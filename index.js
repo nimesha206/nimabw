@@ -210,7 +210,7 @@ async function startBot() {
 			setTimeout(async () => {
 				pairingStarted = true;
 				console.log('Requesting Pairing Code...')
-				let code = await sock.requestPairingCode(phoneNumber);
+				let code = await naze.requestPairingCode(phoneNumber);
 				console.log(chalk.blue('Your Pairing Code :'), chalk.green(code), '\n', chalk.yellow('Expires in 15 second'));
 			}, 3000)
 		}

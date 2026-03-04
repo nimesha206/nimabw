@@ -17,7 +17,7 @@ const { app, server, PORT } = require('./src/server');
 const { assertInstalled, unsafeAgent } = require('./lib/function');
 const { GroupParticipantsUpdate, MessagesUpsert, Solving } = require('./src/message');
 
-const print = (label, value) => console.log(`${chalk.green.bold('║')} ${chalk.cyan.bold(label.padEnd(16))}${chalk.yellow.bold(':')} ${value}`);
+const print = (label, value) => console.log(`${chalk.green.bold('â•‘')} ${chalk.cyan.bold(label.padEnd(16))}${chalk.yellow.bold(':')} ${value}`);
 const pairingCode = process.argv.includes('--qr') ? false : process.argv.includes('--pairing-code') || global.pairing_code;
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
@@ -45,12 +45,12 @@ global.fetchApi = async (path='/', data={}, options={}) => {
       if (isForm) {
         payload = data
         method = 'POST'
-        headers = { apikey, ...headers, ...data.getHeaders() }
+        headers = { ...headers, ...data.getHeaders() }
       } else if (method !== 'GET') {
-        payload = { ...data, apikey }
+        payload = { ...data }
         headers['content-type'] = 'application/json'
       } else {
-        url += '?' + new URLSearchParams({ ...data, apikey }).toString()
+        url += '?' + new URLSearchParams({ ...data }).toString()
       }
 
       const res = await axios({
@@ -71,8 +71,8 @@ const msgRetryCounterCache = new NodeCache();
 
 assertInstalled(process.platform === 'win32' ? 'where ffmpeg' : 'command -v ffmpeg', 'FFmpeg', 0);
 //assertInstalled(process.platform === 'win32' ? 'where magick' : 'command -v convert', 'ImageMagick', 0);
-console.log(chalk.greenBright('✅  All external dependencies are satisfied'));
-console.log(chalk.green.bold(`╔═════[${`${chalk.cyan(userInfoSyt())}@${chalk.cyan(os.hostname())}`}]═════`));
+console.log(chalk.greenBright('âœ…  All external dependencies are satisfied'));
+console.log(chalk.green.bold(`â•”â•â•â•â•â•[${`${chalk.cyan(userInfoSyt())}@${chalk.cyan(os.hostname())}`}]â•â•â•â•â•`));
 print('OS', `${os.platform()} ${os.release()} ${os.arch()}`);
 print('Uptime', `${Math.floor(os.uptime() / 3600)} h ${Math.floor((os.uptime() % 3600) / 60)} m`);
 print('Shell', process.env.SHELL || process.env.COMSPEC || 'unknown');
@@ -82,7 +82,7 @@ print('Script version', `v${require('./package.json').version}`);
 print('Node.js', process.version);
 print('Baileys', `v${require('./package.json').dependencies.baileys}`);
 print('Date & Time', new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta', hour12: false }));
-console.log(chalk.green.bold('╚' + ('═'.repeat(30))));
+console.log(chalk.green.bold('â•š' + ('â•'.repeat(30))));
 server.listen(PORT, () => {
 	console.log('App listened on port', PORT);
 });

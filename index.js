@@ -333,7 +333,7 @@ async function startBot() {
 		}, 10 * 60 * 1000);
 	}
 
-	return nima
+	return "nima"
 }
 
 startBot()

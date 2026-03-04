@@ -183,7 +183,7 @@ async function startBot() {
 		},
 	})
 	
-	if (pairingCode && !phoneNumber && !nima.authState.creds.registered) {
+	if (pairingCode && !phoneNumber && !bot.authState.creds.registered) {
 		async function getPhoneNumber() {
 			phoneNumber = global.number_bot ? global.number_bot : process.env.BOT_NUMBER || await question('Please type your WhatsApp number : ');
 			phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
@@ -206,7 +206,7 @@ async function startBot() {
 	
 	bot.ev.on('connection.update', async (update) => {
 		const { qr, connection, lastDisconnect, isNewLogin, receivedPendingNotifications } = update;
-		if ((connection === 'connecting' || !!qr) && pairingCode && phoneNumber && !nima.authState.creds.registered && !pairingStarted) {
+		if ((connection === 'connecting' || !!qr) && pairingCode && phoneNumber && !bot.authState.creds.registered && !pairingStarted) {
 			setTimeout(async () => {
 				pairingStarted = true;
 				console.log('Requesting Pairing Code...')

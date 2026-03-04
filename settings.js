@@ -2,8 +2,8 @@ const fs = require('fs');
 const chalk = require('chalk');
 
 /*
-	* Create By Naze
-	* Follow https://github.com/nazedev
+	* Create By nima
+	* Follow https://github.com/nimadev
 	* Whatsapp : https://whatsapp.com/channel/0029VaWOkNm7DAWtkvkJBK43
 */
 
@@ -24,7 +24,7 @@ global.number_bot = '94726800969' // Kalo pake panel bisa masukin nomer di sini,
 global.fake = {
 	anonim: 'https://ibb.co/rKyYj3Rr',
 	thumbnailUrl: 'https://ibb.co/rKyYj3Rr',
-	thumbnail: fs.readFileSync('./src/media/naze.png'),
+	thumbnail: fs.readFileSync('./src/media/nima.png'),
 	docs: fs.readFileSync('./src/media/fake.pdf'),
 	listfakedocs: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/pdf'],
 }
@@ -49,7 +49,7 @@ global.money = {
 }
 
 global.mess = {
-	key: 'Apikey mu telah habis silahkan kunjungi\nhttps://naze.biz.id',
+	key: 'Apikey mu telah habis silahkan kunjungi\nhttps://nima.biz.id',
 	owner: 'CREATED BY NIMESHA',
 	admin: 'CREATED BY NIMESHA',
 	botAdmin: 'NIMESHA MADHUSHAN',
@@ -63,10 +63,10 @@ global.mess = {
 }
 
 global.APIs = {
-	naze: 'https://api.naze.biz.id',
+	nima: 'https://api.nima.biz.id',
 }
 global.APIKeys = {
-	'https://api.naze.biz.id': 'nz-8ce9753907',
+	'https://api.nima.biz.id': 'nz-8ce9753907',
 }
 
 // Lainnya

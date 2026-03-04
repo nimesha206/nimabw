@@ -35,8 +35,8 @@ const userInfoSyt = () => {
 global.fetchApi = async (path='/', data={}, options={}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const base = options.name ? (options.name in global.APIs ? global.APIs[options.name] : options.name) : '' // Removed default Naze API base
-      // const apikey = global.APIKeys[base] // Removed Naze API key retrieval
+      const base = options.name ? (options.name in global.APIs ? global.APIs[options.name] : options.name) : global.APIs.nima
+      const apikey = global.APIKeys[base]
       let method = (options.method || 'GET').toUpperCase()
       let url = base + path
       let payload = null
@@ -91,7 +91,7 @@ server.listen(PORT, () => {
 
 */
 
-async function startBot() {
+async function startnimaBot() {
 	try {
 		const loadData = await database.read()
 		const storeLoadData = await storeDB.read()
@@ -156,7 +156,7 @@ async function startBot() {
 		}
 	}
 	
-	const bot = WAConnection({
+	const nima = WAConnection({
 		version,
 		logger: level,
 		getMessage,
@@ -183,7 +183,7 @@ async function startBot() {
 		},
 	})
 	
-	if (pairingCode && !phoneNumber && !bot.authState.creds.registered) {
+	if (pairingCode && !phoneNumber && !nima.authState.creds.registered) {
 		async function getPhoneNumber() {
 			phoneNumber = global.number_bot ? global.number_bot : process.env.BOT_NUMBER || await question('Please type your WhatsApp number : ');
 			phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
@@ -200,17 +200,17 @@ async function startBot() {
 		})()
 	}
 	
-	await Solving(bot, global.store)
+	await Solving(nima, global.store)
 	
-	bot.ev.on('creds.update', saveCreds)
+	nima.ev.on('creds.update', saveCreds)
 	
-	bot.ev.on('connection.update', async (update) => {
+	nima.ev.on('connection.update', async (update) => {
 		const { qr, connection, lastDisconnect, isNewLogin, receivedPendingNotifications } = update;
-		if ((connection === 'connecting' || !!qr) && pairingCode && phoneNumber && !bot.authState.creds.registered && !pairingStarted) {
+		if ((connection === 'connecting' || !!qr) && pairingCode && phoneNumber && !nima.authState.creds.registered && !pairingStarted) {
 			setTimeout(async () => {
 				pairingStarted = true;
 				console.log('Requesting Pairing Code...')
-				let code = await bot.requestPairingCode(phoneNumber);
+				let code = await nima.requestPairingCode(phoneNumber);
 				console.log(chalk.blue('Your Pairing Code :'), chalk.green(code), '\n', chalk.yellow('Expires in 15 second'));
 			}, 3000)
 		}
@@ -218,19 +218,19 @@ async function startBot() {
 			const reason = new Boom(lastDisconnect?.error)?.output.statusCode
 			if (reason === DisconnectReason.connectionLost) {
 				console.log('Connection to Server Lost, Attempting to Reconnect...');
-				startBot()
+				startnimaBot()
 			} else if (reason === DisconnectReason.connectionClosed) {
 				console.log('Connection closed, Attempting to Reconnect...');
-				startBot()
+				startnimaBot()
 			} else if (reason === DisconnectReason.restartRequired) {
 				console.log('Restart Required...');
-				startBot()
+				startnimaBot()
 			} else if (reason === DisconnectReason.timedOut) {
 				console.log('Connection Timed Out, Attempting to Reconnect...');
-				startBot()
+				startnimaBot()
 			} else if (reason === DisconnectReason.badSession) {
 				console.log('Delete Session and Scan again...');
-				startBot()
+				startnimaBot()
 			} else if (reason === DisconnectReason.connectionReplaced) {
 				console.log('Close current Session first...');
 			} else if (reason === DisconnectReason.loggedOut) {
@@ -246,15 +246,15 @@ async function startBot() {
 				exec('rm -rf ./nimadev/*')
 				process.exit(0)
 			} else {
-				bot.end(`Unknown DisconnectReason : ${reason}|${connection}`)
+				nima.end(`Unknown DisconnectReason : ${reason}|${connection}`)
 			}
 		}
 		if (connection == 'open') {
-			console.log('Connected to : ' + JSON.stringify(bot.user, null, 2));
-			let botNumber = await bot.decodeJid(bot.user.id);
+			console.log('Connected to : ' + JSON.stringify(nima.user, null, 2));
+			let botNumber = await nima.decodeJid(nima.user.id);
 			if (global.db?.set[botNumber] && !global.db?.set[botNumber]?.join) {
 				if (my.ch.length > 0 && my.ch.includes('@newsletter')) {
-					if (my.ch) await bot.newsletterMsg(my.ch, { type: 'follow' }).catch(e => {})
+					if (my.ch) await nima.newsletterMsg(my.ch, { type: 'follow' }).catch(e => {})
 					db.set[botNumber].join = true
 				}
 			}
@@ -273,7 +273,7 @@ async function startBot() {
 		}
 	});
 	
-	bot.ev.on('contacts.update', (update) => {
+	nima.ev.on('contacts.update', (update) => {
 		for (let contact of update) {
 			let trueJid;
 			if (!trueJid) continue;
@@ -293,28 +293,28 @@ async function startBot() {
 		}
 	});
 	
-	bot.ev.on('call', async (call) => {
-		let botNumber = await bot.decodeJid(bot.user.id);
+	nima.ev.on('call', async (call) => {
+		let botNumber = await nima.decodeJid(nima.user.id);
 		if (global.db?.set[botNumber]?.anticall) {
 			for (let id of call) {
 				if (id.status === 'offer') {
-					let msg = await bot.sendMessage(id.from, { text: `Saat Ini, Kami Tidak Dapat Menerima Panggilan ${id.isVideo ? 'Video' : 'Suara'}.\nJika @${id.from.split('@')[0]} Memerlukan Bantuan, Silakan Hubungi Owner :)`, mentions: [id.from]});
-					await bot.sendContact(id.from, global.owner, msg);
-					await bot.rejectCall(id.id, id.from)
+					let msg = await nima.sendMessage(id.from, { text: `Saat Ini, Kami Tidak Dapat Menerima Panggilan ${id.isVideo ? 'Video' : 'Suara'}.\nJika @${id.from.split('@')[0]} Memerlukan Bantuan, Silakan Hubungi Owner :)`, mentions: [id.from]});
+					await nima.sendContact(id.from, global.owner, msg);
+					await nima.rejectCall(id.id, id.from)
 				}
 			}
 		}
 	});
 	
-	bot.ev.on('messages.upsert', async (message) => {
-		await MessagesUpsert(bot, message, global.store);
+	nima.ev.on('messages.upsert', async (message) => {
+		await MessagesUpsert(nima, message, global.store);
 	});
 	
-	bot.ev.on('group-participants.update', async (update) => {
-		await GroupParticipantsUpdate(bot, update, global.store);
+	nima.ev.on('group-participants.update', async (update) => {
+		await GroupParticipantsUpdate(nima, update, global.store);
 	});
 	
-	bot.ev.on('groups.update', (update) => {
+	nima.ev.on('groups.update', (update) => {
 		for (const n of update) {
 			if (global.store.groupMetadata[n.id]) {
 				Object.assign(global.store.groupMetadata[n.id], n);
@@ -322,21 +322,21 @@ async function startBot() {
 		}
 	});
 	
-	bot.ev.on('presence.update', ({ id, presences: update }) => {
+	nima.ev.on('presence.update', ({ id, presences: update }) => {
 		store.presences[id] = global.store.presences?.[id] || {};
 		Object.assign(global.store.presences[id], update);
 	});
 	
 	if (!global._dbPresence) {
 		global._dbPresence = setInterval(async () => {
-			if (nima?.user?.id) await bot.sendPresenceUpdate('available', bot.decodeJid(bot.user.id)).catch(e => {})
+			if (nima?.user?.id) await nima.sendPresenceUpdate('available', nima.decodeJid(nima.user.id)).catch(e => {})
 		}, 10 * 60 * 1000);
 	}
 
-	return "nima"
+	return nima
 }
 
-startBot()
+startnimaBot()
 
 // Process Exit
 const cleanup = async (signal) => {

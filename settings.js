@@ -9,9 +9,9 @@ const chalk = require('chalk');
 
 //~~~~~~~~~~~~< GLOBAL SETTINGS >~~~~~~~~~~~~\\
 
-global.owner = ['94726800969'] //['628','628'] 2 owner atau lebih
-global.author = 'NIMESHA'
-global.botname = 'CHUTIYA'
+global.owner = ['94726800969']
+global.author = 'Nimesha Madushan'
+global.botname = 'CHUTIYA V7'
 global.packname = 'Miss Chuti'
 global.listprefix = ['+','!','.']
 
@@ -49,17 +49,17 @@ global.money = {
 }
 
 global.mess = {
-	key: 'Apikey mu telah habis silahkan kunjungi\nhttps://nima.biz.id',
-	owner: 'CREATED BY NIMESHA',
-	admin: 'CREATED BY NIMESHA',
-	botAdmin: 'NIMESHA MADHUSHAN',
-	group: 'Gunakan Di Group!',
-	private: 'Gunakan Di Privat Chat!',
-	limit: 'Limit Anda Telah Habis!',
-	prem: 'Khusus User Premium!',
-	wait: 'Loading...',
-	error: 'Error!',
-	done: 'Done'
+	key: 'ඔබගේ API යතුර කල් ඉකුත් වී ඇත. කරුණාකර https://nima.biz.id වෙත පිවිසෙන්න',
+	owner: 'Nimesha Madushan',
+	admin: 'Nimesha Madushan',
+	botAdmin: 'Nimesha Madushan',
+	group: 'කණ්ඩායම් වල පමණක් භාවිතා කරන්න!',
+	private: 'පුද්ගලික කතාබස් වල පමණක් භාවිතා කරන්න!',
+	limit: 'ඔබගේ සීමාව අවසන් වී ඇත!',
+	prem: 'වාරික පරිශීලකයින් සඳහා පමණි!',
+	wait: 'පූරණය වෙමින් පවතී...',
+	error: 'දෝෂයක්!',
+	done: 'නිමයි'
 }
 
 global.APIs = {

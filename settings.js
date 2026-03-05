@@ -11,7 +11,7 @@ const chalk = require('chalk');
 
 global.owner = ['94726800969']
 global.author = 'Nimesha Madushan'
-global.botname = 'CHUTIYA V7'
+global.botname = 'Miss Chuti'
 global.packname = 'Miss Chuti'
 global.listprefix = ['+','!','.']
 

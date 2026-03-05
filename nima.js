@@ -108,12 +108,12 @@ module.exports = naze = async (naze, m, msg, store) => {
 		const mime = (quoted.msg || quoted).mimetype || ''
 		const qmsg = (quoted.msg || quoted)
 		const author = set.author = global.author || 'nima';
-		const packname = set.packname = global.packname || 'Bot WhatsApp';
+		const packname = set.packname = global.packname || 'Chuti';
 		const botname = set.botname = global.botname || 'Nima Bot';
 		const hari = moment.tz('Asia/Colombo').locale('id').format('dddd');
 		const tanggal = moment.tz('Asia/Colombo').locale('id').format('DD/MM/YYYY');
 		const jam = moment.tz('Asia/Colombo').locale('id').format('HH:mm:ss');
-		const ucapanWaktu = jam < '05:00:00' ? 'Selamat Pagi 🌉' : jam < '11:00:00' ? 'Selamat Pagi 🌄' : jam < '15:00:00' ? 'Selamat Siang 🏙' : jam < '18:00:00' ? 'Selamat Sore 🌅' : jam < '19:00:00' ? 'Selamat Sore 🌃' : jam < '23:59:00' ? 'Selamat Malam 🌌' : 'Selamat Malam 🌌';
+		const ucapanWaktu = jam < '05:00:00' ? 'Good Morning 🌉' : jam < '11:00:00' ? 'Good Morning 🌄' : jam < '15:00:00' ? 'Good Afternoon 🏙' : jam < '18:00:00' ? 'Good Evening 🌅' : jam < '19:00:00' ? 'Good Evening 🌃' : jam < '23:59:00' ? 'Good Night 🌌' : 'Good Night 🌌';
 		const almost = 0.66
 		const time = Date.now()
 		const time_now = new Date()

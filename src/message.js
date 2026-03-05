@@ -546,12 +546,12 @@ async function Solving(naze, store) {
 		const message = generateWAMessageFromContent(participant, msg, options);
 		const invite = await naze.relayMessage(participant, message.message, { messageId: message.key.id })
 		return invite
-	}
-	
 	naze.sendFromOwner = async (jids, text, quoted, options = {}) => {
-		for (const a of jids) {
-			await naze.sendMessage(a.replace(/[^0-9]/g, '') + '@s.whatsapp.net', { text, ...options }, { quoted, ephemeralExpiration: quoted?.expiration || quoted?.metadata?.ephemeralDuration || store?.messages[jid]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0 })
-		}
+    for (const a of jids) {
+        await naze.sendMessage(a.replace(/[^0-9]/g, '') + '@s.whatsapp.net', { text, ...options }, { quoted, ephemeralExpiration: quoted?.expiration || quoted?.metadata?.ephemeralDuration || store?.messages[a]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0 })
+    }
+}
+
 	}
 	
 	naze.sendText = async (jid, text, quoted, options = {}) => naze.sendMessage(jid, { text: text, mentions: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net'), ...options }, { quoted, ephemeralExpiration: quoted?.expiration || quoted?.metadata?.ephemeralDuration || store?.messages[jid]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0 })
@@ -1091,3 +1091,4 @@ fs.watchFile(file, () => {
 	require(file)
 
 });
+

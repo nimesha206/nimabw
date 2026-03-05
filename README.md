@@ -1,51 +1,51 @@
 ## Information
 
 <div align="center">
-<a href="https://github.com/nazedev/hitori/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/nazedev/hitori?label=Watchers&color=green&style=flat-square"></a>
-<a href="https://github.com/nazedev/hitori/network/members"><img title="Forks" src="https://img.shields.io/github/forks/nazedev/hitori?label=Forks&color=blue&style=flat-square"></a>
-<a href="https://github.com/nazedev/hitori/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/nazedev/hitori?label=Stars&color=yellow&style=flat-square"></a>
-<a href="https://github.com/nazedev/hitori/issues"><img title="Issues" src="https://img.shields.io/github/issues/nazedev/hitori?label=Issues&color=success&style=flat-square"></a>
-<a href="https://github.com/nazedev/hitori/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/nazedev/hitori?label=Issues&color=red&style=flat-square"></a>
-<a href="https://github.com/nazedev/hitori/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/nazedev/hitori?label=PullRequest&color=success&style=flat-square"></a>
-<a href="https://github.com/nazedev/hitori/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/nazedev/hitori?label=PullRequest&color=red&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/nimesha206/nimabw?label=Watchers&color=green&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/network/members"><img title="Forks" src="https://img.shields.io/github/forks/nimesha206/nimabw?label=Forks&color=blue&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/nimesha206/nimabw?label=Stars&color=yellow&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/issues"><img title="Issues" src="https://img.shields.io/github/issues/nimesha206/nimabw?label=Issues&color=success&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/nimesha206/nimabw?label=Issues&color=red&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/nimesha206/nimabw?label=PullRequest&color=success&style=flat-square"></a>
+<a href="https://github.com/nimesha206/nimabw/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/nimesha206/nimabw?label=PullRequest&color=red&style=flat-square"></a>
 </div>
 
-This script is created by [Nazedev](https://github.com/nazedev) using Node.js and the [WhiskeySocket/Baileys](https://github.com/WhiskeySockets/Baileys) library. The script is currently in the development phase (BETA), so there may still be some errors that can be ignored. If errors persist even after debugging, please contact the owner for assistance. ~ By Naze
+මෙම ස්ක්‍රිප්ට් එක **Nimesha** විසින් Node.js සහ [WhiskeySocket/Baileys](https://github.com/WhiskeySockets/Baileys) පුස්තකාලය භාවිතා කර නිර්මාණය කර ඇත. මෙම ස්ක්‍රිප්ට් එක දැනට සංවර්ධනය වෙමින් පවතින (BETA) අවධියේ පවතින බැවින්, නොසලකා හැරිය හැකි සුළු දෝෂ තිබිය හැක. දෝෂ නිවැරදි කිරීමෙන් පසුවත් ඒවා දිගටම පවතී නම්, කරුණාකර සහාය සඳහා අයිතිකරු සම්බන්ධ කරගන්න. ~ Nima
 
-#### Join Group
-[![Grup WhatsApp](https://img.shields.io/badge/WhatsApp%20Group-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/DPUC3uuqYZI9FNLdgtMp4n?mode=gi_t) 
+#### සමූහයට එකතු වෙන්න
+[![Grup WhatsApp](https://img.shields.io/badge/WhatsApp%20Group-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029Vb68g1c3LdQLQDkbAQ3M) 
 
 ---
-## 📦 Requirements
+## 📦 අවශ්‍යතා (Requirements)
 
-Minimum requirements:
-- **Node.js** v20 or higher
+අවම අවශ්‍යතා:
+- **Node.js** v20 හෝ ඊට වැඩි
 - **Git**
 
-System dependencies (handled automatically by `install.sh`):
+පද්ධති සංරචක (`install.sh` මගින් ස්වයංක්‍රීයව හසුරුවනු ලැබේ):
 - ffmpeg
 - imagemagick
 - yarn / npm
 
 ---
-## 🚀 Installation
-### 1️⃣ Clone Repository
+## 🚀 ස්ථාපනය (Installation)
+### 1️⃣ රෙපොසිටරිය ක්ලෝන් කරන්න (Clone Repository)
 ```bash
-git clone https://github.com/nazedev/hitori
-cd hitori
+git clone [https://github.com/nimesha206/nimabw](https://github.com/nimesha206/nimabw)
+cd nimabw
 ```
 ---
-### 2️⃣ Automatic Installation (Recommended)
+### 2️⃣ ස්වයංක්‍රීය ස්ථාපනය (නිර්දේශිතයි)
 
 ```bash
 bash install.sh
 ```
 
-This script will:
-- Detect your package manager (`pkg`, `apt`, `dnf`, etc.)
-- Install required system dependencies
-- Install Node.js packages
-- Start the bot automatically
+මෙම ස්ක්‍රිප්ට් එක මගින්:
+- ​ඔබේ පැකේජ කළමනාකරු (pkg, apt, dnf, ආදිය) හඳුනා ගනී
+- ​අවශ්‍ය පද්ධති සංරචක ස්ථාපනය කරයි
+- ​Node.js පැකේජ ස්ථාපනය කරයි
+- ​බොට් ස්වයංක්‍රීයව ක්‍රියාත්මක කරයි
 
 ---
 ## 📱 Termux (Android)
@@ -55,134 +55,104 @@ pkg install git
 pkg install nodejs
 pkg install ffmpeg
 pkg install imagemagick
-git clone https://github.com/nazedev/hitori
-cd hitori
+git clone https://github.com/nimesha206/nimabw
+cd nimabw
 npm install
 ```
-[ RECOMMENDED INSTALL ON TERMUX ]
+[ Termux සඳහා නිර්දේශිත ක්‍රමය ]
 ```bash
 pkg install yarn
 yarn
 ```
-Use **yarn**:
+**yarn* භාවිතා කරන්න:
 
 ```bash
 yarn install
 yarn start
 ```
 
-> Make sure `nodejs` and `yarn` are installed. The `install.sh` script already handles this.
+> `nodejs` සහ `yarn` ස්ථාපනය කර ඇති බව සහතික කරගන්න. `install.sh` ස්ක්‍රිප්ට් එක මගින් දැනටමත් මෙය හසුරුවනු ලැබේ.
 
 ---
 ## 💻 Laptop / Ubuntu / VPS / SSH
-* Download And Install Git [`Click Here`](https://git-scm.com/downloads)
-* Download And Install NodeJS [`Click Here`](https://nodejs.org/en/download)
-* Download And Install FFmpeg [`Click Here`](https://ffmpeg.org/download.html) (**Don't Forget Add FFmpeg to PATH enviroment variables**)
-* Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php)
+* Git බාගත කර ස්ථාපනය කරන්න [`මෙහි ක්ලික් කරන්න`](https://git-scm.com/downloads)
+* NodeJS බාගත කර ස්ථාපනය කරන්න [`මෙහි ක්ලික් කරන්න`](https://nodejs.org/en/download)
+* FFmpeg බාගත කර ස්ථාපනය කරන්න [`මෙහි ක්ලික් කරන්න`](https://ffmpeg.org/download.html) (**FFmpeg පද්ධති PATH එකට එකතු කිරීමට අමතක නොකරන්න**)
+* ImageMagick බාගත කර ස්ථාපනය කරන්න [`මෙහි ක්ලික් කරන්න`](https://imagemagick.org/script/download.php)
 
-Use **npm**:
+**npm** භාවිතා කරන්න: 
 
 ```bash
 npm install
 npm start
 ```
 ---
-## ▶️ Running the Bot
+## ▶️ බොට් ක්‍රියාත්මක කිරීම
 
 ```bash
 npm start
-# or
+# හෝ
 yarn start
 ```
 
-Scan the QR Code or use Pairing Code, and the bot is ready to use.
+QR කේතය ස්කෑන් කරන්න හෝ Pairing Code එක භාවිතා කරන්න, එවිට බොට් භාවිතයට සූදානම් වේ.
 
 ---
 
-## 🌐 API Integration
 
-This bot is fully integrated with the **Naze API Service**:
+## ⚙️ බොට් වින්‍යාස කිරීම (Configuration)
 
-🔗 https://naze.biz.id
+සියලුම ප්‍රධාන වින්‍යාසයන් (Settings) පිහිටා ඇත්තේ:
 
-Many features (such as downloader, AI tools, utilities, and media processing) rely on this external API.
+📁 **[settings.js](https://github.com/nimesha206/nimabw/blob/master/settings.js)**
 
-### API Key Requirement
+### සංස්කරණය කළ හැකි සැකසුම්
 
-To use all features properly, you **must provide your own API key**.
-
-The API key is configured in:
-
-📁 **[settings.js](https://github.com/nazedev/hitori/blob/master/settings.js)**  
-
-Example configuration:
-
+#### අයිතිකරුගේ අංකය (Owner Number)
 ```js
-global.APIKeys = {
-  'https://api.naze.biz.id': 'YOUR_API_KEY_HERE'
-}
+global.owner = ['947xxxxxxxxxx']
 ```
 
-⚠️ If the API key is invalid or not set:
-- Some commands will not work
-- API-based features may return errors
-
-Make sure you register and obtain a valid API key from the official website before using the bot.
-
----
-## ⚙️ Bot Configuration
-
-All main configurations are located in:
-
-📁 **[settings.js](https://github.com/nazedev/hitori/blob/master/settings.js)**
-
-### Editable Settings
-
-#### Owner Number
+#### බොට්ගේ අනන්‍යතාවය
 ```js
-global.owner = ['628xxxxxxxxxx']
+global.botname = 'Miss Chuti'
+global.author = 'Nimesha'
 ```
 
-#### Bot Identity
-```js
-global.botname = 'Hitori Bot'
-global.author = 'Nazedev'
-```
-
-#### Command Prefix
+#### විධාන උපසර්ගය (Command Prefix)
 ```js
 global.listprefix = ['!', '.', '+']
 ```
 
-#### User Limits & Balance
+#### පරිශීලක සීමාවන් සහ මුදල් (Limits & Balance)
 ```js
 global.limit.free = 20
 global.money.free = 10000
 ```
 
-#### Pairing Code / Bot Number
+#### පේයාරින් කෝඩ් / බොට් අංකය (Pairing Code)
 ```js
 global.pairing_code = true
-global.number_bot = '628xxxxxxxxxx'
+global.number_bot = '947xxxxxxxxxx'
 ```
 
-> Any change in [settings.js](https://github.com/nazedev/hitori/blob/master/settings.js) will be **auto-reloaded** without restarting the bot.
+> [settings.js](https://github.com/nimesha206/nimabw/blob/master/settings.js) හි සිදු කරන ඕනෑම වෙනසක් බොට් නැවත පණ ගැන්වීමකින් (restart) තොරව **ස්වයංක්‍රීයව-යාවත්කාලීන** වේ.
 
 ---
 
-## 🧩 Editing & Adding Features
+## 🧩 විශේෂාංග සංස්කරණය සහ එක් කිරීම
 
-All bot features are implemented in:
+​බොට්ගේ සියලුම විශේෂාංග ක්‍රියාත්මක කර ඇත්තේ:
 
-📁 **[naze.js](https://github.com/nazedev/hitori/blob/master/naze.js)**
+📁 **[nima.js](https://github.com/nimesha206/nimabw/blob/master/nima.js)**
 
-Look for the **[switch (command)](https://github.com/nazedev/hitori/blob/61052a01ea8e8975a99f0db7f5d40bad5ee39a5b/naze.js#L742)** section.
+මෙහි ඇති **[switch (command)](https://github.com/nimesha206/nimabw/blob/61052a01ea8e8975a99f0db7f5d40bad5ee39a5b/nima.js#L742)** කොටස බලන්න.
 
-### Where to Add New Features
+### නව විශේෂාංග එක් කරන ආකාරය
 
-Add or edit commands inside the [switch (command)](https://github.com/nazedev/hitori/blob/61052a01ea8e8975a99f0db7f5d40bad5ee39a5b/naze.js#L742) block.
+[switch (command)](https://github.com/nimesha206/nimabw/blob/61052a01ea8e8975a99f0db7f5d40bad5ee39a5b/Nima.js#L742) කොටස තුළ නව විධාන එක් කරන්න.
 
-### Example: Adding a New Command
+### උදාහරණ: නව විධානයක් එක් කිරීම
 
 ```js
 case 'ping': {
@@ -191,28 +161,28 @@ case 'ping': {
 break
 ```
 
-Guidelines:
-- Always add new commands using `case`
-- Do not remove the main switch structure
-- Place feature logic inside each `case`
+මගපෙන්වීම්:
+- සෑම විටම නව විධාන `case` භාවිතා කර එක් කරන්න
+- ප්‍රධාන switch ව්‍යුහය ඉවත් නොකරන්න
+- විශේෂාංගයට අදාළ තාර්කික කොටස් (logic) අදාළ `case` එක තුළ තබන්න
 
 ---
 
-## 🔌 Connector & Core Handler
+## 🔌 සම්බන්ධකය සහ මධ්‍යම හසුරුවන්නා (Core Handler)
 
-To understand the WhatsApp connection flow and event handling, see:
+WhatsApp සම්බන්ධතාවය සහ සිදුවීම් හැසිරවීම තේරුම් ගැනීමට, බලන්න:
 
-📁 **[index.js](https://github.com/nazedev/hitori/blob/master/index.js)**
-This file is responsible for:
-- Initializing Baileys connection
-- Handling WhatsApp events
-- Loading [settings.js](https://github.com/nazedev/hitori/blob/master/settings.js)
-- Dispatching messages to [naze.js](https://github.com/nazedev/hitori/blob/master/naze.js)
+📁 **[index.js](https://github.com/nimesha206/nimabw/blob/master/index.js)**
+මෙම ගොනුව වගකියනු ලබන්නේ:
+- Baileys සම්බන්ධතාවය ආරම්භ කිරීම
+- WhatsApp සිදුවීම් හැසිරවීම
+- [settings.js](https://github.com/nimesha206/nimabw/blob/master/settings.js) පූර්ණය කිරීම
+- පණිවිඩ [nima.js](https://github.com/nimesha206/nimabw/blob/master/nima.js) වෙත යොමු කිරීම
 
-⚠️ **Editing [index.js](https://github.com/nazedev/hitori/blob/master/index.js) is not recommended unless you fully understand the bot flow.**
+⚠️ **ඔබ බොට්ගේ ක්‍රියාකාරිත්වය පිළිබඳව මැනවින් අවබෝධ කර නොමැති නම් [index.js](https://github.com/nimesha206/nimabw/blob/master/index.js) සංස්කරණය කිරීම නිර්දේශ නොකරයි.**
 
 ---
-## 🗂 Structure Project
+## 🗂 ව්‍යාපෘති ව්‍යුහය (Project Structure)
 ```
 ├── Dockerfile
 ├── LICENSE
@@ -221,7 +191,7 @@ This file is responsible for:
 ├── app.json
 ├── database
 │   ├── jadibot
-│   │   └── Naze
+│   │   └── nima
 │   └── temp
 │       └── A
 ├── docker-compose.yml
@@ -237,7 +207,7 @@ This file is responsible for:
 │   ├── template_menu.js
 │   ├── tictactoe.js
 │   └── uploader.js
-├── naze.js
+├── nima.js
 ├── nodemon.json
 ├── package.json
 ├── railway.json
@@ -250,43 +220,39 @@ This file is responsible for:
 │   ├── jadibot.js
 │   ├── media
 │   │   ├── fake.pdf
-│   │   └── naze.png
+│   │   └── nima.png
 │   ├── message.js
 │   └── server.js
 └── start.js
 ```
 ---
-#### Deploy to Heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/nazedev/hitori)
+#### Heroku වෙත ස්ථාපනය (Deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/nimesha206/nimabw)
 
 #### Heroku Buildpack
-| Build Pack | LINK |
+| Build Pack | ලින්ක් එක |
 |--------|--------|
 | **NODEJS** | heroku/nodejs |
 | **FFMPEG** | [here](https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest) |
 | **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
 
 ---
-### Features
-| Menu     | Bot | Group | Search | Download | Tools | Ai | Game | Fun | Owner |
-| -------- | --- | ----- | ------ | -------- | ----- | -- | ---- | --- | ----- |
-| Work     |  ✅  |   ✅   |    ✅    |     ✅     |   ✅   | ✅ |   ✅   |  ✅  |    ✅    |
+### විශේෂාංග
+| මෙනුව (menu) | Bot | Group | Search | Download | Tools | Ai | Game | Fun | Owner |
+| --------- | --- | ----- | ------ | -------- | ----- | -- | ---- | --- | ----- |
+| ක්‍රියාකාරීත්වය     |  ✅  |   ✅   |    ✅    |     ✅     |   ✅   | ✅ |   ✅   |  ✅  |    ✅    |
 
 
-License: [MIT](https://choosealicense.com/licenses/mit/)
+බලපත්‍රය: [MIT](https://choosealicense.com/licenses/mit/)
 
-#### Support Me
-- [Saweria](https://saweria.co/naze)
+#### මට සහය වන්න
+- [whatsapp](https://wa.me/++94726800969)
 
-## Contributor
+## දායකත්වය දුන් අය (Contributor)
 
-- [NazeDev](https://github.com/nazedev) (Pembuat)
-- [Zaynn](https://github.com/ZaynRcK) (Penyedia Layanan API)
-- [Dani](https://github.com/nazedev) (Penyumbang Code)
+- [Nimesha](https://github.com/nimesha206) (නිර්මාණකරු)
+- [Shashikala](https://github.com/nimesha206) (API සේවා සපයන්නා)
+- [Nimesha](https://github.com/nimesha206) (කේත දායකයා)
 
-## Thanks to
 
-| [![Nazedev](https://github.com/nazedev.png?size=100)](https://github.com/nazedev) | [![Zaynn](https://github.com/ZaynRcK.png?size=100)](https://github.com/ZaynRcK) | [![Dani](https://github.com/nazedev.png?size=100)](https://github.com/nazedev) | [![WhiskeySockets](https://github.com/WhiskeySockets.png?size=100)](https://github.com/WhiskeySockets) |
-| --- | --- | --- | --- |
-
-| [NazeDev](https://github.com/nazedev) | [Zaynn](https://github.com/ZaynRcK) | [Dani](https://github.com/dani) | [WhiskeySockets](https://github.com/WhiskeySockets) |
+| [Nimesha](https://github.com/nimesha206) |

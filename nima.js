@@ -1341,7 +1341,7 @@ module.exports = naze = async (naze, m, msg, store) => {
 						forwardedNewsletterMessageInfo: {
 							newsletterJid: my.ch,
 							serverMessageId: null,
-							newsletterName: 'Join For More Info'
+							newsletterName: 'Miss Shasikala'
 						},
 						externalAdReply: {
 							title: author,
@@ -3823,31 +3823,31 @@ module.exports = naze = async (naze, m, msg, store) => {
 					profile = fake.anonim
 				}
 				const menunya = `
-╭──❍「 *USER INFO* 」❍
-├ *Nama* : ${m.pushName ? m.pushName : 'Nimesha'}
-├ *Id* : @${m.sender.split('@')[0]}
-├ *User* : ${isVip ? 'VIP' : isPremium ? 'PREMIUM' : 'FREE'}
-├ *Limit* : ${isVip ? 'VIP' : db.users[m.sender].limit }
-├ *Money* : ${db.users[m.sender] ? db.users[m.sender].money.toLocaleString('id-ID') : '0'}
+╭──❍「 *පරිශීලක තොරතුරු* 」❍
+├ *නම* : ${m.pushName ? m.pushName : 'Nimesha'}
+├ *අංකය* : @${m.sender.split('@')[0]}
+├ *පරිශීලක* : ${isVip ? 'VIP' : isPremium ? 'PREMIUM' : 'FREE'}
+├ *සීමාව* : ${isVip ? 'VIP' : db.users[m.sender].limit }
+├ *මුදල්* : ${db.users[m.sender] ? db.users[m.sender].money.toLocaleString('id-ID') : '0'}
 ╰─┬────❍
-╭─┴─❍「 *BOT INFO* 」❍
-├ *Nama Bot* : ${set?.botname || 'Miss Chuti'}
-├ *Powered* : @${'0@s.whatsapp.net'.split('@')[0]}
-├ *Owner* : @${ownerNumber[0].split('@')[0]}
-├ *Mode* : ${naze.public ? 'Public' : 'Self'}
-├ *Prefix* :${set.multiprefix ? '「 MULTI-PREFIX 」' : ' *'+prefix+'*' }
-├ *Premium Feature* : 🔸️
+╭─┴─❍「 *බොට් තොරතුරු* 」❍
+├ *බොට්ගෙ නම* : ${set?.botname || 'Miss Chuti'}
+├ *බලගැන්වීම* : @${'0@s.whatsapp.net'.split('@')[0]}
+├ *අයිතිකරු* : @${ownerNumber[0].split('@')[0]}
+├ *ප්‍රකාරය* : ${naze.public ? 'Public' : 'Self'}
+├ *පූර්ව ප්‍රත්‍යය* :${set.multiprefix ? '「 MULTI-PREFIX 」' : ' *'+prefix+'*' }
+├ *ප්‍රිමියම් විශේෂාන්ග* : 🔸️
 ╰─┬────❍
-╭─┴─❍「 *ABOUT* 」❍
-├ *Tanggal* : ${tanggal}
-├ *Hari* : ${hari}
-├ *Jam* : ${jam} WIB
+╭─┴─❍「 *විස්තර* 」❍
+├ *දිනය* : ${tanggal}
+├ *දවස* : ${hari}
+├ *වෙලාව* : ${jam} WIB
 ╰──────❍
-╭──❍「 *BOT* 」❍
-│${setv} ${prefix}profile
-│${setv} ${prefix}claim
-│${setv} ${prefix}buy [item] (nominal)
-│${setv} ${prefix}transfer
+╭──❍「 *බොට් ( BOT )* 」❍
+│${setv} ${prefix}profile (ගිණුම් විස්තර)
+│${setv} ${prefix}claim (ත්‍යාග ලබා ගැනීම)
+│${setv} ${prefix}buy (භාණ්ඩ මිලදී ගැනීම)
+│${setv} ${prefix}transfer (මුදල් යැවීම)
 │${setv} ${prefix}leaderboard
 │${setv} ${prefix}request (text)
 │${setv} ${prefix}react (emoji)
@@ -4095,7 +4095,7 @@ module.exports = naze = async (naze, m, msg, store) => {
 						forwardedNewsletterMessageInfo: {
 							newsletterJid: my.ch,
 							serverMessageId: null,
-							newsletterName: 'Join For More Info'
+							newsletterName: 'Miss Shasikala'
 						},
 						externalAdReply: {
 							title: author,

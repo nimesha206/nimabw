@@ -115,7 +115,7 @@ global.owner = ['947xxxxxxxxxx']
 
 #### බොට්ගේ අනන්‍යතාවය
 ```js
-global.botname = 'Miss Chuti'
+global.botname = 'Miss Sashikala'
 global.author = 'Nimesha'
 ```
 
@@ -257,3 +257,4 @@ WhatsApp සම්බන්ධතාවය සහ සිදුවීම් හ�
 
 
 | [Nimesha](https://github.com/nimesha206) |
+

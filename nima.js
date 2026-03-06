@@ -108,7 +108,7 @@ module.exports = naze = async (naze, m, msg, store) => {
 		const mime = (quoted.msg || quoted).mimetype || ''
 		const qmsg = (quoted.msg || quoted)
 		const author = set.author = global.author || 'nima';
-		const packname = set.packname = global.packname || 'Chuti';
+		const packname = set.packname = global.packname || 'Shasikala';
 		const botname = set.botname = global.botname || 'Nima Bot';
 		const hari = moment.tz('Asia/Colombo').locale('id').format('dddd');
 		const tanggal = moment.tz('Asia/Colombo').locale('id').format('DD/MM/YYYY');
@@ -3831,7 +3831,7 @@ module.exports = naze = async (naze, m, msg, store) => {
 ├ *මුදල්* : ${db.users[m.sender] ? db.users[m.sender].money.toLocaleString('id-ID') : '0'}
 ╰─┬────❍
 ╭─┴─❍「 *බොට් තොරතුරු* 」❍
-├ *බොට්ගෙ නම* : ${set?.botname || 'Miss Chuti'}
+├ *බොට්ගෙ නම* : ${set?.botname || 'Miss Shasikala'}
 ├ *බලගැන්වීම* : @${'0@s.whatsapp.net'.split('@')[0]}
 ├ *අයිතිකරු* : @${ownerNumber[0].split('@')[0]}
 ├ *ප්‍රකාරය* : ${naze.public ? 'Public' : 'Self'}
@@ -3848,238 +3848,238 @@ module.exports = naze = async (naze, m, msg, store) => {
 │${setv} ${prefix}claim (ත්‍යාග ලබා ගැනීම)
 │${setv} ${prefix}buy (භාණ්ඩ මිලදී ගැනීම)
 │${setv} ${prefix}transfer (මුදල් යැවීම)
-│${setv} ${prefix}leaderboard
-│${setv} ${prefix}request (text)
-│${setv} ${prefix}react (emoji)
-│${setv} ${prefix}tagme
-│${setv} ${prefix}runtime
-│${setv} ${prefix}totalfitur
-│${setv} ${prefix}speed
-│${setv} ${prefix}ping
-│${setv} ${prefix}afk
-│${setv} ${prefix}rvo (reply pesan viewone)
-│${setv} ${prefix}inspect (url gc)
-│${setv} ${prefix}addmsg
-│${setv} ${prefix}delmsg
-│${setv} ${prefix}getmsg
-│${setv} ${prefix}listmsg
-│${setv} ${prefix}setcmd
-│${setv} ${prefix}delcmd
-│${setv} ${prefix}listcmd
-│${setv} ${prefix}lockcmd
-│${setv} ${prefix}q (reply pesan)
-│${setv} ${prefix}menfes (94xxx|fake name)
-│${setv} ${prefix}confes (94xxx|fake name)
-│${setv} ${prefix}roomai
-│${setv} ${prefix}jadibot 🔸️
-│${setv} ${prefix}stopjadibot
-│${setv} ${prefix}listjadibot
-│${setv} ${prefix}donasi
-│${setv} ${prefix}addsewa
-│${setv} ${prefix}delsewa
-│${setv} ${prefix}listsewa
+│${setv} ${prefix}leaderboard (ප්‍රමුඛ පුවරුව)
+│${setv} ${prefix}request (ඉල්ලීම් කිරීම)
+│${setv} ${prefix}react (ප්‍රතිචාර දැක්වීම)
+│${setv} ${prefix}tagme (මාව ටැග් කරන්න)
+│${setv} ${prefix}runtime (ක්‍රියාත්මක වන කාලය)
+│${setv} ${prefix}totalfitur (මුළු විශේෂාංග ගණන)
+│${setv} ${prefix}speed (වේගය පරීක්ෂාව)
+│${setv} ${prefix}ping (ප්‍රතිචාර කාලය)
+│${setv} ${prefix}afk (බැහැරව සිටින බව දැන්වීම)
+│${setv} ${prefix}rvo (වරක් පමණක් බැලිය හැකි පණිවිඩ බැලීම)
+│${setv} ${prefix}inspect (සමූහයක විස්තර බැලීම)
+│${setv} ${prefix}addmsg (පණිවිඩ එකතු කිරීම)
+│${setv} ${prefix}delmsg (පණිවිඩ මැකීම)
+│${setv} ${prefix}getmsg (පණිවිඩ ලබා ගැනීම)
+│${setv} ${prefix}listmsg (පණිවිඩ ලැයිස්තුව)
+│${setv} ${prefix}setcmd (විධාන සැකසීම)
+│${setv} ${prefix}delcmd (විධාන මැකීම)
+│${setv} ${prefix}listcmd (විධාන ලැයිස්තුව)
+│${setv} ${prefix}lockcmd (විධාන අගුළු දැමීම)
+│${setv} ${prefix}q (පණිවිඩයකට පිළිතුරු දීම)
+│${setv} ${prefix}menfes (රහසිගත පණිවිඩ)
+│${setv} ${prefix}confes (පාපොච්චාරණය)
+│${setv} ${prefix}roomai (AI කාමරය)
+│${setv} ${prefix}jadibot (තවත් බොට් කෙනෙකු වීම) 🔸️
+│${setv} ${prefix}stopjadibot (නැවැත්වීම)
+│${setv} ${prefix}listjadibot (ලැයිස්තුව බැලීම)
+│${setv} ${prefix}donasi (ආධාර කිරීම)
+│${setv} ${prefix}addsewa (කුලී කාලය එකතු කිරීම)
+│${setv} ${prefix}delsewa (කුලී කාලය ඉවත් කිරීම)
+│${setv} ${prefix}listsewa (කුලී ලැයිස්තුව)
 ╰─┬────❍
-╭─┴❍「 *GROUP* 」❍
-│${setv} ${prefix}add (94xxx)
-│${setv} ${prefix}kick (@tag/94xxx)
-│${setv} ${prefix}promote (@tag/94xxx)
-│${setv} ${prefix}demote (@tag/94xxx)
-│${setv} ${prefix}warn (@tag/94xxx)
-│${setv} ${prefix}unwarn (@tag/94xxx)
-│${setv} ${prefix}setname (nama baru gc)
-│${setv} ${prefix}setdesc (desk)
-│${setv} ${prefix}setppgc (reply imgnya)
-│${setv} ${prefix}delete (reply pesan)
-│${setv} ${prefix}linkgrup
-│${setv} ${prefix}revoke
-│${setv} ${prefix}tagall
-│${setv} ${prefix}pin
-│${setv} ${prefix}unpin
-│${setv} ${prefix}hidetag
-│${setv} ${prefix}totag (reply pesan)
-│${setv} ${prefix}listonline
-│${setv} ${prefix}group set
-│${setv} ${prefix}group (khusus admin)
+╭─┴❍「 *සමූහ (GROUP)* 」❍
+│${setv} ${prefix}add (සාමාජිකයින් එක් කිරීම)
+│${setv} ${prefix}kick (සාමාජිකයින් ඉවත් කිරීම)
+│${setv} ${prefix}promote (පාලක තනතුරු දීම)
+│${setv} ${prefix}demote (පාලක තනතුරු ඉවත් කිරීම)
+│${setv} ${prefix}warn (අවවාද කිරීම)
+│${setv} ${prefix}unwarn (අවවාද ඉවත් කිරීම)
+│${setv} ${prefix}setname (සමූහයේ නම වෙනස් කිරීම)
+│${setv} ${prefix}setdesc (විස්තරය වෙනස් කිරීම)
+│${setv} ${prefix}setppgc (සමූහ ඡායාරූපය සැකසීම)
+│${setv} ${prefix}delete (පණිවිඩ මැකීම)
+│${setv} ${prefix}linkgrup (සමූහ සබැඳිය)
+│${setv} ${prefix}revoke (සබැඳිය අලුත් කිරීම)
+│${setv} ${prefix}tagall (සියල්ලන් ටැග් කිරීම)
+│${setv} ${prefix}pin (පණිවිඩය රඳවා තැබීම)
+│${setv} ${prefix}unpin (රඳවා තැබීම ඉවත් කිරීම)
+│${setv} ${prefix}hidetag (නොපෙනෙන සේ ටැග් කිරීම)
+│${setv} ${prefix}totag (පණිවිඩයක් ටැග් කිරීම)
+│${setv} ${prefix}listonline (සක්‍රීය අය බැලීම)
+│${setv} ${prefix}group set (සමූහ සැකසුම්)
+│${setv} ${prefix}group (පාලකයන්ට පමණි)
 ╰─┬────❍
-╭─┴❍「 *SEARCH* 」❍
-│${setv} ${prefix}ytsearch (query)
-│${setv} ${prefix}spotify (query)
-│${setv} ${prefix}pixiv (query)
-│${setv} ${prefix}pinterest (query)
-│${setv} ${prefix}wallpaper (query)
-│${setv} ${prefix}ringtone (query)
-│${setv} ${prefix}google (query)
-│${setv} ${prefix}gimage (query)
-│${setv} ${prefix}npm (query)
-│${setv} ${prefix}style (query)
-│${setv} ${prefix}cuaca (kota)
-│${setv} ${prefix}tenor (query)
-│${setv} ${prefix}urban (query)
+╭─┴❍「 *සෙවුම් (SEARCH)* 」❍
+│${setv} ${prefix}ytsearch (YouTube සෙවීම්)
+│${setv} ${prefix}spotify (සංගීත සෙවීම්)
+│${setv} ${prefix}pixiv (චිත්‍ර සෙවීම්)
+│${setv} ${prefix}pinterest (පින්තූර සෙවීම්)
+│${setv} ${prefix}wallpaper (පසුතල පින්තූර)
+│${setv} ${prefix}ringtone (රිංග්ටෝන්)
+│${setv} ${prefix}google (ගූගල් සෙවීම්)
+│${setv} ${prefix}gimage (ගූගල් පින්තූර)
+│${setv} ${prefix}npm (NPM සෙවීම්)
+│${setv} ${prefix}style (අකුරු හැඩතල)
+│${setv} ${prefix}cuaca (කාලගුණය)
+│${setv} ${prefix}tenor (GIF සෙවීම්)
+│${setv} ${prefix}urban (වචන අර්ථ සෙවීම්)
 ╰─┬────❍
-╭─┴❍「 *DOWNLOAD* 」❍
-│${setv} ${prefix}ytmp3 (url)
-│${setv} ${prefix}ytmp4 (url)
-│${setv} ${prefix}instagram (url)
-│${setv} ${prefix}tiktok (url)
-│${setv} ${prefix}tiktokmp3 (url)
-│${setv} ${prefix}facebook (url)
-│${setv} ${prefix}spotifydl (url)
-│${setv} ${prefix}mediafire (url)
+╭─┴❍「 *බාගත කිරීම් (DOWNLOAD)* 」❍
+│${setv} ${prefix}ytmp3 (YouTube ගීත)
+│${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
+│${setv} ${prefix}instagram (ඉන්ස්ටග්‍රෑම් වීඩියෝ)
+│${setv} ${prefix}tiktok (ටික්ටොක් වීඩියෝ)
+│${setv} ${prefix}tiktokmp3 (ටික්ටොක් ශබ්ද)
+│${setv} ${prefix}facebook (ෆේස්බුක් වීඩියෝ)
+│${setv} ${prefix}spotifydl (ස්පොටිෆයි ගීත)
+│${setv} ${prefix}mediafire (මීඩියාෆයර් ගොනු)
 ╰─┬────❍
-╭─┴❍「 *QUOTES* 」❍
-│${setv} ${prefix}motivasi
-│${setv} ${prefix}quotes
-│${setv} ${prefix}truth
-│${setv} ${prefix}bijak
-│${setv} ${prefix}dare
-│${setv} ${prefix}bucin
-│${setv} ${prefix}renungan
+╭─┴❍「 *උපුටා දැක්වීම් (QUOTES)* 」❍
+│${setv} ${prefix}motivasi (අභිප්‍රේරණය)
+│${setv} ${prefix}quotes (උපුටා දැක්වීම්)
+│${setv} ${prefix}truth (ඇත්ත පැවසීම)
+│${setv} ${prefix}bijak (නැණවත් කියමන්)
+│${setv} ${prefix}dare (අභියෝග)
+│${setv} ${prefix}bucin (ආදරණීය කියමන්)
+│${setv} ${prefix}renungan (සිතන්නට යමක්)
 ╰─┬────❍
-╭─┴❍「 *TOOLS* 」❍
-│${setv} ${prefix}get (url) 🔸️
-│${setv} ${prefix}hd (reply pesan)
-│${setv} ${prefix}toaudio (reply pesan)
-│${setv} ${prefix}tomp3 (reply pesan)
-│${setv} ${prefix}tovn (reply pesan)
-│${setv} ${prefix}toimage (reply pesan)
-│${setv} ${prefix}toptv (reply pesan)
-│${setv} ${prefix}tourl (reply pesan)
-│${setv} ${prefix}tts (textnya)
-│${setv} ${prefix}toqr (textnya)
-│${setv} ${prefix}brat (textnya)
-│${setv} ${prefix}bratvid (textnya)
-│${setv} ${prefix}ssweb (url) 🔸️
-│${setv} ${prefix}sticker (send/reply img)
-│${setv} ${prefix}colong (reply stiker)
-│${setv} ${prefix}smeme (send/reply img)
-│${setv} ${prefix}dehaze (send/reply img)
-│${setv} ${prefix}colorize (send/reply img)
-│${setv} ${prefix}hitamkan (send/reply img)
-│${setv} ${prefix}emojimix 🙃+💀
-│${setv} ${prefix}nulis
-│${setv} ${prefix}readmore text1|text2
-│${setv} ${prefix}qc (pesannya)
-│${setv} ${prefix}translate
-│${setv} ${prefix}wasted (send/reply img)
-│${setv} ${prefix}triggered (send/reply img)
-│${setv} ${prefix}shorturl (urlnya)
-│${setv} ${prefix}gitclone (urlnya)
-│${setv} ${prefix}fat (reply audio)
-│${setv} ${prefix}fast (reply audio)
-│${setv} ${prefix}bass (reply audio)
-│${setv} ${prefix}slow (reply audio)
-│${setv} ${prefix}tupai (reply audio)
-│${setv} ${prefix}deep (reply audio)
-│${setv} ${prefix}robot (reply audio)
-│${setv} ${prefix}blown (reply audio)
-│${setv} ${prefix}reverse (reply audio)
-│${setv} ${prefix}smooth (reply audio)
-│${setv} ${prefix}earrape (reply audio)
-│${setv} ${prefix}nightcore (reply audio)
-│${setv} ${prefix}getexif (reply sticker)
+╭─┴❍「 *මෙවලම් (TOOLS)* 」❍
+│${setv} ${prefix}get (දත්ත ලබා ගැනීම) 🔸️
+│${setv} ${prefix}hd (පැහැදිලි බව වැඩි කිරීම)
+│${setv} ${prefix}toaudio (හඬ බවට හැරවීම)
+│${setv} ${prefix}tomp3 (MP3 බවට හැරවීම)
+│${setv} ${prefix}tovn (හඬ පටයක් බවට හැරවීම)
+│${setv} ${prefix}toimage (පින්තූරයක් බවට හැරවීම)
+│${setv} ${prefix}toptv (වීඩියෝවක් බවට හැරවීම)
+│${setv} ${prefix}tourl (සබැඳියක් බවට හැරවීම)
+│${setv} ${prefix}tts (අකුරු හඬ බවට හැරවීම)
+│${setv} ${prefix}toqr (QR කේතයක් සෑදීම)
+│${setv} ${prefix}brat (විශේෂ ස්ටිකර්)
+│${setv} ${prefix}bratvid (වීඩියෝ ස්ටිකර්)
+│${setv} ${prefix}ssweb (වෙබ් පිටු ඡායාරූප) 🔸️
+│${setv} ${prefix}sticker (ස්ටිකර් සෑදීම)
+│${setv} ${prefix}colong (ස්ටිකර් ගැනීම)
+│${setv} ${prefix}smeme (මීම්ස් සෑදීම)
+│${setv} ${prefix}dehaze (පැහැදිලි කිරීම)
+│${setv} ${prefix}colorize (වර්ණ ගැන්වීම)
+│${setv} ${prefix}hitamkan (කළු සුදු කිරීම)
+│${setv} ${prefix}emojimix (ඉමෝජි මිශ්‍ර කිරීම)
+│${setv} ${prefix}nulis (ලිවීම)
+│${setv} ${prefix}readmore (වැඩිපුර කියවීමට)
+│${setv} ${prefix}qc (චැට් බබල් සෑදීම)
+│${setv} ${prefix}translate (පරිවර්තනය)
+│${setv} ${prefix}wasted (වෙස්ටඩ් ඉෆෙක්ට්)
+│${setv} ${prefix}triggered (ට්‍රිගර් ඉෆෙක්ට්)
+│${setv} ${prefix}shorturl (සබැඳි කෙටි කිරීම)
+│${setv} ${prefix}gitclone (ගිට්හබ් ගොනු ගැනීම)
+│${setv} ${prefix}fat (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}fast (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}bass (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}slow (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}tupai (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}deep (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}robot (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}blown (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}reverse (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}smooth (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}earrape (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}nightcore (හඬ වෙනස් කිරීම්)
+│${setv} ${prefix}getexif (ස්ටිකර් විස්තර බැලීම)
 ╰─┬────❍
-╭─┴❍「 *AI* 」❍
-│${setv} ${prefix}ai (query)
-│${setv} ${prefix}gemini (query)
-│${setv} ${prefix}txt2img (query)
+╭─┴❍「 *කෘතිම බුද්ධිය (AI)* 」❍
+│${setv} ${prefix}ai (ප්‍රශ්න ඇසීම)
+│${setv} ${prefix}gemini (ගෙමිනි AI)
+│${setv} ${prefix}txt2img (අකුරුවලින් පින්තූර සෑදීම)
 ╰─┬────❍
-╭─┴❍「 *ANIME* 」❍
-│${setv} ${prefix}waifu
-│${setv} ${prefix}neko
+╭─┴❍「 *ඇනිමේ (ANIME)* 」❍
+│${setv} ${prefix}waifu (ඇනිමේ රූප)
+│${setv} ${prefix}neko (නෙකෝ රූප)
 ╰─┬────❍
-╭─┴❍「 *GAME* 」❍
-│${setv} ${prefix}tictactoe
-│${setv} ${prefix}akinator
-│${setv} ${prefix}suit
-│${setv} ${prefix}slot
-│${setv} ${prefix}math (level)
-│${setv} ${prefix}begal
-│${setv} ${prefix}ulartangga
-│${setv} ${prefix}blackjack
-│${setv} ${prefix}catur
-│${setv} ${prefix}casino (nominal)
-│${setv} ${prefix}samgong (nominal)
-│${setv} ${prefix}rampok (@tag)
-│${setv} ${prefix}tekateki
-│${setv} ${prefix}tebaklirik
-│${setv} ${prefix}tebakkata
-│${setv} ${prefix}tebakbom
-│${setv} ${prefix}susunkata
-│${setv} ${prefix}colorblind
-│${setv} ${prefix}tebakkimia
-│${setv} ${prefix}caklontong
-│${setv} ${prefix}tebakangka
-│${setv} ${prefix}tebaknegara
-│${setv} ${prefix}tebakgambar
-│${setv} ${prefix}tebakbendera
+╭─┴❍「 *ක්‍රීඩා (GAME)* 」❍
+│${setv} ${prefix}tictactoe (තිතයි කතුරයි)
+│${setv} ${prefix}akinator (සිතුවිලි කියවීම)
+│${setv} ${prefix}suit (ගල, කතුර, කොළය)
+│${setv} ${prefix}slot (ස්ලොට් මැෂින්)
+│${setv} ${prefix}math (ගණිත ගැටලු)
+│${setv} ${prefix}begal (කොල්ලකෑම)
+│${setv} ${prefix}ulartangga (ලුඩෝ/පහේ ක්‍රීඩාව)
+│${setv} ${prefix}blackjack (කාඩ් ක්‍රීඩාව)
+│${setv} ${prefix}catur (චෙස්)
+│${setv} ${prefix}casino (කැසිනෝ)
+│${setv} ${prefix}samgong (කාඩ් ක්‍රීඩාව)
+│${setv} ${prefix}rampok (සොරකම් කිරීම)
+│${setv} ${prefix}tekateki (ප්‍රහේලිකා)
+│${setv} ${prefix}tebaklirik (ගීත පද අනුමානය)
+│${setv} ${prefix}tebakkata (වචන අනුමානය)
+│${setv} ${prefix}tebakbom (බෝම්බ අනුමානය)
+│${setv} ${prefix}susunkata (වචන පෙළගැස්ම)
+│${setv} ${prefix}colorblind (වර්ණ පරීක්ෂාව)
+│${setv} ${prefix}tebakkimia (රසායන විද්‍යා අනුමානය)
+│${setv} ${prefix}caklontong (විහිළු ප්‍රහේලිකා)
+│${setv} ${prefix}tebakangka (අංක අනුමානය)
+│${setv} ${prefix}tebaknegara (රටවල් අනුමානය)
+│${setv} ${prefix}tebakgambar (රූප අනුමානය)
+│${setv} ${prefix}tebakbendera (කොඩි අනුමානය)
 ╰─┬────❍
-╭─┴❍「 *FUN* 」❍
-│${setv} ${prefix}coba
-│${setv} ${prefix}dadu
-│${setv} ${prefix}bisakah (text)
-│${setv} ${prefix}apakah (text)
-│${setv} ${prefix}kapan (text)
-│${setv} ${prefix}siapa (text)
-│${setv} ${prefix}kerangajaib (text)
-│${setv} ${prefix}cekmati (name)
-│${setv} ${prefix}ceksifat
-│${setv} ${prefix}cekkhodam (name)
-│${setv} ${prefix}rate (reply pesan)
-│${setv} ${prefix}jodohku
-│${setv} ${prefix}jadian
-│${setv} ${prefix}fitnah
-│${setv} ${prefix}halah (text)
-│${setv} ${prefix}hilih (text)
-│${setv} ${prefix}huluh (text)
-│${setv} ${prefix}heleh (text)
-│${setv} ${prefix}holoh (text)
+╭─┴❍「 *විනෝදය (FUN)* 」❍
+│${setv} ${prefix}coba (උත්සාහ කරන්න)
+│${setv} ${prefix}dadu (දාදු කැටය)
+│${setv} ${prefix}bisakah (හැකියාවක් ඇසීම)
+│${setv} ${prefix}apakah (ප්‍රශ්න ඇසීම)
+│${setv} ${prefix}kapan (කවදාදැයි ඇසීම)
+│${setv} ${prefix}siapa (කවුදැයි ඇසීම)
+│${setv} ${prefix}kerangajaib (විස්මිත බෙල්ලා)
+│${setv} ${prefix}cekmati (මරණය ගැන විහිළුවට ඇසීම)
+│${setv} ${prefix}ceksifat (ගතිගුණ බැලීම)
+│${setv} ${prefix}cekkhodam (ආත්මය බැලීම)
+│${setv} ${prefix}rate (අගය කිරීම)
+│${setv} ${prefix}jodohku (සහකරු සෙවීම)
+│${setv} ${prefix}jadian (සම්බන්ධතාවයක් ඇති කිරීම)
+│${setv} ${prefix}fitnah (ව්‍යාජ පණිවිඩ සෑදීම)
+│${setv} ${prefix}halah (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}hilih (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}huluh (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}heleh (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}holoh (අකුරු වෙනස් කිරීම)
 ╰─┬────❍
-╭─┴❍「 *RANDOM* 」❍
-│${setv} ${prefix}coffe
+╭─┴❍「 *වෙනත් (RANDOM)* 」❍
+│${setv} ${prefix}coffe (කෝපි පින්තූර)
 ╰─┬────❍
-╭─┴❍「 *STALKER* 」❍
-│${setv} ${prefix}wastalk
-│${setv} ${prefix}githubstalk
+╭─┴❍「 *තොරතුරු සෙවීම (STALKER)* 」❍
+│${setv} ${prefix}wastalk (WhatsApp තොරතුරු)
+│${setv} ${prefix}githubstalk (GitHub තොරතුරු)
 ╰─┬────❍
-╭─┴❍「 *OWNER* 」❍
-│${setv} ${prefix}bot [set]
-│${setv} ${prefix}setbio
-│${setv} ${prefix}setppbot
-│${setv} ${prefix}join
-│${setv} ${prefix}leave
-│${setv} ${prefix}block
-│${setv} ${prefix}listblock
-│${setv} ${prefix}openblock
-│${setv} ${prefix}listpc
-│${setv} ${prefix}listgc
-│${setv} ${prefix}ban
-│${setv} ${prefix}unban
-│${setv} ${prefix}mute
-│${setv} ${prefix}unmute
-│${setv} ${prefix}creategc
-│${setv} ${prefix}clearchat
-│${setv} ${prefix}addprem
-│${setv} ${prefix}delprem
-│${setv} ${prefix}listprem
-│${setv} ${prefix}addlimit
-│${setv} ${prefix}adduang
-│${setv} ${prefix}setbotauthor
-│${setv} ${prefix}setbotname
-│${setv} ${prefix}setbotpackname
-│${setv} ${prefix}setapikey
-│${setv} ${prefix}addowner
-│${setv} ${prefix}delowner
-│${setv} ${prefix}getmsgstore
-│${setv} ${prefix}bot --settings
-│${setv} ${prefix}bot settings
-│${setv} ${prefix}getsession
-│${setv} ${prefix}delsession
-│${setv} ${prefix}delsampah
-│${setv} ${prefix}upsw
-│${setv} ${prefix}backup
-│${setv} $
-│${setv} >
-│${setv} <
+╭─┴❍「 *හිමිකරු (OWNER)* 」❍
+│${setv} ${prefix}bot [set] (බොට් සැකසුම්)
+│${setv} ${prefix}setbio (මතකය සැකසීම)
+│${setv} ${prefix}setppbot (බොට් පින්තූරය සැකසීම)
+│${setv} ${prefix}join (සමූහයකට එක්වීම)
+│${setv} ${prefix}leave (සමූහයෙන් ඉවත් වීම)
+│${setv} ${prefix}block (අවහිර කිරීම)
+│${setv} ${prefix}listblock (අවහිර කළ ලැයිස්තුව)
+│${setv} ${prefix}openblock (අවහිරය ඉවත් කිරීම)
+│${setv} ${prefix}listpc (පෞද්ගලික චැට් ලැයිස්තුව)
+│${setv} ${prefix}listgc (සමූහ ලැයිස්තුව)
+│${setv} ${prefix}ban (තහනම් කිරීම)
+│${setv} ${prefix}unban (තහනම ඉවත් කිරීම)
+│${setv} ${prefix}mute (නිහඬ කිරීම)
+│${setv} ${prefix}unmute (නිහඬ බව ඉවත් කිරීම)
+│${setv} ${prefix}creategc (සමූහයක් සෑදීම)
+│${setv} ${prefix}clearchat (චැට් මැකීම)
+│${setv} ${prefix}addprem (ප්‍රීමියම් එක් කිරීම)
+│${setv} ${prefix}delprem (ප්‍රීමියම් ඉවත් කිරීම)
+│${setv} ${prefix}listprem (ප්‍රීමියම් ලැයිස්තුව)
+│${setv} ${prefix}addlimit (සීමාව වැඩි කිරීම)
+│${setv} ${prefix}adduang (මුදල් එක් කිරීම)
+│${setv} ${prefix}setbotauthor (නිර්මාණකරු නම)
+│${setv} ${prefix}setbotname (බොට්ගේ නම)
+│${setv} ${prefix}setbotpackname (පැකේජ නම)
+│${setv} ${prefix}setapikey (API කේතය සැකසීම)
+│${setv} ${prefix}addowner (හිමිකරුවෙකු එක් කිරීම)
+│${setv} ${prefix}delowner (හිමිකරුවෙකු ඉවත් කිරීම)
+│${setv} ${prefix}getmsgstore (දත්ත ගබඩාව ලබා ගැනීම)
+│${setv} ${prefix}bot --settings (බොට් සැකසුම්)
+│${setv} ${prefix}bot settings (බොට් සැකසුම්)
+│${setv} ${prefix}getsession (සෙශන් එක ලබා ගැනීම)
+│${setv} ${prefix}delsession (සෙශන් එක මැකීම)
+│${setv} ${prefix}delsampah (වැඩකට නැති දත්ත මැකීම)
+│${setv} ${prefix}upsw (ස්ටේටස් දැමීම)
+│${setv} ${prefix}backup (දත්ත සුරැකීම)
+│${setv} $ (කේත ක්‍රියාත්මක කිරීම)
+│${setv} > (කේත ක්‍රියාත්මක කිරීම)
+│${setv} < (කේත ක්‍රියාත්මක කිරීම)
 ╰──────❍`
 				await m.reply({
 					document: fake.docs,
@@ -4114,291 +4114,291 @@ module.exports = naze = async (naze, m, msg, store) => {
 			break
 			case 'botmenu': {
 				m.reply(`
-╭──❍「 *BOT* 」❍
-│${setv} ${prefix}profile
-│${setv} ${prefix}claim
-│${setv} ${prefix}buy [item] (nominal)
-│${setv} ${prefix}transfer
-│${setv} ${prefix}leaderboard
-│${setv} ${prefix}request (text)
-│${setv} ${prefix}react (emoji)
-│${setv} ${prefix}tagme
-│${setv} ${prefix}runtime
-│${setv} ${prefix}totalfitur
-│${setv} ${prefix}speed
-│${setv} ${prefix}ping
-│${setv} ${prefix}afk
-│${setv} ${prefix}rvo (reply pesan viewone)
-│${setv} ${prefix}inspect (url gc)
-│${setv} ${prefix}addmsg
-│${setv} ${prefix}delmsg
-│${setv} ${prefix}getmsg
-│${setv} ${prefix}listmsg
-│${setv} ${prefix}setcmd
-│${setv} ${prefix}delcmd
-│${setv} ${prefix}listcmd
-│${setv} ${prefix}lockcmd
-│${setv} ${prefix}q (reply pesan)
-│${setv} ${prefix}menfes (94xxx|fake name)
-│${setv} ${prefix}confes (94xxx|fake name)
-│${setv} ${prefix}roomai
-│${setv} ${prefix}jadibot 🔸️
-│${setv} ${prefix}stopjadibot
-│${setv} ${prefix}listjadibot
-│${setv} ${prefix}donasi
-│${setv} ${prefix}addsewa
-│${setv} ${prefix}delsewa
-│${setv} ${prefix}listsewa
+╭──❍「 *බොට් (BOT)* 」❍
+│${setv} ${prefix}profile (ගිණුම් විස්තර)
+│${setv} ${prefix}claim (දිනපතා ත්‍යාග)
+│${setv} ${prefix}buy [භාණ්ඩය] (ප්‍රමාණය)
+│${setv} ${prefix}transfer (මුදල් යැවීම)
+│${setv} ${prefix}leaderboard (ප්‍රමුඛ පුවරුව)
+│${setv} ${prefix}request (ඉල්ලීම් පණිවිඩ)
+│${setv} ${prefix}react (ප්‍රතිචාර ඉමෝජි)
+│${setv} ${prefix}tagme (මාව ටැග් කරන්න)
+│${setv} ${prefix}runtime (ක්‍රියාත්මක වන කාලය)
+│${setv} ${prefix}totalfitur (මුළු විශේෂාංග)
+│${setv} ${prefix}speed (වේගය පරීක්ෂාව)
+│${setv} ${prefix}ping (ප්‍රතිචාර කාලය)
+│${setv} ${prefix}afk (බැහැරව සිටින බව දැන්වීම)
+│${setv} ${prefix}rvo (වරක් පමණක් බැලිය හැකි පණිවිඩ බැලීම)
+│${setv} ${prefix}inspect (සමූහයක විස්තර බැලීම)
+│${setv} ${prefix}addmsg (පණිවිඩ එකතු කිරීම)
+│${setv} ${prefix}delmsg (පණිවිඩ මැකීම)
+│${setv} ${prefix}getmsg (පණිවිඩ ලබා ගැනීම)
+│${setv} ${prefix}listmsg (පණිවිඩ ලැයිස්තුව)
+│${setv} ${prefix}setcmd (විධාන සැකසීම)
+│${setv} ${prefix}delcmd (විධාන මැකීම)
+│${setv} ${prefix}listcmd (විධාන ලැයිස්තුව)
+│${setv} ${prefix}lockcmd (විධාන අගුළු දැමීම)
+│${setv} ${prefix}q (පණිවිඩයකට පිළිතුරු දීම)
+│${setv} ${prefix}menfes (රහසිගත පණිවිඩ)
+│${setv} ${prefix}confes (පාපොච්චාරණය)
+│${setv} ${prefix}roomai (AI කාමරය)
+│${setv} ${prefix}jadibot (තවත් බොට් කෙනෙකු වීම) 🔸️
+│${setv} ${prefix}stopjadibot (නැවැත්වීම)
+│${setv} ${prefix}listjadibot (ලැයිස්තුව බැලීම)
+│${setv} ${prefix}donasi (ආධාර කිරීම)
+│${setv} ${prefix}addsewa (කුලී කාලය එකතු කිරීම)
+│${setv} ${prefix}delsewa (කුලී කාලය ඉවත් කිරීම)
+│${setv} ${prefix}listsewa (කුලී ලැයිස්තුව)
 ╰──────❍`)
 			}
 			break
 			case 'groupmenu': {
 				m.reply(`
-╭──❍「 *GROUP* 」❍
-│${setv} ${prefix}add (94xxx)
-│${setv} ${prefix}kick (@tag/94xxx)
-│${setv} ${prefix}promote (@tag/94xxx)
-│${setv} ${prefix}demote (@tag/94xxx)
-│${setv} ${prefix}warn (@tag/94xxx)
-│${setv} ${prefix}unwarn (@tag/94xxx)
-│${setv} ${prefix}setname (nama baru gc)
-│${setv} ${prefix}setdesc (desk)
-│${setv} ${prefix}setppgc (reply imgnya)
-│${setv} ${prefix}delete (reply pesan)
-│${setv} ${prefix}linkgrup
-│${setv} ${prefix}revoke
-│${setv} ${prefix}tagall
-│${setv} ${prefix}pin
-│${setv} ${prefix}unpin
-│${setv} ${prefix}hidetag
-│${setv} ${prefix}totag (reply pesan)
-│${setv} ${prefix}listonline
-│${setv} ${prefix}group set
-│${setv} ${prefix}group (khusus admin)
+╭──❍「 *සමූහ (GROUP)* 」❍
+│${setv} ${prefix}add (සාමාජිකයින් එක් කිරීම)
+│${setv} ${prefix}kick (සාමාජිකයින් ඉවත් කිරීම)
+│${setv} ${prefix}promote (පාලක තනතුරු දීම)
+│${setv} ${prefix}demote (පාලක තනතුරු ඉවත් කිරීම)
+│${setv} ${prefix}warn (අවවාද කිරීම)
+│${setv} ${prefix}unwarn (අවවාද ඉවත් කිරීම)
+│${setv} ${prefix}setname (සමූහයේ නම වෙනස් කිරීම)
+│${setv} ${prefix}setdesc (විස්තරය වෙනස් කිරීම)
+│${setv} ${prefix}setppgc (සමූහ ඡායාරූපය සැකසීම)
+│${setv} ${prefix}delete (පණිවිඩ මැකීම)
+│${setv} ${prefix}linkgrup (සමූහ සබැඳිය)
+│${setv} ${prefix}revoke (සබැඳිය අලුත් කිරීම)
+│${setv} ${prefix}tagall (සියල්ලන් ටැග් කිරීම)
+│${setv} ${prefix}pin (පණිවිඩය රඳවා තැබීම)
+│${setv} ${prefix}unpin (රඳවා තැබීම ඉවත් කිරීම)
+│${setv} ${prefix}hidetag (නොපෙනෙන සේ ටැග් කිරීම)
+│${setv} ${prefix}totag (පණිවිඩයක් ටැග් කිරීම)
+│${setv} ${prefix}listonline (සක්‍රීය අය බැලීම)
+│${setv} ${prefix}group set (සමූහ සැකසුම්)
+│${setv} ${prefix}group (පාලකයන්ට පමණි)
 ╰──────❍`)
 			}
 			break
 			case 'searchmenu': {
 				m.reply(`
-╭──❍「 *SEARCH* 」❍
-│${setv} ${prefix}ytsearch (query)
-│${setv} ${prefix}spotify (query)
-│${setv} ${prefix}pixiv (query)
-│${setv} ${prefix}pinterest (query)
-│${setv} ${prefix}wallpaper (query)
-│${setv} ${prefix}ringtone (query)
-│${setv} ${prefix}google (query)
-│${setv} ${prefix}gimage (query)
-│${setv} ${prefix}npm (query)
-│${setv} ${prefix}style (query)
-│${setv} ${prefix}cuaca (kota)
-│${setv} ${prefix}tenor (query)
-│${setv} ${prefix}urban (query)
+╭──❍「 *සෙවුම් (SEARCH)* 」❍
+│${setv} ${prefix}ytsearch (YouTube සෙවීම්)
+│${setv} ${prefix}spotify (සංගීත සෙවීම්)
+│${setv} ${prefix}pixiv (Pixiv චිත්‍ර සෙවීම්)
+│${setv} ${prefix}pinterest (Pinterest පින්තූර සෙවීම්)
+│${setv} ${prefix}wallpaper (පසුතල පින්තූර)
+│${setv} ${prefix}ringtone (රිංග්ටෝන් සෙවීම්)
+│${setv} ${prefix}google (Google සෙවීම්)
+│${setv} ${prefix}gimage (Google පින්තූර)
+│${setv} ${prefix}npm (NPM පැකේජ සෙවීම්)
+│${setv} ${prefix}style (අකුරු හැඩතල)
+│${setv} ${prefix}cuaca (කාලගුණය - නගරය)
+│${setv} ${prefix}tenor (Tenor GIF සෙවීම්)
+│${setv} ${prefix}urban (Urban Dictionary අර්ථ)
 ╰──────❍`)
 			}
 			break
 			case 'downloadmenu': {
 				m.reply(`
-╭──❍「 *DOWNLOAD* 」❍
-│${setv} ${prefix}ytmp3 (url)
-│${setv} ${prefix}ytmp4 (url)
-│${setv} ${prefix}instagram (url)
-│${setv} ${prefix}tiktok (url)
-│${setv} ${prefix}tiktokmp3 (url)
-│${setv} ${prefix}facebook (url)
-│${setv} ${prefix}spotifydl (url)
-│${setv} ${prefix}mediafire (url)
+╭──❍「 *බාගත කිරීම් (DOWNLOAD)* 」❍
+│${setv} ${prefix}ytmp3 (YouTube ගීත)
+│${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
+│${setv} ${prefix}instagram (Instagram වීඩියෝ)
+│${setv} ${prefix}tiktok (TikTok වීඩියෝ)
+│${setv} ${prefix}tiktokmp3 (TikTok ශබ්ද)
+│${setv} ${prefix}facebook (Facebook වීඩියෝ)
+│${setv} ${prefix}spotifydl (Spotify ගීත)
+│${setv} ${prefix}mediafire (Mediafire ගොනු)
 ╰──────❍`)
 			}
 			break
 			case 'quotesmenu': {
 				m.reply(`
-╭──❍「 *QUOTES* 」❍
-│${setv} ${prefix}motivasi
-│${setv} ${prefix}quotes
-│${setv} ${prefix}truth
-│${setv} ${prefix}bijak
-│${setv} ${prefix}dare
-│${setv} ${prefix}bucin
-│${setv} ${prefix}renungan
+╭──❍「 *උපුටා දැක්වීම් (QUOTES)* 」❍
+│${setv} ${prefix}motivasi (අභිප්‍රේරණය)
+│${setv} ${prefix}quotes (උපුටා දැක්වීම්)
+│${setv} ${prefix}truth (සත්‍යය පැවසීම)
+│${setv} ${prefix}bijak (නැණවත් කියමන්)
+│${setv} ${prefix}dare (අභියෝග)
+│${setv} ${prefix}bucin (ආදරණීය කියමන්)
+│${setv} ${prefix}renungan (සිතන්නට යමක්)
 ╰──────❍`)
 			}
 			break
 			case 'toolsmenu': {
 				m.reply(`
-╭──❍「 *TOOLS* 」❍
-│${setv} ${prefix}get (url) 🔸️
-│${setv} ${prefix}hd (reply pesan)
-│${setv} ${prefix}toaudio (reply pesan)
-│${setv} ${prefix}tomp3 (reply pesan)
-│${setv} ${prefix}tovn (reply pesan)
-│${setv} ${prefix}toimage (reply pesan)
-│${setv} ${prefix}toptv (reply pesan)
-│${setv} ${prefix}tourl (reply pesan)
-│${setv} ${prefix}tts (textnya)
-│${setv} ${prefix}toqr (textnya)
-│${setv} ${prefix}brat (textnya)
-│${setv} ${prefix}bratvid (textnya)
-│${setv} ${prefix}ssweb (url) 🔸️
-│${setv} ${prefix}sticker (send/reply img)
-│${setv} ${prefix}colong (reply stiker)
-│${setv} ${prefix}smeme (send/reply img)
-│${setv} ${prefix}dehaze (send/reply img)
-│${setv} ${prefix}colorize (send/reply img)
-│${setv} ${prefix}hitamkan (send/reply img)
-│${setv} ${prefix}emojimix 🙃+💀
-│${setv} ${prefix}nulis
-│${setv} ${prefix}readmore text1|text2
-│${setv} ${prefix}qc (pesannya)
-│${setv} ${prefix}translate
-│${setv} ${prefix}wasted (send/reply img)
-│${setv} ${prefix}triggered (send/reply img)
-│${setv} ${prefix}shorturl (urlnya)
-│${setv} ${prefix}gitclone (urlnya)
-│${setv} ${prefix}fat (reply audio)
-│${setv} ${prefix}fast (reply audio)
-│${setv} ${prefix}bass (reply audio)
-│${setv} ${prefix}slow (reply audio)
-│${setv} ${prefix}tupai (reply audio)
-│${setv} ${prefix}deep (reply audio)
-│${setv} ${prefix}robot (reply audio)
-│${setv} ${prefix}blown (reply audio)
-│${setv} ${prefix}reverse (reply audio)
-│${setv} ${prefix}smooth (reply audio)
-│${setv} ${prefix}earrape (reply audio)
-│${setv} ${prefix}nightcore (reply audio)
-│${setv} ${prefix}getexif (reply sticker)
+╭──❍「 *මෙවලම් (TOOLS)* 」❍
+│${setv} ${prefix}get (දත්ත ලබා ගැනීම) 🔸️
+│${setv} ${prefix}hd (පැහැදිලි බව වැඩි කිරීම)
+│${setv} ${prefix}toaudio (හඬ බවට හැරවීම)
+│${setv} ${prefix}tomp3 (MP3 බවට හැරවීම)
+│${setv} ${prefix}tovn (හඬ පටයක් බවට හැරවීම)
+│${setv} ${prefix}toimage (ඡායාරූපයක් බවට හැරවීම)
+│${setv} ${prefix}toptv (වීඩියෝවක් බවට හැරවීම)
+│${setv} ${prefix}tourl (සබැඳියක් බවට හැරවීම)
+│${setv} ${prefix}tts (අකුරු හඬ බවට හැරවීම)
+│${setv} ${prefix}toqr (QR කේතයක් සෑදීම)
+│${setv} ${prefix}brat (බ්‍රැට් ස්ටිකර්)
+│${setv} ${prefix}bratvid (වීඩියෝ බ්‍රැට් ස්ටිකර්)
+│${setv} ${prefix}ssweb (වෙබ් පිටු ඡායාරූප) 🔸️
+│${setv} ${prefix}sticker (ස්ටිකර් සෑදීම)
+│${setv} ${prefix}colong (ස්ටිකර් ලබා ගැනීම)
+│${setv} ${prefix}smeme (මීම්ස් සෑදීම)
+│${setv} ${prefix}dehaze (පැහැදිලි කිරීම)
+│${setv} ${prefix}colorize (වර්ණ ගැන්වීම)
+│${setv} ${prefix}hitamkan (කළු සුදු කිරීම)
+│${setv} ${prefix}emojimix (ඉමෝජි මිශ්‍ර කිරීම)
+│${setv} ${prefix}nulis (ලිවීම)
+│${setv} ${prefix}readmore (වැඩිපුර කියවීමට)
+│${setv} ${prefix}qc (චැට් බබල් සෑදීම)
+│${setv} ${prefix}translate (පරිවර්තනය)
+│${setv} ${prefix}wasted (වෙස්ටඩ් ඉෆෙක්ට්)
+│${setv} ${prefix}triggered (ට්‍රිගර් ඉෆෙක්ට්)
+│${setv} ${prefix}shorturl (සබැඳි කෙටි කිරීම)
+│${setv} ${prefix}gitclone (ගිට්හබ් ගොනු ගැනීම)
+│${setv} ${prefix}fat (මහත හඬ)
+│${setv} ${prefix}fast (වේගවත් හඬ)
+│${setv} ${prefix}bass (බේස් වැඩි හඬ)
+│${setv} ${prefix}slow (සෙමින් ඇසෙන හඬ)
+│${setv} ${prefix}tupai (ලේනෙකුගේ හඬ)
+│${setv} ${prefix}deep (ගැඹුරු හඬ)
+│${setv} ${prefix}robot (රොබෝ හඬ)
+│${setv} ${prefix}blown (බ්ලෝන් ඉෆෙක්ට්)
+│${setv} ${prefix}reverse (පසුපසට ඇසෙන හඬ)
+│${setv} ${prefix}smooth (සිනිඳු හඬ)
+│${setv} ${prefix}earrape (ඉයර්රේප් ඉෆෙක්ට්)
+│${setv} ${prefix}nightcore (නයිට්කෝර් ඉෆෙක්ට්)
+│${setv} ${prefix}getexif (ස්ටිකර් විස්තර බැලීම)
 ╰──────❍`)
 			}
 			break
 			case 'aimenu': {
 				m.reply(`
-╭──❍「 *AI* 」❍
-│${setv} ${prefix}ai (query)
-│${setv} ${prefix}gemini (query)
-│${setv} ${prefix}txt2img (query)
+╭──❍「 *කෘතිම බුද්ධිය (AI)* 」❍
+│${setv} ${prefix}ai (ප්‍රශ්න ඇසීම)
+│${setv} ${prefix}gemini (ගෙමිනි AI)
+│${setv} ${prefix}txt2img (අකුරුවලින් පින්තූර සෑදීම)
 ╰──────❍`)
 			}
 			break
 			case 'randommenu': {
 				m.reply(`
-╭──❍「 *RANDOM* 」❍
-│${setv} ${prefix}coffe
+╭──❍「 *වෙනත් (RANDOM)* 」❍
+│${setv} ${prefix}coffe (කෝපි පින්තූර)
 ╰──────❍`)
 			}
 			break
 			case 'stalkermenu': {
 				m.reply(`
-╭──❍「 *STALKER* 」❍
-│${setv} ${prefix}wastalk
-│${setv} ${prefix}githubstalk
+╭──❍「 *තොරතුරු සෙවීම (STALKER)* 」❍
+│${setv} ${prefix}wastalk (WhatsApp තොරතුරු)
+│${setv} ${prefix}githubstalk (GitHub තොරතුරු)
 ╰──────❍`)
 			}
 			break
 			case 'animemenu': {
 				m.reply(`
-╭──❍「 *ANIME* 」❍
-│${setv} ${prefix}waifu
-│${setv} ${prefix}neko
+╭──❍「 *ඇනිමේ (ANIME)* 」❍
+│${setv} ${prefix}waifu (ඇනිමේ රූප)
+│${setv} ${prefix}neko (නෙකෝ රූප)
 ╰──────❍`)
 			}
 			break
 			case 'gamemenu': {
 				m.reply(`
-╭──❍「 *GAME* 」❍
-│${setv} ${prefix}tictactoe
-│${setv} ${prefix}akinator
-│${setv} ${prefix}suit
-│${setv} ${prefix}slot
-│${setv} ${prefix}math (level)
-│${setv} ${prefix}begal
-│${setv} ${prefix}ulartangga
-│${setv} ${prefix}blackjack
-│${setv} ${prefix}catur
-│${setv} ${prefix}casino (nominal)
-│${setv} ${prefix}samgong (nominal)
-│${setv} ${prefix}rampok (@tag)
-│${setv} ${prefix}tekateki
-│${setv} ${prefix}tebaklirik
-│${setv} ${prefix}tebakkata
-│${setv} ${prefix}tebakbom
-│${setv} ${prefix}susunkata
-│${setv} ${prefix}colorblind
-│${setv} ${prefix}tebakkimia
-│${setv} ${prefix}caklontong
-│${setv} ${prefix}tebakangka
-│${setv} ${prefix}tebaknegara
-│${setv} ${prefix}tebakgambar
-│${setv} ${prefix}tebakbendera
+╭──❍「 *ක්‍රීඩා (GAME)* 」❍
+│${setv} ${prefix}tictactoe (තිතයි කතුරයි)
+│${setv} ${prefix}akinator (සිතුවිලි කියවීම)
+│${setv} ${prefix}suit (ගල, කතුර, කොළය)
+│${setv} ${prefix}slot (ස්ලොට් මැෂින්)
+│${setv} ${prefix}math (ගණිත ගැටලු)
+│${setv} ${prefix}begal (කොල්ලකෑම)
+│${setv} ${prefix}ulartangga (ලුඩෝ/පහේ ක්‍රීඩාව)
+│${setv} ${prefix}blackjack (කාඩ් ක්‍රීඩාව)
+│${setv} ${prefix}catur (චෙස්)
+│${setv} ${prefix}casino (කැසිනෝ)
+│${setv} ${prefix}samgong (කාඩ් ක්‍රීඩාව)
+│${setv} ${prefix}rampok (සොරකම් කිරීම)
+│${setv} ${prefix}tekateki (ප්‍රහේලිකා)
+│${setv} ${prefix}tebaklirik (ගීත පද අනුමානය)
+│${setv} ${prefix}tebakkata (වචන අනුමානය)
+│${setv} ${prefix}tebakbom (බෝම්බ අනුමානය)
+│${setv} ${prefix}susunkata (වචන පෙළගැස්ම)
+│${setv} ${prefix}colorblind (වර්ණ පරීක්ෂාව)
+│${setv} ${prefix}tebakkimia (රසායන විද්‍යා අනුමානය)
+│${setv} ${prefix}caklontong (විහිළු ප්‍රහේලිකා)
+│${setv} ${prefix}tebakangka (අංක අනුමානය)
+│${setv} ${prefix}tebaknegara (රටවල් අනුමානය)
+│${setv} ${prefix}tebakgambar (රූප අනුමානය)
+│${setv} ${prefix}tebakbendera (කොඩි අනුමානය)
 ╰──────❍`)
 			}
 			break
 			case 'funmenu': {
 				m.reply(`
-╭──❍「 *FUN* 」❍
-│${setv} ${prefix}coba
-│${setv} ${prefix}dadu
-│${setv} ${prefix}bisakah (text)
-│${setv} ${prefix}apakah (text)
-│${setv} ${prefix}kapan (text)
-│${setv} ${prefix}siapa (text)
-│${setv} ${prefix}kerangajaib (text)
-│${setv} ${prefix}cekmati (name)
-│${setv} ${prefix}ceksifat
-│${setv} ${prefix}cekkhodam (name)
-│${setv} ${prefix}rate (reply pesan)
-│${setv} ${prefix}jodohku
-│${setv} ${prefix}jadian
-│${setv} ${prefix}fitnah
-│${setv} ${prefix}halah (text)
-│${setv} ${prefix}hilih (text)
-│${setv} ${prefix}huluh (text)
-│${setv} ${prefix}heleh (text)
-│${setv} ${prefix}holoh (text)
+╭──❍「 *විනෝදය (FUN)* 」❍
+│${setv} ${prefix}coba (උත්සාහ කරන්න)
+│${setv} ${prefix}dadu (දාදු කැටය)
+│${setv} ${prefix}bisakah (හැකියාවක් ඇසීම)
+│${setv} ${prefix}apakah (ප්‍රශ්න ඇසීම)
+│${setv} ${prefix}kapan (කවදාදැයි ඇසීම)
+│${setv} ${prefix}siapa (කවුදැයි ඇසීම)
+│${setv} ${prefix}kerangajaib (විස්මිත බෙල්ලා)
+│${setv} ${prefix}cekmati (මරණය ගැන විහිළුවට ඇසීම)
+│${setv} ${prefix}ceksifat (ගතිගුණ බැලීම)
+│${setv} ${prefix}cekkhodam (ආත්මය බැලීම)
+│${setv} ${prefix}rate (අගය කිරීම)
+│${setv} ${prefix}jodohku (සහකරු සෙවීම)
+│${setv} ${prefix}jadian (සම්බන්ධතාවයක් ඇති කිරීම)
+│${setv} ${prefix}fitnah (ව්‍යාජ පණිවිඩ සෑදීම)
+│${setv} ${prefix}halah (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}hilih (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}huluh (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}heleh (අකුරු වෙනස් කිරීම)
+│${setv} ${prefix}holoh (අකුරු වෙනස් කිරීම)
 ╰──────❍`)
 			}
 			break
 			case 'ownermenu': {
 				m.reply(`
-╭──❍「 *OWNER* 」❍
-│${setv} ${prefix}bot [set]
-│${setv} ${prefix}setbio
-│${setv} ${prefix}setppbot
-│${setv} ${prefix}join
-│${setv} ${prefix}leave
-│${setv} ${prefix}block
-│${setv} ${prefix}listblock
-│${setv} ${prefix}openblock
-│${setv} ${prefix}listpc
-│${setv} ${prefix}listgc
-│${setv} ${prefix}ban
-│${setv} ${prefix}unban
-│${setv} ${prefix}mute
-│${setv} ${prefix}unmute
-│${setv} ${prefix}creategc
-│${setv} ${prefix}clearchat
-│${setv} ${prefix}addprem
-│${setv} ${prefix}delprem
-│${setv} ${prefix}listprem
-│${setv} ${prefix}addlimit
-│${setv} ${prefix}adduang
-│${setv} ${prefix}setbotauthor
-│${setv} ${prefix}setbotname
-│${setv} ${prefix}setbotpackname
-│${setv} ${prefix}setapikey
-│${setv} ${prefix}addowner
-│${setv} ${prefix}delowner
-│${setv} ${prefix}getmsgstore
-│${setv} ${prefix}bot --settings
-│${setv} ${prefix}bot settings
-│${setv} ${prefix}getsession
-│${setv} ${prefix}delsession
-│${setv} ${prefix}delsampah
-│${setv} ${prefix}upsw
-│${setv} ${prefix}backup
-│${setv} $
-│${setv} >
-│${setv} <
+╭──❍「 *හිමිකරු (OWNER)* 」❍
+│${setv} ${prefix}bot [set] (බොට් සැකසුම්)
+│${setv} ${prefix}setbio (මතකය සැකසීම)
+│${setv} ${prefix}setppbot (බොට් පින්තූරය සැකසීම)
+│${setv} ${prefix}join (සමූහයකට එක්වීම)
+│${setv} ${prefix}leave (සමූහයෙන් ඉවත් වීම)
+│${setv} ${prefix}block (අවහිර කිරීම)
+│${setv} ${prefix}listblock (අවහිර කළ ලැයිස්තුව)
+│${setv} ${prefix}openblock (අවහිරය ඉවත් කිරීම)
+│${setv} ${prefix}listpc (පෞද්ගලික චැට් ලැයිස්තුව)
+│${setv} ${prefix}listgc (සමූහ ලැයිස්තුව)
+│${setv} ${prefix}ban (තහනම් කිරීම)
+│${setv} ${prefix}unban (තහනම ඉවත් කිරීම)
+│${setv} ${prefix}mute (නිහඬ කිරීම)
+│${setv} ${prefix}unmute (නිහඬ බව ඉවත් කිරීම)
+│${setv} ${prefix}creategc (සමූහයක් සෑදීම)
+│${setv} ${prefix}clearchat (චැට් මැකීම)
+│${setv} ${prefix}addprem (ප්‍රීමියම් එක් කිරීම)
+│${setv} ${prefix}delprem (ප්‍රීමියම් ඉවත් කිරීම)
+│${setv} ${prefix}listprem (ප්‍රීමියම් ලැයිස්තුව)
+│${setv} ${prefix}addlimit (සීමාව වැඩි කිරීම)
+│${setv} ${prefix}adduang (මුදල් එක් කිරීම)
+│${setv} ${prefix}setbotauthor (නිර්මාණකරු නම)
+│${setv} ${prefix}setbotname (බොට්ගේ නම)
+│${setv} ${prefix}setbotpackname (පැකේජ නම)
+│${setv} ${prefix}setapikey (API කේතය සැකසීම)
+│${setv} ${prefix}addowner (හිමිකරුවෙකු එක් කිරීම)
+│${setv} ${prefix}delowner (හිමිකරුවෙකු ඉවත් කිරීම)
+│${setv} ${prefix}getmsgstore (දත්ත ගබඩාව ලබා ගැනීම)
+│${setv} ${prefix}bot --settings (බොට් සැකසුම්)
+│${setv} ${prefix}bot settings (බොට් සැකසුම්)
+│${setv} ${prefix}getsession (සෙශන් එක ලබා ගැනීම)
+│${setv} ${prefix}delsession (සෙශන් එක මැකීම)
+│${setv} ${prefix}delsampah (වැඩකට නැති දත්ත මැකීම)
+│${setv} ${prefix}upsw (ස්ටේටස් දැමීම)
+│${setv} ${prefix}backup (දත්ත සුරැකීම)
+│${setv} $ (කේත ක්‍රියාත්මක කිරීම)
+│${setv} > (කේත ක්‍රියාත්මක කිරීම)
+│${setv} < (කේත ක්‍රියාත්මක කිරීම)
 ╰──────❍`)
 			}
 			break

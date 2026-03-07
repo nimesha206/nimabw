@@ -760,15 +760,6 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			? (db.game.private_ai_disabled === false)
 			: (gemini_autoreply[m.chat] === true)
 
-		// removed debug
-			isGroup: m.isGroup,
-			isAutoReplyEnabled,
-			isCmd,
-			fromMe: m.key.fromMe,
-			private_ai_disabled: db.game.private_ai_disabled,
-			budy: budy?.slice(0,30)
-		})
-
 		if (
 			isAutoReplyEnabled &&
 			!isCmd &&

@@ -61,15 +61,42 @@ pkg install git nodejs-lts python ffmpeg imagemagick -y
 # 3. yt-dlp install කරන්න (YouTube download සඳහා අත්‍යවශ්‍යයි)
 pip install yt-dlp
 
-# 4. Repository clone කරන්න
+# 4. Repository clone කරන්න (username/password නොඉල්ලයි)
 git clone https://github.com/nimesha206/nimabw.git
 cd nimabw
 
 # 5. Node packages install කරන්න
-npm install
+npm install --legacy-peer-deps
 
 # 6. Bot start කරන්න
-npm start
+node start.js
+```
+
+> ⚠️ **`git clone` username/password ඉල්ලනවා නම්:**
+> Repository එක **Public** කරන්න — GitHub → Settings → General → Danger Zone → Change visibility → Public
+> හෝ HTTPS වෙනුවට token use කරන්න:
+> ```bash
+> git clone https://<your-token>@github.com/nimesha206/nimabw.git
+> ```
+
+#### 🔄 දැනටමත් install කළා නම් (update කිරීමට):
+
+```bash
+cd ~/nimabw
+git pull origin main
+pip install -U yt-dlp
+node start.js
+```
+
+#### 📵 Termux background එකේ රඳවා ගැනීමට:
+
+```bash
+# Battery optimization off කරන්න
+# Settings → Apps → Termux → Battery → Unrestricted
+
+# Wake lock (phone sleep වැටුනත් run වෙනවා)
+termux-wake-lock
+node start.js
 ```
 
 ---

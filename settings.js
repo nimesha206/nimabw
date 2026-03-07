@@ -10,6 +10,7 @@ const chalk = require('chalk');
 //~~~~~~~~~~~~< GLOBAL SETTINGS >~~~~~~~~~~~~\\
 
 global.owner = ['94726800969']
+global.ownerName = 'Nimesha Madhushan'  // Bot හිමිකරු - වෙනස් නොකරන්න
 global.author = 'Nimesha Madhushan'
 global.botname = 'Miss Shasikala'
 global.packname = 'Miss Shasikala'
@@ -73,6 +74,10 @@ global.APIKeys = {
 
 global.badWords = ['dongo'] // input kata-kata toxic yg lain. ex: ['dongo','dongonya']
 global.chatLength = 500
+global.geminiMemorySize = 50  // Gemini history memory - messages 50ක් දක්වා මතක තියාගනී
+// Gemini Auto Reply API Key
+// https://aistudio.google.com/app/apikey යන්න ගිහින් free API key එකක් ගන්න
+global.geminiApiKey = 'YOUR_GEMINI_API_KEY_HERE'
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {

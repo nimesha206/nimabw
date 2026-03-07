@@ -271,6 +271,9 @@ async function startnimaBot() {
 ║
 ║ 💫 _සියලු commands සූදානම්_
 ║ 💫 _භාවිතයට සුදානම් වෙලා ඉන්නවා_
+╠══════════════════╣
+║ 🌸 *${global.botname || 'Miss Shasikala'}*
+║ 👑 *By ${global.ownerName || global.author || 'Nimesha Madhushan'}*
 ╚══════════════════╝`;
 			setTimeout(async () => {
 				await nima.sendMessage(ownerJid, { text: connectMsg }).catch(e => {});

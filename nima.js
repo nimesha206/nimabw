@@ -59,6 +59,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 	let suit = db.game.suit
 	let chess = db.game.chess
 	let chat_ai = db.game.chat_ai
+	// Gemini Auto Reply - private chat සඳහා, group සඳහා per-group
+	if (!db.game.gemini_autoreply) db.game.gemini_autoreply = {}
+	let gemini_autoreply = db.game.gemini_autoreply
+	// Gemini conversation history (per user/chat)
+	if (!db.game.gemini_history) db.game.gemini_history = {}
+	let gemini_history = db.game.gemini_history
 	let menfes = db.game.menfes
 	let tekateki = db.game.tekateki
 	let akinator = db.game.akinator
@@ -746,6 +752,68 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				}
 			}
 		}
+		
+		// ===== Gemini Auto Reply =====
+		// Private chat: .aion/.aioff (owner only) - default ON
+		// Group chat: .groupai on/off per-group (admin only) - default OFF
+		const isAutoReplyEnabled = !m.isGroup 
+			? (db.game.private_ai_disabled === false)
+			: (gemini_autoreply[m.chat] === true)
+
+		if (
+			isAutoReplyEnabled &&
+			!isCmd &&
+			!m.key.fromMe &&
+			m.key.remoteJid !== 'status@broadcast' &&
+			budy &&
+			budy.trim().length > 0 &&
+			!chat_ai[m.sender]
+		) {
+			try {
+				const ownerName = global.ownerName || global.author || 'Nimesha Madhushan'
+				const ownerNum = (global.owner?.[0] || '94726800969')
+				const botName = global.botname || 'Miss Shasikala'
+				const apiKey = global.geminiApiKey
+
+				if (apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
+					const memSize = global.geminiMemorySize || 50
+					const histKey = m.isGroup ? m.chat : m.sender
+					if (!gemini_history[histKey]) gemini_history[histKey] = []
+
+					// Owner recognition - sender number check
+					const senderNum = m.sender.split('@')[0]
+					const isOwnerMsg = (global.owner || []).map(n => n.replace(/[^0-9]/g,'')).includes(senderNum)
+
+					const systemPrompt = `ඔබ ${botName} නම් WhatsApp bot කෙනෙකි. ඔබව නිර්මාණය කළේ ${ownerName} විසිනි. ඔවුන්ගේ WhatsApp අංකය ${ownerNum} වේ. ඔවුන් ඔබේ නිර්මාතෘ හා හිමිකරු. ඕනෑම කෙනෙකු bot connect කළත් ${ownerName} (${ownerNum}) ව සදා ඔබේ creator ලෙස දැනගෙන ඉන්නේය.${isOwnerMsg ? ` ⚠️ දැනට කතා කරන්නේ ඔබේ හිමිකරු ${ownerName} ය - ඔවුන්ව විශේෂ ලෙස ගරු කරන්න, ඔවුන් කියන දෙයට ඉතා හොඳින් සවන් දෙන්න.` : ''} ඔබ සිංහල, ඉංග්‍රීසි සහ user කතා කරන ඕනෑම භාෂාවෙන් reply කරන්න. User message කරන භාෂාවෙන්ම reply කරන්න. ස්වාභාවිකව සහ මිත්‍රශීලීව කතා කරන්න. ඉතා දිගු answers නොදෙන්න.`
+
+					gemini_history[histKey].push({ role: 'user', parts: [{ text: budy }] })
+					if (gemini_history[histKey].length > memSize) gemini_history[histKey].shift()
+
+					const geminiRes = await fetch(
+						`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+						{
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								system_instruction: { parts: [{ text: systemPrompt }] },
+								contents: gemini_history[histKey]
+							})
+						}
+					)
+					const geminiData = await geminiRes.json()
+					const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text
+
+					if (replyText) {
+						gemini_history[histKey].push({ role: 'model', parts: [{ text: replyText }] })
+						if (gemini_history[histKey].length > memSize) gemini_history[histKey].shift()
+						await m.reply(replyText)
+					}
+				}
+			} catch (e) {
+				console.log('Gemini AutoReply Error:', e.message)
+			}
+		}
+		// ===== End Gemini Auto Reply =====
 		
 		// Afk
 		let mentionUser = [...new Set([...(m.mentionedJid || []), ...(m.quoted ? [m.quoted.sender] : [])])]
@@ -2013,6 +2081,60 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				delete chat_ai[m.sender];
 			}
 			break
+			// ===== Gemini Auto Reply Commands =====
+			case 'autoreply': {
+				if (!m.isGroup) return m.reply(`⚠️ *Private Chat AI*\n\nPrivate chat AI control:\n✅ on: *${prefix}aion*\n❌ off: *${prefix}aioff*\n\n💡 Group AI: *${prefix}groupai on/off*`)
+				if (!isAdmin && !isCreator) return m.reply('⚠️ Group Admin පමණි!')
+				if (!text || !['on','off'].includes(text.toLowerCase())) return m.reply(`*Gemini Auto Reply (Group)*\n\n✅ Enable: *${prefix}autoreply on*\n❌ Disable: *${prefix}autoreply off*\n\nStatus: ${gemini_autoreply[m.chat] ? '✅ ON' : '❌ OFF'}`)
+				if (text.toLowerCase() === 'on') {
+					gemini_autoreply[m.chat] = true
+					m.reply(`✅ *Gemini Auto Reply ON!*\n\nදැන් *මේ group* හි පමණක් හැම message එකටම AI reply යනවා 🤖\nඅනිත් groups බලපාන්නේ නෑ.`)
+				} else {
+					gemini_autoreply[m.chat] = false
+					m.reply(`❌ *Gemini Auto Reply OFF!*\n\nAI auto reply නවත්වා ඇත.`)
+				}
+			}
+			break
+			case 'aion': case 'privateai': {
+				if (m.isGroup) return m.reply(`💡 Private chat හිදී පමණක් use කරන්න!\nGroup AI: *${prefix}groupai on*`)
+				if (!isCreator) return m.reply(mess.owner)
+				if (!db.game.private_ai_disabled) db.game.private_ai_disabled = false
+				db.game.private_ai_disabled = false
+				m.reply(`✅ *Private Chat AI ON!*\n\nPrivate chat හි AI autoreply සක්‍රීය කළා.`)
+			}
+			break
+			case 'aioff': case 'stopai': {
+				if (m.isGroup) return m.reply(`💡 Private chat හිදී පමණක් use කරන්න!\nGroup AI: *${prefix}groupai off*`)
+				if (!isCreator) return m.reply(mess.owner)
+				if (!db.game.private_ai_disabled) db.game.private_ai_disabled = false
+				db.game.private_ai_disabled = true
+				m.reply(`❌ *Private Chat AI OFF!*\n\nPrivate chat AI autoreply අක්‍රීය කළා.`)
+			}
+			break
+			case 'groupai': {
+				if (!m.isGroup) return m.reply(`💡 Group chat හිදී පමණක් use කරන්න!\nPrivate AI: *${prefix}aion* / *${prefix}aioff*`)
+				if (!isAdmin && !isCreator) return m.reply('⚠️ Group Admin පමණි!')
+				if (!text || !['on','off'].includes(text.toLowerCase())) return m.reply(`*Group AI Auto Reply*\n\n✅ Enable: *${prefix}groupai on*\n❌ Disable: *${prefix}groupai off*\n\nStatus: ${gemini_autoreply[m.chat] ? '✅ ON' : '❌ OFF'}\n\n💡 මේ group හි පමණි. අනිත් groups බලපාන්නේ නෑ.`)
+				if (text.toLowerCase() === 'on') {
+					gemini_autoreply[m.chat] = true
+					m.reply(`✅ *Group AI ON!*\n\n*${m.isGroup ? m.metadata?.subject || 'මේ group' : ''}* හි AI autoreply සක්‍රීය.\nඅනිත් groups බලපාන්නේ නෑ 🤖`)
+				} else {
+					gemini_autoreply[m.chat] = false
+					m.reply(`❌ *Group AI OFF!*\n\nAI auto reply නවත්වා ඇත.`)
+				}
+			}
+			break
+			case 'clearai': case 'resetai': {
+				const histKeyDel = m.isGroup ? m.chat : m.sender
+				if (gemini_history[histKeyDel]) {
+					delete gemini_history[histKeyDel]
+					m.reply('🗑️ *AI conversation history clear කළා!*\n\nනව conversation එකක් ආරම්භ වේ.')
+				} else {
+					m.reply('⚠️ History නැහැ.')
+				}
+			}
+			break
+			// ===== End Gemini Commands =====
 			case 'jadibot': {
 				if (!isPremium) return m.reply(mess.prem)
 				if (!isLimit) return m.reply(mess.limit)
@@ -4340,6 +4462,14 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}ai (ප්‍රශ්න ඇසීම)
 │${setv} ${prefix}gemini (ගෙමිනි AI)
 │${setv} ${prefix}txt2img (අකුරුවලින් පින්තූර සෑදීම)
+│${setv} ${prefix}roomai (AI chat room)
+│${setv} ${prefix}delroomai (AI room නවත්වන්න)
+├──── *Gemini Auto Reply* ────
+│${setv} ${prefix}aion (Private AI on - owner)
+│${setv} ${prefix}aioff (Private AI off - owner)
+│${setv} ${prefix}groupai on (Group AI on - admin)
+│${setv} ${prefix}groupai off (Group AI off - admin)
+│${setv} ${prefix}clearai (AI history මකන්න)
 ╰──────❍`)
 			}
 			break
@@ -4459,6 +4589,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}delsampah (වැඩකට නැති දත්ත මැකීම)
 │${setv} ${prefix}upsw (ස්ටේටස් දැමීම)
 │${setv} ${prefix}backup (දත්ත සුරැකීම)
+├──── *AI (Owner)* ────
+│${setv} ${prefix}aion (Private AI on)
+│${setv} ${prefix}aioff (Private AI off)
 │${setv} $ (කේත ක්‍රියාත්මක කිරීම)
 │${setv} > (කේත ක්‍රියාත්මක කිරීම)
 │${setv} < (කේත ක්‍රියාත්මක කිරීම)

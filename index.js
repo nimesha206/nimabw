@@ -26,7 +26,7 @@ let phoneNumber;
 
 const userInfoSyt = () => {
 	try {
-		return os.userInfo().userනාමය
+		return os.userInfo().username
 	} catch (e) {
 		return process.env.USER || process.env.USERNAME || 'unknown';
 	}
@@ -71,7 +71,7 @@ const msgRetryCounterCache = new NodeCache();
 
 assertInstalled(process.platform === 'win32' ? 'where ffmpeg' : 'command -v ffmpeg', 'FFmpeg', 0);
 console.log(chalk.greenBright('✅ පද්ධතියට අවශ්‍ය සියලුම බාහිර ගොනු (Dependencies) සක්‍රීයයි'));
-console.log(chalk.green.bold(`╔═════[${`${chalk.cyan(userInfoSyt())}@${chalk.cyan(os.hostනාමය())}`}]═════`));
+console.log(chalk.green.bold(`╔═════[${`${chalk.cyan(userInfoSyt())}@${chalk.cyan(os.hostname())}`}]═════`));
 print('OS', `${os.platform()} ${os.release()} ${os.arch()}`);
 print('Uptime', `${Math.floor(os.uptime() / 3600)} පැය ${Math.floor((os.uptime() % 3600) / 60)} විනාඩි`);
 print('Shell', process.env.SHELL || process.env.COMSPEC || 'unknown');
@@ -306,7 +306,7 @@ async function startnimaBot() {
 			global.store.contacts[trueJid] = {
 				...global.store.contacts[trueJid],
 				id: trueJid,
-				නාමය: contact.notify
+				name: contact.notify
 			}
 			if (contact.id.endsWith('@lid')) {
 				global.store.contacts[trueJid].lid = jidNormalizedUser(contact.id);

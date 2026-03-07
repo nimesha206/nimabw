@@ -1555,7 +1555,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				} else m.reply(`⚠️ *Unwarn Command*\n\nඅවවාදය ඉවත් කිරීමට:\n📌 Reply කිරීමෙන්: *(reply කරන්න)*\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
-			case 'setනාමය': case 'setනාමයgc': case 'setsubject': case 'setsubjectgc': {
+			case 'setname': case 'setnamegc': case 'setsubject': case 'setsubjectgc': {
 				if (!m.isGroup) return m.reply(mess.group)
 				if (!m.isAdmin) return m.reply(mess.admin)
 				if (!m.isBotAdmin) return m.reply(mess.botAdmin)
@@ -2518,7 +2518,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			          avatar: true,
 			          from: {
 			            id: 1,
-			            නාමය: senderName,
+			            name: senderName,
 			            number: '+' + m.sender.split('@')[0],
 			            time: new Date().toLocaleTimeString('id-ID', {
 			              hour: '2-digit',
@@ -2531,7 +2531,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			          ...(m.quoted ? {
 			                replyMessage: {
 			                  chatId: Math.floor(Math.random() * 9999999),
-			                  නාමය: quotedName,
+			                  name: quotedName,
 			                  text: m?.quoted?.text || '',
 			                  number: '+' + m.quoted.sender.split('@')[0],
 			                  ...(quotedMediaBuffer ? { media: { buffer: quotedMediaBuffer.toString('base64') } } : {})
@@ -2894,7 +2894,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			break
 			case 'ghstalk': case 'githubstalk': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} userනාමයnya`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} usernamenya`)
 				try {
 					const res = await fetchJson('https://api.github.com/users/' + text)
 					m.reply({ image: { url: res.avatar_url }, caption: `*Userනාමය :* ${res.login}\n*Nickනාමය :* ${res.name || 'නැත'}\n*Bio :* ${res.bio || 'නැත'}\n*ID:* ${res.id}\n*Node ID :* ${res.node_id}\n*වර්ගය:* ${res.type}\n*Admin:* ${res.admin ? 'ඔව්' : 'නැහැ'}\n*Company :* ${res.company || 'නැත'}\n*Blog :* ${res.blog || 'නැත'}\n*Location :* ${res.location || 'නැත'}\n*Email :* ${res.email || 'නැත'}\n*Public Repo :* ${res.public_repos}\n*Public Gists :* ${res.public_gists}\n*Followers :* ${res.followers}\n*Following :* ${res.following}\n*Created At :* ${res.created_at} *Updated At :* ${res.updated_at}` })
@@ -3461,7 +3461,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tekateki, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tekateki[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tekateki[m.chat + key.id].jawaban)
 					delete tekateki[m.chat + key.id]
 				}
 			}
@@ -3476,7 +3476,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(90000)
 				if (rdGame(tebaklirik, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebaklirik[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebaklirik[m.chat + key.id].jawaban)
 					delete tebaklirik[m.chat + key.id]
 				}
 			}
@@ -3491,7 +3491,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tebakkata, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebakkata[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebakkata[m.chat + key.id].jawaban)
 					delete tebakkata[m.chat + key.id]
 				}
 			}
@@ -3508,7 +3508,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(300000)
 				if (family100.hasOwnProperty(m.chat)) {
-					m.reply('Waktu Habis\nපිළිතුරු:\n- ' + family100[m.chat].jawaban.join('\n- '))
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු:\n- ' + family100[m.chat].jawaban.join('\n- '))
 					delete family100[m.chat]
 				}
 			}
@@ -3523,7 +3523,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(susunkata, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + susunkata[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + susunkata[m.chat + key.id].jawaban)
 					delete susunkata[m.chat + key.id]
 				}
 			}
@@ -3538,7 +3538,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tebakkimia, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebakkimia[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebakkimia[m.chat + key.id].jawaban)
 					delete tebakkimia[m.chat + key.id]
 				}
 			}
@@ -3569,7 +3569,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tebaknegara, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebaknegara[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebaknegara[m.chat + key.id].jawaban)
 					delete tebaknegara[m.chat + key.id]
 				}
 			}
@@ -3584,7 +3584,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tebakgambar, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebakgambar[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebakgambar[m.chat + key.id].jawaban)
 					delete tebakgambar[m.chat + key.id]
 				}
 			}
@@ -3599,7 +3599,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tebakbendera, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebakbendera[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebakbendera[m.chat + key.id].jawaban)
 					delete tebakbendera[m.chat + key.id]
 				}
 			}
@@ -3626,7 +3626,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 				await sleep(60000)
 				if (rdGame(tebakangka, m.chat, key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + tebakangka[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + tebakangka[m.chat + key.id].jawaban)
 					delete tebakangka[m.chat + key.id]
 				}
 			}
@@ -3638,15 +3638,15 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!text) return m.reply(`Mode: ${Object.keys(modes).join(' | ')}\nභාවිතා කිරීමේ උදාහරණ: ${prefix}math medium`)
 				if (!inputMode.includes(text.toLowerCase())) return m.reply('Mode හොයාගත නොහැකිය!')
 				let result = await genMath(text.toLowerCase())
-				let { key } = await m.reply(`*ප්‍රතිඵලය කොතරම්: ${result.soal.toLowerCase()}*?\n\nකාලය: ${(result.කාලය / 1000).toFixed(2)} seconds`)
+				let { key } = await m.reply(`*ප්‍රතිඵලය කොතරම්: ${result.soal.toLowerCase()}*?\n\nකාලය: ${(result.waktu / 1000).toFixed(2)} seconds`)
 				kuismath[m.chat + key.id] = {
 					jawaban: result.jawaban,
 					mode: text.toLowerCase(),
 					id: key.id
 				}
-				await sleep(kuismath, result.කාලය)
+				await sleep(kuismath, result.waktu)
 				if (rdGame(m.chat + key.id)) {
-					m.reply('Waktu Habis\nපිළිතුරු: ' + kuismath[m.chat + key.id].jawaban)
+					m.reply('⏰ කාලය ඉකිවිය!\nපිළිතුරු: ' + kuismath[m.chat + key.id].jawaban)
 					delete kuismath[m.chat + key.id]
 				}
 			}
@@ -3844,8 +3844,8 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					m.reply(`🃏GAME BLACKJACK♦️\nආරම්භ Card: ${blackjack[m.chat].startCard.rank + blackjack[m.chat].startCard.suit}\nDeck Count: ${blackjack[m.chat].deck.length}\n${blackjack[m.chat].players.map(a => `- @${a.id.split('@')[0]} : (${a.cards.length} kartu)`).join('\n')}\n\nPrivate Chat පරීක්ෂා කරන්න\nwa.me/${botNumber.split('@')[0]}`);
 					for (let p of blackjack[m.chat].players) {
 						const startCard = blackjack[m.chat].startCard;
-						let buttons = p.cards.map(a => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
-						if (!blackjack[m.chat].hasMatching(p.id)) buttons.push({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
+						let buttons = p.cards.map(a => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
+						if (!blackjack[m.chat].hasMatching(p.id)) buttons.push({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
 						await nimesha.sendListMsg(p.id, { text: `ආරම්භ Card: ${startCard.rank + startCard.suit}`, footer: `${p.cards.map(c => c.rank + c.suit).join(', ')}`, buttons }, { quoted: m });
 					}
 					break
@@ -3865,8 +3865,8 @@ _ස්තූතියි!_ 🌸`).then(() => {
 								const newCard = session.deck.shift();
 								player.cards.push(newCard);
 								await sleep(1000);
-								let buttons = player.cards.map(a => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
-								if (!session.hasMatching(player.id)) buttons.push({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
+								let buttons = player.cards.map(a => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
+								if (!session.hasMatching(player.id)) buttons.push({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
 								await nimesha.sendListMsg(player.id, { text: `ආරම්භ Card: ${session.startCard.rank + session.startCard.suit}`, footer: `${player.cards.map(c => c.rank + c.suit).join(', ')}`, buttons }, { quoted: m });
 							} else {
 								let reuse = session.reuseSubmitCardsForDrinking()
@@ -3884,7 +3884,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 											return;
 										}
 										const leaderCards = session.players.find(a => a.id === session.leader);
-										let buttons = leaderCards.cards.map(c => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
+										let buttons = leaderCards.cards.map(c => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
 										await nimesha.sendListMsg(session.leader, { text: 'නව Round ආරම්භ කිරීමට Card තෝරන්න', footer: leaderCards.cards.map(c => c.rank + c.suit).join(', '), buttons }, { quoted: m });
 									}
 								}
@@ -3900,7 +3900,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 									return;
 								}
 								const leaderCards = session.players.find(a => a.id === session.leader);
-								let buttons = leaderCards.cards.map(c => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
+								let buttons = leaderCards.cards.map(c => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
 								await nimesha.sendListMsg(session.leader, { text: 'නව Round ආරම්භ කිරීමට Card තෝරන්න', footer: leaderCards.cards.map(c => c.rank + c.suit).join(', '), buttons }, { quoted: m });
 							}
 						}
@@ -3942,8 +3942,8 @@ _ස්තූතියි!_ 🌸`).then(() => {
 							for (let s of session.players) {
 								if (s.id === session.leader) continue;
 								const startCard = session.startCard;
-								let buttons = s.cards.map(a => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
-								if (!session.hasMatching(s.id)) buttons.push({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
+								let buttons = s.cards.map(a => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
+								if (!session.hasMatching(s.id)) buttons.push({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
 								await nimesha.sendListMsg(s.id, { text: `ආරම්භ Card: ${startCard.rank + startCard.suit}`, footer: `${s.cards.map(c => c.rank + c.suit).join(', ')}`, buttons }, { quoted: m });
 							}
 							return;
@@ -3958,7 +3958,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 									return;
 								}
 								const leaderCards = session.players.find(a => a.id === session.leader);
-								let buttons = leaderCards.cards.map(c => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
+								let buttons = leaderCards.cards.map(c => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
 								await nimesha.sendListMsg(session.leader, { text: 'නව Round ආරම්භ කිරීමට Card තෝරන්න', footer: leaderCards.cards.map(c => c.rank + c.suit).join(', '), buttons }, { quoted: m });
 							}
 						}
@@ -4072,7 +4072,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}demote (පාලක තනතුරු ඉවත් කිරීම)
 │${setv} ${prefix}warn (අවවාද කිරීම)
 │${setv} ${prefix}unwarn (අවවාද ඉවත් කිරීම)
-│${setv} ${prefix}setනාමය (සමූහයේ නම වෙනස් කිරීම)
+│${setv} ${prefix}setname (සමූහයේ නම වෙනස් කිරීම)
 │${setv} ${prefix}setdesc (විස්තරය වෙනස් කිරීම)
 │${setv} ${prefix}setppgc (සමූහ ඡායාරූපය සැකසීම)
 │${setv} ${prefix}delete (පණිවිඩ මැකීම)
@@ -4349,7 +4349,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}demote (පාලක තනතුරු ඉවත් කිරීම)
 │${setv} ${prefix}warn (අවවාද කිරීම)
 │${setv} ${prefix}unwarn (අවවාද ඉවත් කිරීම)
-│${setv} ${prefix}setනාමය (සමූහයේ නම වෙනස් කිරීම)
+│${setv} ${prefix}setname (සමූහයේ නම වෙනස් කිරීම)
 │${setv} ${prefix}setdesc (විස්තරය වෙනස් කිරීම)
 │${setv} ${prefix}setppgc (සමූහ ඡායාරූපය සැකසීම)
 │${setv} ${prefix}delete (පණිවිඩ මැකීම)

@@ -2098,7 +2098,6 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'aion': case 'privateai': {
 				if (m.isGroup) return m.reply(`💡 Private chat හිදී පමණක් use කරන්න!\nGroup AI: *${prefix}groupai on*`)
 				if (!isCreator) return m.reply(mess.owner)
-				if (!db.game.private_ai_disabled) db.game.private_ai_disabled = false
 				db.game.private_ai_disabled = false
 				m.reply(`✅ *Private Chat AI ON!*\n\nPrivate chat හි AI autoreply සක්‍රීය කළා.`)
 			}
@@ -2106,7 +2105,6 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'aioff': case 'stopai': {
 				if (m.isGroup) return m.reply(`💡 Private chat හිදී පමණක් use කරන්න!\nGroup AI: *${prefix}groupai off*`)
 				if (!isCreator) return m.reply(mess.owner)
-				if (!db.game.private_ai_disabled) db.game.private_ai_disabled = false
 				db.game.private_ai_disabled = true
 				m.reply(`❌ *Private Chat AI OFF!*\n\nPrivate chat AI autoreply අක්‍රීය කළා.`)
 			}

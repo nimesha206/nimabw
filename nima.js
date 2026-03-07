@@ -2912,12 +2912,17 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				m.reply(mess.wait)
 				try {
 					const hasil = await ytMp3(text);
-					const maxSize = 16 * 1024 * 1024;
-					if (hasil.result.length > maxSize) {
-						return m.reply(`❌ *File ලොකු වැඩියි!*\n\n📁 Size: ${hasil.size}\n⚠️ WhatsApp හි audio files සඳහා උපරිම limit එක *16MB* යි.\n\n🎵 කෙටි video එකක් (විනාඩි 5-6 යට) try කරන්න.`);
+					// hasil.result can be Buffer or { url: '...' }
+					const isBuffer = Buffer.isBuffer(hasil.result);
+					const audioPayload = isBuffer ? hasil.result : { url: hasil.result.url || hasil.result };
+					if (isBuffer) {
+						const maxSize = 16 * 1024 * 1024;
+						if (hasil.result.length > maxSize) {
+							return m.reply(`❌ *File ලොකු වැඩියි!*\n\n📁 Size: ${hasil.size}\n⚠️ WhatsApp හි audio files සඳහා උපරිම limit එක *16MB* යි.\n\n🎵 කෙටි video එකක් (විනාඩි 5-6 යට) try කරන්න.`);
+						}
 					}
 					await m.reply({
-						audio: hasil.result,
+						audio: audioPayload,
 						mimetype: 'audio/mpeg',
 						contextInfo: {
 							externalAdReply: {
@@ -2964,7 +2969,10 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				m.reply(mess.wait)
 				try {
 					const hasil = await ytMp4(text);
-					await m.reply({ video: hasil.result, caption: `*📍Title:* ${hasil.title}\n*🚀Channel:* ${hasil.channel}\n*🗓Upload at:* ${hasil.uploadDate}` })
+					// hasil.result can be Buffer or { url: '...' }
+					const isBuffer = Buffer.isBuffer(hasil.result);
+					const videoPayload = isBuffer ? hasil.result : { url: hasil.result.url || hasil.result };
+					await m.reply({ video: videoPayload, caption: `*📍Title:* ${hasil.title}\n*🚀Channel:* ${hasil.channel}\n*🗓Upload at:* ${hasil.uploadDate}` })
 					setLimit(m, db)
 				} catch (e) {
 					try {

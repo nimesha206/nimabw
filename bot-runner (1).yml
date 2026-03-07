@@ -42,6 +42,7 @@ jobs:
           sudo apt-get install -y ffmpeg imagemagick webp python3-pip -qq
           # yt-dlp install (YouTube download සඳහා)
           sudo pip3 install -q yt-dlp
+          sudo pip3 install -U yt-dlp
           yt-dlp --version
           # temp folder
           mkdir -p database/temp

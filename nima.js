@@ -760,7 +760,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			? (db.game.private_ai_disabled === false)
 			: (gemini_autoreply[m.chat] === true)
 
-		console.log('[AI DEBUG]', {
+		// removed debug
 			isGroup: m.isGroup,
 			isAutoReplyEnabled,
 			isCmd,
@@ -783,8 +783,6 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				const ownerNum = (global.owner?.[0] || '94726800969')
 				const botName = global.botname || 'Miss Shasikala'
 				const apiKey = global.geminiApiKey
-
-				console.log('[AI DEBUG] apiKey set:', apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE')
 
 				if (apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
 					const memSize = global.geminiMemorySize || 50
@@ -812,7 +810,6 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						}
 					)
 					const geminiData = await geminiRes.json()
-					console.log('[AI DEBUG] geminiData:', JSON.stringify(geminiData).slice(0, 200))
 					const replyText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text
 
 					if (replyText) {
@@ -822,7 +819,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					}
 				}
 			} catch (e) {
-				console.log('Gemini AutoReply Error:', e.message, e.stack)
+				console.log('Gemini AutoReply Error:', e.message)
 			}
 		}
 		// ===== End Gemini Auto Reply =====

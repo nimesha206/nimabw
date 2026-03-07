@@ -9,7 +9,7 @@ const chalk = require('chalk');
 
 //~~~~~~~~~~~~< GLOBAL SETTINGS >~~~~~~~~~~~~\\
 
-global.owner = ['94726800969']
+global.owner = ['94784134577']
 global.ownerName = 'Nimesha Madhushan'  // Bot හිමිකරු - වෙනස් නොකරන්න
 global.author = 'Nimesha Madhushan'
 global.botname = 'Miss Shasikala'

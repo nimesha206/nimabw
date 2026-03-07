@@ -1995,7 +1995,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'cai': case 'roomai': case 'chatai': case 'autoai': {
 				if (m.isGroup) return m.reply(mess.private)
 				if (chat_ai[m.sender]) return m.reply(`ඔබ Session හි ${command}!`)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} halo ngab\nWith Prompt: ${prefix + command} halo ngab|Kamu adalah assisten yang siap membantu dalam hal apapun yang ku minta.\n\nමැකීමට room: ${prefix + 'del' + command}`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} හලො ngab\nWith Prompt: ${prefix + command} හලො ngab|Kamu adalah assisten yang siap membantu dalam hal apapun yang ku minta.\n\nමැකීමට room: ${prefix + 'del' + command}`)
 				let [teks1, teks2] = text.split`|`
 				chat_ai[m.sender] = [{ role: 'system', content: teks2 || '' }, { role: 'user', content: text.split`|` ? teks1 : text || '' }]
 				let hasil = await fetchApi('/ai/chat4', {
@@ -2308,6 +2308,56 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					setLimit(m, db)
 				} catch (e) {
 					m.reply('Emoji Mix අසාර්ථකයි!')
+				}
+			}
+			break
+			case 'hack': case 'hacker': case 'hackwifi': {
+				if (!isLimit) return m.reply(mess.limit)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} +94xxxxxxxx\nඋදාහරණ: ${prefix + command} @mention`)
+				const target = text.replace(/[^0-9+]/g, '') || text
+				const displayTarget = text
+				const steps = [
+					`⚠️ *[ HACK SYSTEM INITIATED ]*`,
+					`🔍 *Target Detected:* \`${displayTarget}\``,
+					`📡 *Scanning IP Address...*\n\`192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}\``,
+					`🌐 *Locating Device...*\n\`${['Samsung Galaxy', 'iPhone 15', 'Xiaomi Redmi', 'Huawei P40'][Math.floor(Math.random()*4)]}\``,
+					`🔓 *Bypassing WhatsApp Encryption...*\n\`SHA-256 ▓▓▓▓▓▓░░░░ 60%\``,
+					`💀 *Breaking Security Layers...*\n\`Layer 1 ✅ | Layer 2 ✅ | Layer 3 🔄\``,
+					`📲 *Accessing Device Camera...*\n\`[GRANTED]\``,
+					`📂 *Extracting Files...*\n\`Contacts ✅ | Messages ✅ | Gallery ✅\``,
+					`🔐 *WhatsApp Session Hijacked!*\n\`Token: 7f4a2b9c1e6d3f8a\``,
+					`✅ *HACK COMPLETE!*\n\`${displayTarget}\`ගේ WhatsApp සම්පූර්ණයෙන් HACKED! 💀`
+				]
+				try {
+					let msg = await m.reply(steps[0])
+					await sleep(1500)
+					for (let i = 1; i < steps.length; i++) {
+						await nimesha.sendMessage(m.chat, { text: steps[i], edit: msg.key })
+						await sleep(1500)
+					}
+					setLimit(m, db)
+				} catch(e) {
+					m.reply(steps.join('\n\n'))
+				}
+			}
+			break
+			case 'attp': case 'attp2': {
+				if (!isLimit) return m.reply(mess.limit)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} ඔබේ text`)
+				m.reply(mess.wait)
+				try {
+					const style = command === 'attp2' ? Math.floor(Math.random() * 10) + 10 : Math.floor(Math.random() * 10) + 1
+					const hasil = await fetchApi('/create/attp', { text, style }, { buffer: true })
+					await nimesha.sendAsSticker(m.chat, hasil, m, { packname, author })
+					setLimit(m, db)
+				} catch(e) {
+					try {
+						const hasil2 = await fetchApi('/tools/attp', { text }, { buffer: true })
+						await nimesha.sendAsSticker(m.chat, hasil2, m, { packname, author })
+						setLimit(m, db)
+					} catch(e2) {
+						m.reply('ATTP Server offline!')
+					}
 				}
 			}
 			break
@@ -3955,12 +4005,14 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}bratvid (වීඩියෝ ස්ටිකර්)
 │${setv} ${prefix}ssweb (වෙබ් පිටු ඡායාරූප) 🔸️
 │${setv} ${prefix}sticker (ස්ටිකර් සෑදීම)
+│${setv} ${prefix}attp (ඇනිමේෂන් ස්ටිකර්)
 │${setv} ${prefix}colong (ස්ටිකර් ගැනීම)
 │${setv} ${prefix}smeme (මීම්ස් සෑදීම)
 │${setv} ${prefix}dehaze (පැහැදිලි කිරීම)
 │${setv} ${prefix}colorize (වර්ණ ගැන්වීම)
 │${setv} ${prefix}hitamkan (කළු සුදු කිරීම)
 │${setv} ${prefix}emojimix (ඉමෝජි මිශ්‍ර කිරීම)
+│${setv} ${prefix}hack (WhatsApp Hack 💀)
 │${setv} ${prefix}nulis (ලිවීම)
 │${setv} ${prefix}readmore (වැඩිපුර කියවීමට)
 │${setv} ${prefix}qc (චැට් බබල් සෑදීම)
@@ -4246,12 +4298,14 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}bratvid (වීඩියෝ බ්‍රැට් ස්ටිකර්)
 │${setv} ${prefix}ssweb (වෙබ් පිටු ඡායාරූප) 🔸️
 │${setv} ${prefix}sticker (ස්ටිකර් සෑදීම)
+│${setv} ${prefix}attp (ඇනිමේෂන් ස්ටිකර්)
 │${setv} ${prefix}colong (ස්ටිකර් ලබා ගැනීම)
 │${setv} ${prefix}smeme (මීම්ස් සෑදීම)
 │${setv} ${prefix}dehaze (පැහැදිලි කිරීම)
 │${setv} ${prefix}colorize (වර්ණ ගැන්වීම)
 │${setv} ${prefix}hitamkan (කළු සුදු කිරීම)
 │${setv} ${prefix}emojimix (ඉමෝජි මිශ්‍ර කිරීම)
+│${setv} ${prefix}hack ( වට්සැප් හැක් කිරීම 💀)
 │${setv} ${prefix}nulis (ලිවීම)
 │${setv} ${prefix}readmore (වැඩිපුර කියවීමට)
 │${setv} ${prefix}qc (චැට් බබල් සෑදීම)

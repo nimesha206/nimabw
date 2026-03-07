@@ -32,6 +32,12 @@ const { generateWAMessageContent, getContentType } = require('baileys');
 const { UguuSe } = require('./lib/uploader');
 const TicTacToe = require('./lib/tictactoe');
 const { antiSpam } = require('./src/antispam');
+// @mrnima npm packages (npm install @mrnima/instagram-downloader @mrnima/tiktok-downloader @mrnima/facebook-downloader)
+let mrnima_ig = null, mrnima_tt = null, mrnima_fb = null;
+try { mrnima_ig = require('@mrnima/instagram-downloader'); } catch(e) { console.log('[mrnima] instagram-downloader not installed'); }
+try { mrnima_tt = require('@mrnima/tiktok-downloader'); } catch(e) { console.log('[mrnima] tiktok-downloader not installed'); }
+try { mrnima_fb = require('@mrnima/facebook-downloader'); } catch(e) { console.log('[mrnima] facebook-downloader not installed'); }
+
 const { ytMp4, ytMp3 } = require('./lib/scraper');
 const templateMenu = require('./lib/template_menu');
 const { toAudio, toPTT, toVideo } = require('./lib/converter');
@@ -2470,29 +2476,72 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			break
 			case 'attp': case 'attp2': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} ඔබේ text`)
+				if (!text) return m.reply(`*ජීවම් අකුරු ස්ටිකර්* ✨\nඋදාහරණ: ${prefix + command} ඔබේ text`)
 				m.reply(mess.wait)
-				try {
-					const style = command === 'attp2' ? Math.floor(Math.random() * 10) + 10 : Math.floor(Math.random() * 10) + 1
-					const hasil = await fetchApi('/create/attp', { text, style }, { buffer: true })
-					await nimesha.sendAsSticker(m.chat, hasil, m, { packname, author })
-					setLimit(m, db)
-				} catch(e) {
+				// ATTP methods priority order
+				const atpMethods = [
+					// 1. api.nima.biz.id (original)
+					async () => {
+						const style = command === 'attp2' ? Math.floor(Math.random() * 10) + 10 : Math.floor(Math.random() * 10) + 1
+						return await fetchApi('/create/attp', { text, style }, { buffer: true })
+					},
+					// 2. api.xteam.xyz
+					async () => {
+						const res = await fetch(`https://api.xteam.xyz/attp?file&text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						if (!res.ok) throw new Error('xteam failed')
+						return Buffer.from(await res.arrayBuffer())
+					},
+					// 3. bk9.fun
+					async () => {
+						const s = Math.floor(Math.random() * 10) + 1
+						const res = await fetch(`https://bk9.fun/sticker/attp?text=${encodeURIComponent(text)}&style=${s}`, { signal: AbortSignal.timeout(15000) })
+						if (!res.ok) throw new Error('bk9 failed')
+						const buf = Buffer.from(await res.arrayBuffer())
+						if (buf.length < 200) throw new Error('invalid')
+						return buf
+					},
+					// 4. api.itzpire.com
+					async () => {
+						const res = await fetch(`https://api.itzpire.com/sticker/attp?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						if (!res.ok) throw new Error('itzpire failed')
+						return Buffer.from(await res.arrayBuffer())
+					},
+					// 5. apis.davidcyriltech.my.id
+					async () => {
+						const res = await fetch(`https://apis.davidcyriltech.my.id/attp?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						const data = await res.json()
+						const imgUrl = data?.result || data?.url || data?.image
+						if (!imgUrl) throw new Error('no url')
+						const r2 = await fetch(imgUrl, { signal: AbortSignal.timeout(15000) })
+						return Buffer.from(await r2.arrayBuffer())
+					},
+					// 6. attp.xteam.xyz (alt endpoint)
+					async () => {
+						const res = await fetch(`https://attp.xteam.xyz/?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						if (!res.ok) throw new Error('attp.xteam failed')
+						return Buffer.from(await res.arrayBuffer())
+					},
+					// 7. api.nima.biz.id style 2
+					async () => {
+						return await fetchApi('/create/attp', { text, style: Math.floor(Math.random() * 5) + 6 }, { buffer: true })
+					},
+				]
+				let success = false
+				for (let i = 0; i < atpMethods.length; i++) {
 					try {
-						const hasil2 = await fetchApi('/create/attp', { text, style: Math.floor(Math.random() * 5) + 1 }, { buffer: true })
-						await nimesha.sendAsSticker(m.chat, hasil2, m, { packname, author })
+						console.log('[ATTP] Trying method', i + 1)
+						const buf = await atpMethods[i]()
+						if (!buf || buf.length < 100) throw new Error('empty buffer')
+						await nimesha.sendAsSticker(m.chat, buf, m, { packname, author })
 						setLimit(m, db)
-					} catch(e2) {
-						try {
-							const buf3 = await atpSticker(text)
-							await nimesha.sendAsSticker(m.chat, buf3, m, { packname, author })
-							setLimit(m, db)
-						} catch(e3) {
-							m.reply('ATTP අසාර්ථකයි!')
-						}
+						console.log('[ATTP] ✅ Method', i + 1)
+						success = true
+						break
+					} catch(e) {
+						console.log('[ATTP] ❌ Method', i + 1, e.message)
 					}
 				}
-			}
+				if (!success) m.reply('❌ ATTP අසාර්ථකයි! සියලු APIs offline.')
 			break
 			case 'qc':
 			case 'quote':
@@ -2994,47 +3043,106 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'ig': case 'instagram': case 'instadl': case 'igdown': case 'igdl': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Instagram URL`)
-				if (!text.includes('instagram.com')) return m.reply('URL Instagram ප්‍රතිඵලය ඇතුළත් නෑ!')
+				if (!text.includes('instagram.com')) return m.reply('Instagram URL නෙවෙ!')
 				m.reply(mess.wait)
-				try {
-					let hasil = await fetchApi('/download/instagram', { url: text })
-					if(hasil.result.urls.length > 1) {
-						await nimesha.sendAlbumMessage(m.chat, {
-							album: hasil.result.urls.map(a => (a.is_video ? { video: { url: a.url }} : { image: { url: a.url }})),
-							caption: hasil.result.caption
-						}, { quoted: m });
-					} else if(hasil.result.urls.length == 1) {
-						m.reply({ image: { url: hasil.result.urls[0].url }, caption: hasil.result.caption });
-					} else m.reply('Post ලබා ගත නොහැකිය හෝ Private!')
-					setLimit(m, db)
-				} catch (e) {
-					console.log(e)
-					m.reply('Post ලබා ගත නොහැකිය හෝ Private!')
+				// Instagram: @mrnima package -> fetchApi -> scraper fallback
+				const sendIgMedia = async (items, caption) => {
+					if (items.length > 1) {
+						await nimesha.sendAlbumMessage(m.chat, { album: items.map(a => a.is_video ? { video: { url: a.url } } : { image: { url: a.url } }), caption: caption || '' }, { quoted: m });
+					} else if (items[0]?.is_video) {
+						await m.reply({ video: { url: items[0].url }, caption: caption || '' });
+					} else {
+						await m.reply({ image: { url: items[0].url }, caption: caption || '' });
+					}
 				}
+				let igOk = false
+				// Method 1: @mrnima/instagram-downloader
+				if (!igOk && mrnima_ig) {
+					try {
+						const { instagramDownload } = mrnima_ig
+						const res = await instagramDownload(text)
+						if (res?.status && res?.result?.length) {
+							const items = res.result.map(r => ({ url: r.link, is_video: r.type === 'video' }))
+							await sendIgMedia(items, '')
+							setLimit(m, db); igOk = true
+						}
+					} catch(e) { console.log('[IG] @mrnima failed:', e.message) }
+				}
+				// Method 2: fetchApi (api.nima.biz.id)
+				if (!igOk) {
+					try {
+						const hasil = await fetchApi('/download/instagram', { url: text })
+						if (hasil?.result?.urls?.length) {
+							const items = hasil.result.urls.map(a => ({ url: a.url, is_video: a.is_video }))
+							await sendIgMedia(items, hasil.result.caption || '')
+							setLimit(m, db); igOk = true
+						}
+					} catch(e) { console.log('[IG] fetchApi failed:', e.message) }
+				}
+				// Method 3: scraper igDownload (yt-dlp multi-method)
+				if (!igOk) {
+					try {
+						const hasil = await igDownload(text)
+						if (hasil.type === 'album') await sendIgMedia(hasil.items, hasil.caption)
+						else await sendIgMedia([{ url: hasil.url, is_video: hasil.type === 'video' }], hasil.caption)
+						setLimit(m, db); igOk = true
+					} catch(e) { console.log('[IG] scraper failed:', e.message) }
+				}
+				if (!igOk) m.reply('❌ Instagram Post ලබා ගත නොහැකිය! Private හෝ Invalid URL.')
 			}
 			break
 			case 'tiktok': case 'tiktokdown': case 'ttdown': case 'ttdl': case 'tt': case 'ttmp4': case 'ttvideo': case 'tiktokmp4': case 'tiktokvideo': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} TikTok URL`)
-				if (!text.includes('tiktok.com')) return m.reply('URL TikTok ප්‍රතිඵලය ඇතුළත් නෑ!')
-				try {
-					const hasil = await fetchApi('/download/tiktok', { url: text })
-					m.reply(mess.wait)
-					if (hasil.result.download.type == "video") {
-						await m.reply({ video: { url: hasil.result.download?.video?.nowm_hd || hasil.result.download?.video?.nowm }, caption: `*📍Title:* ${hasil.result.desc || '-'}\n*🕓Create At:* ${hasil.result.create_time}\n*🎃Author:* ${hasil.result.author.nickනාමය} (@${hasil.result.author.unique_id})` });
-					} else if (hasil.result.download.type == "images") {
-						await nimesha.sendAlbumMessage(m.chat, {
-							album: hasil.result.download.images.map(a => ({ image: { url: a.url }})),
-							caption: `*📍Title:* ${hasil.result.desc || '-'}\n*🕓Create At:* ${hasil.result.create_time}\n*🎃Author:* ${hasil.result.author.nickනාමය} (@${hasil.result.author.unique_id})`
-						}, { quoted: m });
-					} else {
-						return m.reply('Url නැහැ Valid!')
-					}
-					setLimit(m, db)
-				} catch (e) {
-					console.log(e)
-					m.reply('අසාර්ථකයි/URL වලංගු නොවේ!')
+				if (!text.includes('tiktok.com')) return m.reply('TikTok URL නෙවෙ!')
+				m.reply(mess.wait)
+				let ttOk = false
+				// Method 1: @mrnima/tiktok-downloader
+				if (!ttOk && mrnima_tt) {
+					try {
+						const { tiktokDownloader } = mrnima_tt
+						const res = await tiktokDownloader(text)
+						if (res?.status && res?.result) {
+							const d = res.result
+							const cap = `*🎵 TikTok*\n*📌 ${d.title || ''}*`
+							if (d.dl_link?.images && d.dl_link.images !== false) {
+								const imgs = Array.isArray(d.dl_link.images) ? d.dl_link.images : []
+								if (imgs.length) await nimesha.sendAlbumMessage(m.chat, { album: imgs.map(u => ({ image: { url: u } })), caption: cap }, { quoted: m })
+							} else {
+								const vid = d.dl_link?.download_mp4_1 || d.dl_link?.download_mp4_2 || d.dl_link?.download_mp4_3
+								if (vid) await m.reply({ video: { url: vid }, caption: cap })
+							}
+							setLimit(m, db); ttOk = true
+						}
+					} catch(e) { console.log('[TT] @mrnima failed:', e.message) }
 				}
+				// Method 2: fetchApi
+				if (!ttOk) {
+					try {
+						const hasil = await fetchApi('/download/tiktok', { url: text })
+						const cap = `*📍 ${hasil.result.desc || '-'}*`
+						if (hasil.result.download.type === 'video') {
+							await m.reply({ video: { url: hasil.result.download?.video?.nowm_hd || hasil.result.download?.video?.nowm }, caption: cap })
+						} else if (hasil.result.download.type === 'images') {
+							await nimesha.sendAlbumMessage(m.chat, { album: hasil.result.download.images.map(a => ({ image: { url: a.url } })), caption: cap }, { quoted: m })
+						}
+						setLimit(m, db); ttOk = true
+					} catch(e) { console.log('[TT] fetchApi failed:', e.message) }
+				}
+				// Method 3: scraper tiktokDownload
+				if (!ttOk) {
+					try {
+						const hasil = await tiktokDownload(text)
+						const cap = `*🎵 TikTok*\n*📌 ${hasil.title || ''}*`
+						if (hasil.type === 'slideshow') {
+							await nimesha.sendAlbumMessage(m.chat, { album: hasil.items.map(u => ({ image: { url: u } })), caption: cap }, { quoted: m })
+						} else {
+							await m.reply({ video: { url: hasil.url }, caption: cap })
+						}
+						setLimit(m, db); ttOk = true
+					} catch(e) { console.log('[TT] scraper failed:', e.message) }
+				}
+				if (!ttOk) m.reply('❌ TikTok Download අසාර්ථකයි!')
 			}
 			break
 			case 'ttmp3': case 'tiktokmp3': case 'ttaudio': case 'tiktokaudio': {
@@ -3068,19 +3176,45 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'fb': case 'fbdl': case 'fbdown': case 'facebook': case 'facebookdl': case 'facebookdown': case 'fbdownload': case 'fbmp4': case 'fbvideo': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Facebook URL`)
-				if (!text.includes('facebook.com')) return m.reply('URL Facebook ප්‍රතිඵලය ඇතුළත් නෑ!')
-				try {
-					const hasil = await fetchApi('/download/facebook', { url: text });
-					if (!hasil.result.hd && !hasil.result.sd) {
-						m.reply('Video හොයාගත නොහැකිය!')
-					} else {
-						m.reply(mess.wait)
-						await nimesha.sendFileUrl(m.chat, hasil.result.hd || hasil.result.sd, `*🎐Title:* ${hasil.result.title}`, m);
-					}
-					setLimit(m, db)
-				} catch (e) {
-					m.reply('Facebook Downloader Server offline!')
+				if (!/facebook\.com|fb\.watch/.test(text)) return m.reply('Facebook URL නෙවෙ!')
+				m.reply(mess.wait)
+				let fbOk = false
+				// Method 1: @mrnima/facebook-downloader
+				if (!fbOk && mrnima_fb) {
+					try {
+						const { facebook } = mrnima_fb
+						const res = await facebook(text)
+						if (res?.status && res?.result?.links) {
+							const vidUrl = res.result.links.HD || res.result.links.SD
+							if (vidUrl) {
+								await nimesha.sendFileUrl(m.chat, vidUrl, `*📘 Facebook Video*\n⏱ ${res.result.duration || ''}`, m)
+								setLimit(m, db); fbOk = true
+							}
+						}
+					} catch(e) { console.log('[FB] @mrnima failed:', e.message) }
 				}
+				// Method 2: fetchApi
+				if (!fbOk) {
+					try {
+						const hasil = await fetchApi('/download/facebook', { url: text })
+						const vidUrl = hasil?.result?.hd || hasil?.result?.sd
+						if (vidUrl) {
+							await nimesha.sendFileUrl(m.chat, vidUrl, `*📘 ${hasil.result.title || 'Facebook Video'}*`, m)
+							setLimit(m, db); fbOk = true
+						}
+					} catch(e) { console.log('[FB] fetchApi failed:', e.message) }
+				}
+				// Method 3: scraper fbDownload
+				if (!fbOk) {
+					try {
+						const hasil = await fbDownload(text)
+						if (hasil.hd || hasil.sd) {
+							await nimesha.sendFileUrl(m.chat, hasil.hd || hasil.sd, `*📘 ${hasil.title || 'Facebook Video'}*`, m)
+							setLimit(m, db); fbOk = true
+						}
+					} catch(e) { console.log('[FB] scraper failed:', e.message) }
+				}
+				if (!fbOk) m.reply('❌ Facebook Video ලබා ගත නොහැකිය!')
 			}
 			break
 			case 'mediafire': case 'mf': {
@@ -4289,23 +4423,23 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}urban (වචන අර්ථ සෙවීම්)
 ╰─┬────❍
 ╭─┴❍「 *බාගත කිරීම් (DOWNLOAD)* 」❍
-│${setv} ${prefix}ytmp3 (YouTube ගීත)
+│${setv} ${prefix}ytmp3 (YouTube සංගීත)
 │${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
-│${setv} ${prefix}instagram (Instagram)
+│${setv} ${prefix}instagram (Instagram ඡායාරූප/වීඩියෝ)
 │${setv} ${prefix}tiktok (TikTok වීඩියෝ)
-│${setv} ${prefix}tiktokmp3 (TikTok ශබ්ද)
-│${setv} ${prefix}facebook (Facebook)
-│${setv} ${prefix}twitter (Twitter/X)
-│${setv} ${prefix}pinterest (Pinterest)
-│${setv} ${prefix}reddit (Reddit)
-│${setv} ${prefix}threads (Threads)
-│${setv} ${prefix}soundcloud (SoundCloud)
-│${setv} ${prefix}vimeo (Vimeo)
-│${setv} ${prefix}dailymotion (Dailymotion)
+│${setv} ${prefix}tiktokmp3 (TikTok සංගීත)
+│${setv} ${prefix}facebook (Facebook වීඩියෝ)
+│${setv} ${prefix}twitter (Twitter/X වීඩියෝ)
+│${setv} ${prefix}pinterest (Pinterest පින්තූර/වීඩියෝ)
+│${setv} ${prefix}reddit (Reddit වීඩියෝ)
+│${setv} ${prefix}threads (Threads පින්තූර/වීඩියෝ)
+│${setv} ${prefix}soundcloud (SoundCloud සංගීත)
+│${setv} ${prefix}vimeo (Vimeo වීඩියෝ)
+│${setv} ${prefix}dailymotion (Dailymotion වීඩියෝ)
 │${setv} ${prefix}spotifydl (Spotify ගීත)
 │${setv} ${prefix}mediafire (MediaFire ගොනු)
-│${setv} ${prefix}apk (APK / Play Store)
-│${setv} ${prefix}dl (Universal Downloader 🌐)
+│${setv} ${prefix}apk (Play Store ඇප බාගත කිරීම)
+│${setv} ${prefix}dl (සියලු වෙබ් අඩවි 🌐 — Twitch, Rumble, VK, Bilibili ආදි 1000+)
 ╰─┬────❍
 ╭─┴❍「 *උපුටා දැක්වීම් (QUOTES)* 」❍
 │${setv} ${prefix}motivasi (අභිප්‍රේරණය)
@@ -4331,11 +4465,9 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}bratvid (වීඩියෝ ස්ටිකර්)
 │${setv} ${prefix}ssweb (වෙබ් පිටු ඡායාරූප) 🔸️
 │${setv} ${prefix}sticker (ස්ටිකර් සෑදීම)
-│${setv} ${prefix}attp (ඇනිමේෂන් ස්ටිකර්)
-│${setv} ${prefix}attp2 (ඇනිමේෂන් ස්ටිකර් 2)
-│${setv} ${prefix}attp3 (ඇනිමේෂන් ස්ටිකර් Pro)
-│${setv} ${prefix}attp2 (ඇනිමේෂන් ස්ටිකර් 2)
-│${setv} ${prefix}attp3 (ඇනිමේෂන් ස්ටිකර් Pro)
+│${setv} ${prefix}attp (ජීවම් අකුරු ස්ටිකර්)
+│${setv} ${prefix}attp2 (ජීවම් අකුරු ස්ටිකර් 2)
+│${setv} ${prefix}attp3 (ජීවම් අකුරු ස්ටිකර් Pro)
 │${setv} ${prefix}colong (ස්ටිකර් ගැනීම)
 │${setv} ${prefix}smeme (මීම්ස් සෑදීම)
 │${setv} ${prefix}dehaze (පැහැදිලි කිරීම)
@@ -4587,23 +4719,23 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'downloadmenu': {
 				m.reply(`
 ╭──❍「 *බාගත කිරීම් (DOWNLOAD)* 」❍
-│${setv} ${prefix}ytmp3 (YouTube ගීත)
+│${setv} ${prefix}ytmp3 (YouTube සංගීත)
 │${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
-│${setv} ${prefix}instagram (Instagram)
+│${setv} ${prefix}instagram (Instagram ඡායාරූප/වීඩියෝ)
 │${setv} ${prefix}tiktok (TikTok වීඩියෝ)
-│${setv} ${prefix}tiktokmp3 (TikTok ශබ්ද)
-│${setv} ${prefix}facebook (Facebook)
-│${setv} ${prefix}twitter (Twitter/X)
-│${setv} ${prefix}pinterest (Pinterest)
-│${setv} ${prefix}reddit (Reddit)
-│${setv} ${prefix}threads (Threads)
-│${setv} ${prefix}soundcloud (SoundCloud)
-│${setv} ${prefix}vimeo (Vimeo)
-│${setv} ${prefix}dailymotion (Dailymotion)
+│${setv} ${prefix}tiktokmp3 (TikTok සංගීත)
+│${setv} ${prefix}facebook (Facebook වීඩියෝ)
+│${setv} ${prefix}twitter (Twitter/X වීඩියෝ)
+│${setv} ${prefix}pinterest (Pinterest පින්තූර/වීඩියෝ)
+│${setv} ${prefix}reddit (Reddit වීඩියෝ)
+│${setv} ${prefix}threads (Threads පින්තූර/වීඩියෝ)
+│${setv} ${prefix}soundcloud (SoundCloud සංගීත)
+│${setv} ${prefix}vimeo (Vimeo වීඩියෝ)
+│${setv} ${prefix}dailymotion (Dailymotion වීඩියෝ)
 │${setv} ${prefix}spotifydl (Spotify ගීත)
 │${setv} ${prefix}mediafire (MediaFire ගොනු)
-│${setv} ${prefix}apk (APK / Play Store)
-│${setv} ${prefix}dl (Universal Downloader 🌐)
+│${setv} ${prefix}apk (Play Store ඇප බාගත කිරීම)
+│${setv} ${prefix}dl (සියලු වෙබ් අඩවි 🌐 — Twitch, Rumble, VK, Bilibili ආදි 1000+)
 ╰──────❍`)
 			}
 			break
@@ -4637,7 +4769,9 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}bratvid (වීඩියෝ බ්‍රැට් ස්ටිකර්)
 │${setv} ${prefix}ssweb (වෙබ් පිටු ඡායාරූප) 🔸️
 │${setv} ${prefix}sticker (ස්ටිකර් සෑදීම)
-│${setv} ${prefix}attp (ඇනිමේෂන් ස්ටිකර්)
+│${setv} ${prefix}attp (ජීවම් අකුරු ස්ටිකර්)
+│${setv} ${prefix}attp2 (ජීවම් අකුරු ස්ටිකර් 2)
+│${setv} ${prefix}attp3 (ජීවම් අකුරු ස්ටිකර් Pro)
 │${setv} ${prefix}colong (ස්ටිකර් ලබා ගැනීම)
 │${setv} ${prefix}smeme (මීම්ස් සෑදීම)
 │${setv} ${prefix}dehaze (පැහැදිලි කිරීම)

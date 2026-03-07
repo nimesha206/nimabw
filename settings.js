@@ -77,7 +77,7 @@ global.chatLength = 500
 global.geminiMemorySize = 50  // Gemini history memory - messages 50ක් දක්වා මතක තියාගනී
 // Gemini Auto Reply API Key
 // https://aistudio.google.com/app/apikey යන්න ගිහින් free API key එකක් ගන්න
-global.geminiApiKey = 'YOUR_GEMINI_API_KEY_HERE'
+global.geminiApiKey = 'AIzaSyB0Sy2ZMAPuHi17y39M6PcaL1rDG2ehmbo'
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {

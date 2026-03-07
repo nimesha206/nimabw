@@ -40,9 +40,10 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg imagemagick webp python3-pip -qq
-          # yt-dlp install (YouTube download සඳහා)
-          sudo pip3 install -q yt-dlp
+          # yt-dlp latest version
           sudo pip3 install -U yt-dlp
+          # bgutil PO Token plugin (bot check bypass)
+          sudo pip3 install -U bgutil-ytdlp-pot-provider
           yt-dlp --version
           # temp folder
           mkdir -p database/temp

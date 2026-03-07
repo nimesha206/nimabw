@@ -42,7 +42,7 @@ const { rdGame, iGame, tGame, gameSlot, gameCasinoSolo, gameSamgongSolo, gameMer
 const { getRandom, getBuffer, fetchJson, runtime, clockString, sleep, isUrl, formatDate, formatp, generateProfilePicture, errorCache, normalize, updateSettings, parseMention, fixBytes, similarity, pickRandom, tarBackup } = require('./lib/function');
 
 const menfesTimeouts = new Map();
-const settingsPath = path.join(__dirname, 'settings.js');
+const settingsPath = path.join(__dirනාමය, 'settings.js');
 const cases = db.cases ? db.cases : (db.cases = [...fs.readFileSync('./nima.js', 'utf-8').matchAll(/case\s+['"]([^'"]+)['"]/g)].map(match => match[1]));
 
 module.exports = nimesha = async (nimesha, m, msg, store) => {
@@ -114,14 +114,14 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 		const mime = (quoted.msg || quoted).mimetype || ''
 		const qmsg = (quoted.msg || quoted)
 		const author = set.author = global.author || 'Nimesha Madhushan';
-		const packname = set.packname = global.packname || 'Shasikala';
-		const botname = set.botname = global.botname || 'Nima Bot';
+		const packනාමය = set.packනාමය = global.packනාමය || 'Shasikala';
+		const botනාමය = set.botනාමය = global.botනාමය || 'නාමය Bot';
 		const _dayMap = {
   'Sunday':'ඉරිදා','Monday':'සදුදා','Tuesday':'අඟහරුවාදා',
   'Wednesday':'බදාදා','Thursday':'බ්‍රහස්පතින්දා',
   'Friday':'සිකුරාදා','Saturday':'සෙනසුරාදා'
 };
-        const hari = _dayMap[moment.tz('Asia/Colombo').format('dddd')] || moment.tz('Asia/Colombo').format('dddd');
+        const දිනය = _dayMap[moment.tz('Asia/Colombo').format('dddd')] || moment.tz('Asia/Colombo').format('dddd');
         const tanggal = moment.tz('Asia/Colombo').format('DD/MM/YYYY');
         const jam = moment.tz('Asia/Colombo').format('HH:mm:ss');
 		const ucapanWaktu = jam < '05:00:00' ? 'සුභ අළුයමක් 🌉' : jam < '11:00:00' ? 'සුභ උදෑසනක් 🌄' : jam < '15:00:00' ? 'සුභ දහවලක් 🏙' : jam < '18:00:00' ? 'සුභ සන්ධ්‍යාවක් 🌅' : jam < '19:00:00' ? 'සුභ සන්ධ්‍යාවක් 🌃' : jam < '23:59:00' ? 'සුභ රාත්‍රියක් 🌌' : 'සුභ රාත්‍රියක් 🌌';
@@ -188,7 +188,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 		// Auto Set Bio
 		if (set.autobio) {
 			if (new Date() * 1 - set.status > 60000) {
-				await nimesha.updateProfileStatus(`${nimesha.user.name} | 🎯 Runtime: ${runtime(process.uptime())}`).catch(e => {})
+				await nimesha.updateProfileStatus(`${nimesha.user.නාමය} | 🎯 Runtime: ${runtime(process.uptime())}`).catch(e => {})
 				set.status = new Date() * 1
 			}
 		}
@@ -222,14 +222,14 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (m.type === 'groupStatusMentionMessage' || m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || Object.keys(m.message).length === 1 && Object.keys(m.message)[0] === 'messageContextInfo') {
 					if (!db.groups[m.chat].tagsw[m.sender]) {
 						db.groups[m.chat].tagsw[m.sender] = 1
-						await m.reply(`මෙම සමූහය WhatsApp ස්ටේටස් හි ටැග් කර ඇත\n@${m.sender.split('@')[0]}, WhatsApp ස්ටේටස් හි සමූහය ටැග් නොකරන්න\nPeringatan ${db.groups[m.chat].tagsw[m.sender]}/5, akan dikick sewaktu waktu❗`)
+						await m.reply(`මෙම සමූහය WhatsApp ස්ටේටස් හි ටැග් කර ඇත\n@${m.sender.split('@')[0]}, WhatsApp ස්ටේටස් හි සමූහය ටැග් නොකරන්න\n⚠️ අවවාදය ${db.groups[m.chat].tagsw[m.sender]}/5 — නැවත කළොත් kick!❗`)
 					} else if (db.groups[m.chat].tagsw[m.sender] >= 5) {
 						await nimesha.groupParticipantsUpdate(m.chat, [m.sender], 'remove').catch((err) => m.reply('අසාර්ථකයි!'))
 						await m.reply(`@${m.sender.split("@")[0]} සමූහයෙන් ඉවත් කරන ලදි\nWhatsApp ස්ටේටස් හි 5 වාරයක් සමූහය ටැග් කළ නිසා`)
 						delete db.groups[m.chat].tagsw[m.sender]
 					} else {
 						db.groups[m.chat].tagsw[m.sender] += 1
-						await m.reply(`මෙම සමූහය WhatsApp ස්ටේටස් හි ටැග් කර ඇත\n@${m.sender.split('@')[0]}, WhatsApp ස්ටේටස් හි සමූහය ටැග් නොකරන්න\nPeringatan ${db.groups[m.chat].tagsw[m.sender]}/5, akan dikick sewaktu waktu❗`)
+						await m.reply(`මෙම සමූහය WhatsApp ස්ටේටස් හි ටැග් කර ඇත\n@${m.sender.split('@')[0]}, WhatsApp ස්ටේටස් හි සමූහය ටැග් නොකරන්න\n⚠️ අවවාදය ${db.groups[m.chat].tagsw[m.sender]}/5 — නැවත කළොත් kick!❗`)
 					}
 				}
 			}
@@ -357,21 +357,21 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			Isya: '19:00'
 		}
 		if (!this.intervalSholat) this.intervalSholat = null;
-		if (!this.waktusholat) this.waktusholat = {};
+		if (!this.කාලයsholat) this.කාලයsholat = {};
 		if (this.intervalSholat) clearInterval(this.intervalSholat); 
 		setTimeout(() => {
 			this.intervalSholat = setInterval(async() => {
 				const sekarang = moment.tz('Asia/Colombo');
 				const jamSholat = sekarang.format('HH:mm');
-				const hariIni = sekarang.format('YYYY-MM-DD');
+				const දිනයIni = sekarang.format('YYYY-MM-DD');
 				const seconds = sekarang.format('ss');
 				if (seconds !== '00') return;
-				for (const [sholat, waktu] of Object.entries(jadwalSholat)) {
-					if (jamSholat === waktu && this.waktusholat[sholat] !== hariIni) {
-						this.waktusholat[sholat] = hariIni
+				for (const [sholat, කාලය] of Object.entries(jadwalSholat)) {
+					if (jamSholat === කාලය && this.කාලයsholat[sholat] !== දිනයIni) {
+						this.කාලයsholat[sholat] = දිනයIni
 						for (const [idnya, settings] of Object.entries(db.groups)) {
-							if (settings.waktusholat) {
-								await nimesha.sendMessage(idnya, { text: `*${sholat}* ශ්‍රිත කාලය ළඟා විය, නැමදුමට සූදානම් වන්න🙂.\n\n*${waktu.slice(0, 5)}*\n_ජකාර්තා සහ ආශ්‍රිත ප්‍රදේශ සඳහා._` }, { ephemeralExpiration: m.expiration || store?.messages[idnya]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0 }).catch(e => {})
+							if (settings.කාලයsholat) {
+								await nimesha.sendMessage(idnya, { text: `*${sholat}* ශ්‍රිත කාලය ළඟා විය, නැමදුමට සූදානම් වන්න🙂.\n\n*${කාලය.slice(0, 5)}*\n_ජකාර්තා සහ ආශ්‍රිත ප්‍රදේශ සඳහා._` }, { ephemeralExpiration: m.expiration || store?.messages[idnya]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0 }).catch(e => {})
 							}
 						}
 					}
@@ -445,9 +445,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				}
 				roof.status = 'play';
 				roof.asal = m.chat;
-				m.reply(`Suit chat වෙත යැව්වා\n\n@${roof.p.split('@')[0]} dan @${roof.p2.split('@')[0]}\n\nSilahkan තෝරන්න suit di chat masing-masing klik https://wa.me/${botNumber.split('@')[0]}`)
-				if (!roof.තෝරන්න) nimesha.sendMessage(roof.p, { text: `Silahkan තෝරන්න \n\nBatu🗿\nKertas📄\nGunting✂️` }, { quoted: m })
-				if (!roof.තෝරන්න2) nimesha.sendMessage(roof.p2, { text: `Silahkan තෝරන්න \n\nBatu🗿\nKertas📄\nGunting✂️` }, { quoted: m })
+				m.reply(`✅ Suit Request යවා ඇත!\n\n@${roof.p.split('@')[0]} vs @${roof.p2.split('@')[0]}\n\n📱 Private chat හි choice දෙන්න:\nhttps://wa.me/${botNumber.split('@')[0]}`)
+				if (!roof.තෝරන්න) nimesha.sendMessage(roof.p, { text: `📌 ඔබේ choice දෙන්න:\n\n🗿 Batu\n📄 Kertas\n✂️ Gunting` }, { quoted: m })
+				if (!roof.තෝරන්න2) nimesha.sendMessage(roof.p2, { text: `📌 ඔබේ choice දෙන්න:\n\n🗿 Batu\n📄 Kertas\n✂️ Gunting` }, { quoted: m })
 			}
 			let jwb = m.sender == roof.p, jwb2 = m.sender == roof.p2;
 			let g = /gunting/i, b = /batu/i, k = /kertas/i, reg = /^(gunting|batu|kertas)/i;
@@ -494,7 +494,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				tebakbom[m.sender].nyawa.pop();
 				let brd = tebakbom[m.sender].board;
 				if (tebakbom[m.sender].nyawa.length < 1) {
-					await m.reply(`*ක්‍රීඩාව අවසන් විය*\nඔබ bomb වල හසු වූවා\n\n ${brd.join('')}\n\n*Terතෝරන්න :* ${tebakbom[m.sender].pick}\n_Pengurangan Limit: 1_`);
+					await m.reply(`*ක්‍රීඩාව අවසන් විය*\nඔබ bomb වල හසු වූවා\n\n ${brd.join('')}\n\n*Terතෝරන්න :* ${tebakbom[m.sender].pick}\n_Limit: -1_`);
 					m.react('😂')
 					delete tebakbom[m.sender];
 				} else m.reply(`*අංකය තෝරන්න*\n\nඔබ bomb වල හසු වූවා\n ${brd.join('')}\n\nTerතෝරන්න: ${tebakbom[m.sender].pick}\nSisa nyawa: ${tebakbom[m.sender].nyawa}`);
@@ -508,7 +508,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				let brd = tebakbom[m.sender].board;
 				if (tebakbom[m.sender].lolos < 1) {
 					db.users[m.sender].money += 6000
-					await m.reply(`*KAMU HEBAT ಠ⁠ᴥ⁠ಠ*\n\n${brd.join('')}\n\n*Terතෝරන්න :* ${tebakbom[m.sender].pick}\n*ජීවිත ඉතිරිය:* ${tebakbom[m.sender].nyawa}\n*Bomb:* ${tebakbom[m.sender].bomb}\nBonus Money 💰 *+6000*`);
+					await m.reply(`🎉 *ඔබ දක්ෂයි!* ಠ⁠ᴥ⁠ಠ\n\n${brd.join('')}\n\n*Terතෝරන්න :* ${tebakbom[m.sender].pick}\n*ජීවිත ඉතිරිය:* ${tebakbom[m.sender].nyawa}\n*Bomb:* ${tebakbom[m.sender].bomb}\n🎉 Bonus Money 💰 *+6,000*`);
 					delete tebakbom[m.sender];
 				} else m.reply(`*අංකය තෝරන්න*\n\n${brd.join('')}\n\nTerතෝරන්න : ${tebakbom[m.sender].pick}\nජීවිත ඉතිරිය: ${tebakbom[m.sender].nyawa}\nBomb: ${tebakbom[m.sender].bomb}`)
 			}
@@ -524,7 +524,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					}
 					akinator[m.sender].isWin = false
 					await akinator[m.sender].cancelAnswer()
-					let { key } = await m.reply(`🎮 Akinator Game Back :\n\n@${m.sender.split('@')[0]} (${akinator[m.sender].progress.toFixed(2)}) %\n${akinator[m.sender].question}\n\n- 0 - ඔව්\n- 1 - නැහැ\n- 2 - නැහැ Tau\n- 3 - Mungkin\n- 4 - Mungkin නැහැ\n- 5 - ${akinator[m.sender]?.progress?.toFixed(0) == 0 ? 'End' : 'Back'}`)
+					let { key } = await m.reply(`🎮 Akinator Game Back :\n\n@${m.sender.split('@')[0]} (${akinator[m.sender].progress.toFixed(2)}) %\n${akinator[m.sender].question}\n\n- 0 - ඔව්\n- 1 - නැහැ\n- 2 - නොදනිමි\n- 3 - සමහරවිට\n- 4 - සමහරවිට නැහැ\n- 5 - ${akinator[m.sender]?.progress?.toFixed(0) == 0 ? 'End' : 'Back'}`)
 					akinator[m.sender].key = key.id
 				} else if (akinator[m.sender].isWin && ['benar', 'ya'].includes(budy.toLowerCase())) {
 					m.react('🎊')
@@ -532,15 +532,15 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				} else {
 					if (!isNaN(budy) && budy.match(/^[0-4]$/) && budy) {
 						if (akinator[m.sender].isWin) {
-							let { key } = await m.reply({ image: { url: akinator[m.sender].sugestion_photo }, caption: `🎮 Akinator Answer :\n\n@${m.sender.split('@')[0]}\nDia ලෙස *${akinator[m.sender].sugestion_name}*\n_${akinator[m.sender].sugestion_desc}_\n\n- 5 - Back\n- *ඔව්* (Session ඉවත් වීමට)`, contextInfo: { mentionedJid: [m.sender] }});
+							let { key } = await m.reply({ image: { url: akinator[m.sender].sugestion_photo }, caption: `🎮 Akinator Answer :\n\n@${m.sender.split('@')[0]}\nDia ලෙස *${akinator[m.sender].sugestion_නාමය}*\n_${akinator[m.sender].sugestion_desc}_\n\n- 5 - Back\n- *ඔව්* (Session ඉවත් වීමට)`, contextInfo: { mentionedJid: [m.sender] }});
 							akinator[m.sender].key = key.id
 						} else {
 							await akinator[m.sender].answer(budy)
 							if (akinator[m.sender].isWin) {
-								let { key } = await m.reply({ image: { url: akinator[m.sender].sugestion_photo }, caption: `🎮 Akinator Answer :\n\n@${m.sender.split('@')[0]}\nDia ලෙස *${akinator[m.sender].sugestion_name}*\n_${akinator[m.sender].sugestion_desc}_\n\n- 5 - Back\n- *ඔව්* (Session ඉවත් වීමට)`, contextInfo: { mentionedJid: [m.sender] }});
+								let { key } = await m.reply({ image: { url: akinator[m.sender].sugestion_photo }, caption: `🎮 Akinator Answer :\n\n@${m.sender.split('@')[0]}\nDia ලෙස *${akinator[m.sender].sugestion_නාමය}*\n_${akinator[m.sender].sugestion_desc}_\n\n- 5 - Back\n- *ඔව්* (Session ඉවත් වීමට)`, contextInfo: { mentionedJid: [m.sender] }});
 								akinator[m.sender].key = key.id
 							} else {
-								let { key } = await m.reply(`🎮 Akinator Game :\n\n@${m.sender.split('@')[0]} (${akinator[m.sender].progress.toFixed(2)}) %\n${akinator[m.sender].question}\n\n- 0 - ඔව්\n- 1 - නැහැ\n- 2 - නැහැ Tau\n- 3 - Mungkin\n- 4 - Mungkin නැහැ\n- 5 - Back`)
+								let { key } = await m.reply(`🎮 Akinator Game :\n\n@${m.sender.split('@')[0]} (${akinator[m.sender].progress.toFixed(2)}) %\n${akinator[m.sender].question}\n\n- 0 - ඔව්\n- 1 - නැහැ\n- 2 - නොදනිමි\n- 3 - සමහරවිට\n- 4 - සමහරවිට නැහැ\n- 5 - Back`)
 								akinator[m.sender].key = key.id
 							}
 						}
@@ -573,7 +573,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						let bonus = gameName == 'caklontong' ? 9999 : gameName == 'tebaklirik' ? 4299 : gameName == 'susunkata' ? 2989 : 3499
 						if (jawabBenar) {
 							db.users[m.sender].money += bonus * 1
-							await m.reply(`නිවැරදි පිළිතුර 🎉\nBonus Money 💰 *+${bonus}*`)
+							await m.reply(`නිවැරදි පිළිතුර 🎉\n🎉 Bonus Money 💰 *+${bonus}*`)
 							delete game[m.chat + id]
 						} else m.reply('*වැරදි පිළිතුර!*')
 					}
@@ -609,7 +609,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (game.isCheckmate() || game.isDraw() || game.isGameOver()) {
 					const status = game.isCheckmate() ? 'Checkmate' : game.isDraw() ? 'Draw' : 'Game Over';
 					delete chess[m.sender];
-					return m.reply(`♟Game ${status}\nPermainan dihentikan`);
+					return m.reply(`♟ ක්‍රීඩාව ${status} කෙරිණ!`);
 				}
 				const [from, to] = budy.toLowerCase().split(' ');
 				if (!from || !to || from.length !== 2 || to.length !== 2) return m.reply('Format salah! භාවිතා කරන්න: e2 e4');
@@ -621,7 +621,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				
 				if (game.isGameOver()) {
 					delete chess[m.sender];
-					return m.reply(`♟Permainan Selesai\nPemenang: @${m.sender.split('@')[0]}`);
+					return m.reply(`♟ ජයග්‍රාහකයා: @${m.sender.split('@')[0]} 🏆`);
 				}
 				const moves = game.moves({ verbose: true });
 				const botMove = moves[Math.floor(Math.random() * moves.length)];
@@ -631,7 +631,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				
 				if (game.isGameOver()) {
 					delete chess[m.sender];
-					return m.reply(`♟Permainan Selesai\nPemenang: BOT`);
+					return m.reply(`♟ BOT දිනා ගත්තා! 🤖`);
 				}
 				const encodedFen = encodeURI(game._fen);
 				const boardUrls = [`https://www.chess.com/dynboard?fen=${encodedFen}&size=3&coordinates=inside`,`https://www.chess.com/dynboard?fen=${encodedFen}&board=graffiti&piece=graffiti&size=3&coordinates=inside`,`https://chessboardimage.com/${encodedFen}.png`,`https://backscattering.de/web-boardimage/board.png?fen=${encodedFen}&coordinates=true&size=765`,`https://fen2image.chessvision.ai/${encodedFen}/`];
@@ -645,7 +645,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				}
 			} else if (game.time && (Date.now() - game.time >= 3600000)) {
 				delete chess[m.sender];
-				return m.reply(`♟Waktu Habis!\nPermainan dihentikan`);
+				return m.reply(`♟ ⏰ කාලය ඉකිවිය! ක්‍රීඩාව නිමා.`);
 			}
 		}
 		if (m.isGroup && (!isCmd || isCreator) && (m.chat in chess)) {
@@ -656,7 +656,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (chess[m.chat].isCheckmate() || chess[m.chat].isDraw() || chess[m.chat].isGameOver()) {
 					const status = chess[m.chat].isCheckmate() ? 'Checkmate' : chess[m.chat].isDraw() ? 'Draw' : 'Game Over';
 					delete chess[m.chat];
-					return m.reply(`♟Game ${status}\nPermainan dihentikan`);
+					return m.reply(`♟ ක්‍රීඩාව ${status} කෙරිණ!`);
 				}
 				const [from, to] = budy.toLowerCase().split(' ');
 				if (!from || !to || from.length !== 2 || to.length !== 2) return m.reply('Format salah! භාවිතා කරන්න format seperti: e2 e4');
@@ -684,7 +684,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				}
 			} else if (chess[m.chat].time && (Date.now() - chess[m.chat].time >= 3600000)) {
 				delete chess[m.chat]
-				return m.reply(`♟Waktu Habis!\nPermainan dihentikan`)
+				return m.reply(`♟ ⏰ කාලය ඉකිවිය! ක්‍රීඩාව නිමා.`)
 			}
 		}
 		
@@ -720,7 +720,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				} else m.reply('උදාහරණ: Roll/Kocok ටයිප් කරන්න')
 			} else if (ulartangga[m.chat].time && (Date.now() - ulartangga[m.chat].time >= 7200000)) {
 				delete ulartangga[m.chat]
-				return m.reply(`🐍🪜Waktu Habis!\nPermainan dihentikan`)
+				return m.reply(`🐍🪜 ⏰ කාලය ඉකිවිය! ක්‍රීඩාව නිමා.`)
 			}
 		}
 		
@@ -772,7 +772,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			try {
 				const ownerName = global.ownerName || global.author || 'Nimesha Madhushan'
 				const ownerNum = (global.owner?.[0] || '94726800969')
-				const botName = global.botname || 'Miss Shasikala'
+				const botName = global.botනාමය || 'Miss Shasikala'
 				const apiKey = global.geminiApiKey
 
 				if (apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
@@ -842,7 +842,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			// Owner Menu
 			case 'shutdown': case 'off': {
 				if (!isCreator) return m.reply(mess.owner)
-				m.reply(`*[BOT] Shutdown වෙමින්...*`).then(() => {
+				m.reply(`🔴 *Bot Shutdown වෙමින්...*
+_ස්තූතියි!_ 🌸`).then(() => {
 					process.exit(0)
 				})
 			}
@@ -859,15 +860,15 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!isCreator) return m.reply(mess.owner)
 				if (!text) return m.reply('Text එක කොහේද?')
 				nimesha.setStatus(q)
-				m.reply(`*Bio telah di ganti ලෙස ${q}*`)
+				m.reply(`✅ *Bio සාර්ථකව* *${q}* *ලෙස වෙනස් කෙරිණ!*`)
 			}
 			break
 			case 'setppbot': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!/image/.test(quoted.type)) return m.reply(`Caption සමග Image Reply කරන්න ${prefix + command}`)
+				if (!/image/.test(quoted.type)) return m.reply(`📌 රූපයකට Reply කරන්න (caption: *${prefix + command}*)`)
 				let media = await quoted.download();
 				let { img } = await generateProfilePicture(media, text.length > 0 ? null : 512)
-				await nimesha.query({
+				await nimesha.සොයන දෙය({
 					tag: 'iq',
 					attrs: {
 						to: '@s.whatsapp.net',
@@ -919,7 +920,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					const msgnya = await global.loadMessage(teks1, teks2)
 					if (msgnya?.message) await nimesha.relayMessage(m.chat, msgnya.message, {})
 					else m.reply('පණිවිඩය හොයාගත නොහැකිය!')
-				} else m.reply(`Contoh: ${prefix + command} 123xxx@g.us|3EB0xxx`)
+				} else m.reply(`උදාහරණ: ${prefix + command} 123xxx@g.us|3EB0xxx`)
 			}
 			break
 			case 'blokir': case 'block': {
@@ -927,7 +928,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (text || m.quoted) {
 					const numbersOnly = m.isGroup ? (text ? text.replace(/\D/g, '') + '@s.whatsapp.net' : m.quoted?.sender) : m.chat
 					await nimesha.updateBlockStatus(numbersOnly, 'block').then((a) => m.reply(mess.done)).catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+				} else m.reply(`උදාහරණ: ${prefix + command} 94xxx`)
 			}
 			break
 			case 'listblock': {
@@ -940,12 +941,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (text || m.quoted) {
 					const numbersOnly = m.isGroup ? (text ? text.replace(/\D/g, '') + '@s.whatsapp.net' : m.quoted?.sender) : m.chat
 					await nimesha.updateBlockStatus(numbersOnly, 'unblock').then((a) => m.reply(mess.done)).catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+				} else m.reply(`උදාහරණ: ${prefix + command} 94xxx`)
 			}
 			break
 			case 'ban': case 'banned': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text) return m.reply(`Kirim/tag අංකය!\nඋදාහරණ:\n${prefix + command} 94xxx`)
+				if (!text) return m.reply(`📌 අංකය හෝ Tag කරන්න!\nඋදාහරණ:\n${prefix + command} 94xxx`)
 				const findJid = nimesha.findJidByLid(text.replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = text.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 				const nmrnya = nimesha.findJidByLid(klss, store, true)
@@ -957,7 +958,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'unban': case 'unbanned': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text) return m.reply(`Kirim/tag අංකය!\nඋදාහරණ:\n${prefix + command} 94xxx`)
+				if (!text) return m.reply(`📌 අංකය හෝ Tag කරන්න!\nඋදාහරණ:\n${prefix + command} 94xxx`)
 				const findJid = nimesha.findJidByLid(text.replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = text.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 				const nmrnya = nimesha.findJidByLid(klss, store, true)
@@ -981,7 +982,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'addowner': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text || isNaN(text)) return m.reply(`Kirim/tag අංකය!\nඋදාහරණ:\n${prefix + command} 94xxx`)
+				if (!text || isNaN(text)) return m.reply(`📌 අංකය හෝ Tag කරන්න!\nඋදාහරණ:\n${prefix + command} 94xxx`)
 				const findJid = nimesha.findJidByLid(text.replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = text.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 				const nmrnya = nimesha.findJidByLid(klss, store, true)
@@ -996,7 +997,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'delowner': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text || isNaN(text)) return m.reply(`Kirim/tag අංකය!\nඋදාහරණ:\n${prefix + command} 94xxx`)
+				if (!text || isNaN(text)) return m.reply(`📌 අංකය හෝ Tag කරන්න!\nඋදාහරණ:\n${prefix + command} 94xxx`)
 				const findJid = nimesha.findJidByLid(text.replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = text.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 				const nmrnya = nimesha.findJidByLid(klss, store, true)
@@ -1011,7 +1012,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'adduang': case 'addmoney': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!args[0] || !args[1] || isNaN(args[1])) return m.reply(`Kirim/tag අංකය!\nඋදාහරණ:\n${prefix + command} 94xxx 1000`)
+				if (!args[0] || !args[1] || isNaN(args[1])) return m.reply(`📌 අංකය හෝ Tag කරන්න!\nඋදාහරණ:\n${prefix + command} 94xxx 1000`)
 				if (args[1].length > 15) return m.reply('මුදල් ප්‍රමාණය දිජිත 15 ක් දක්වා!')
 				const findJid = nimesha.findJidByLid(args[0].replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = args[0].replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
@@ -1026,7 +1027,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'addlimit': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!args[0] || !args[1] || isNaN(args[1])) return m.reply(`Kirim/tag අංකය!\nඋදාහරණ:\n${prefix + command} 94xxx 10`)
+				if (!args[0] || !args[1] || isNaN(args[1])) return m.reply(`📌 අංකය හෝ Tag කරන්න!\nඋදාහරණ:\n${prefix + command} 94xxx 10`)
 				if (args[1].length > 10) return m.reply('Limit ප්‍රමාණය දිජිත 10 ක් දක්වා!')
 				const findJid = nimesha.findJidByLid(args[0].replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = args[0].replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
@@ -1072,7 +1073,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'creategc': case 'buatgc': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text) return m.reply(`උදාහරණ:\n${prefix + command} *Nama Gc*`)
+				if (!text) return m.reply(`උදාහරණ:\n${prefix + command} *සමූහ නාමය*`)
 				let group = await nimesha.groupCreate(q, [m.sender])
 				let res = await nimesha.groupInviteCode(group.id)
 				await m.reply(`*Link Group :* *https://chat.whatsapp.com/${res}*\n\n*Nama Group :* *${group.subject}*\nSegera Masuk dalam 30 seconds\nAgar ලෙස Admin`, { detectLink: true })
@@ -1083,7 +1084,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'addsewa': case 'sewa': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text) return m.reply(`උදාහරණ:\n${prefix + command} https://chat.whatsapp.com/xxx | waktu\n${prefix + command} https://chat.whatsapp.com/xxx | 30 hari`)
+				if (!text) return m.reply(`උදාහරණ:\n${prefix + command} https://chat.whatsapp.com/xxx | කාලය\n${prefix + command} https://chat.whatsapp.com/xxx | 30 දිනය`)
 				let [teks1, teks2] = text.split('|')?.map(x => x.trim()) || [];
 				if (!isUrl(teks1) && !teks1.includes('chat.whatsapp.com/')) return m.reply('සබැඳිය වලංගු නැත!')
 				const urlny = teks1.match(/chat\.whatsapp\.com\/([0-9A-Za-z]+)/)
@@ -1098,7 +1099,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				}
 				await nimesha.groupGetInviteInfo(urlny[1]).then(a => {
 					addExpired({ url: urlny[1], expired: (teks2?.replace(/[^0-9]/g, '') || 30) + 'd', id: a.id }, sewa)
-					m.reply('සාර්ථකයි Menambahkan Sewa කාලය: ' + (teks2?.replace(/[^0-9]/g, '') || 30) + ' hari\nOtomatis Keluar Saat Waktu Habis!')
+					m.reply('සාර්ථකයි Menambahkan Sewa කාලය: ' + (teks2?.replace(/[^0-9]/g, '') || 30) + ' දිනය\nOtomatis Keluar Saat Waktu Habis!')
 				}).catch(e => m.reply('Sewa එකතු කිරීම අසාර්ථකයි!'))
 			}
 			break
@@ -1131,7 +1132,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'addpr': case 'addprem': case 'addpremium': {
 				if (!isCreator) return m.reply(mess.owner)
-				if (!text) return m.reply(`උදාහරණ:\n${prefix + command} @tag|waktu\n${prefix + command} @${m.sender.split('@')[0]}|30 hari`)
+				if (!text) return m.reply(`උදාහරණ:\n${prefix + command} @tag|කාලය\n${prefix + command} @${m.sender.split('@')[0]}|30 දිනය`)
 				let [teks1, teks2] = text.split('|').map(x => x.trim());
 				const findJid = nimesha.findJidByLid(teks1.replace(/[^0-9]/g, '') + '@lid', store);
 				const klss = teks1.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
@@ -1145,7 +1146,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						db.users[nmrnya].limit += db.users[nmrnya].vip ? limit.vip : limit.premium
 						db.users[nmrnya].money += db.users[nmrnya].vip ? money.vip : money.premium
 					} else m.reply('අංකය BOT හි ලියාපදිංචි නෑ!\nPastikan Nomer Pernah Menggunakan BOT!')
-				} else m.reply(`කාලය ඇතුළත් කරන්න!\උදාහරණ:\n${prefix + command} @tag|waktu\n${prefix + command} @${m.sender.split('@')[0]}|30d\n_d = day_`)
+				} else m.reply(`කාලය ඇතුළත් කරන්න!\උදාහරණ:\n${prefix + command} @tag|කාලය\n${prefix + command} @${m.sender.split('@')[0]}|30d\n_d = day_`)
 			}
 			break
 			case 'delpr': case 'delprem': case 'delpremium': {
@@ -1160,7 +1161,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						m.reply(`සාර්ථකයි ${command} @${nmrnya.split('@')[0]}`)
 						db.users[nmrnya].limit += db.users[nmrnya].vip ? limit.vip : limit.free
 						db.users[nmrnya].money += db.users[nmrnya].vip ? money.vip : money.free
-					} else m.reply(`User @${nmrnya.split('@')[0]} Premium නොවේ❗`)
+					} else m.reply(`⚠️ @${nmrnya.split('@')[0]} Premium User නොවේ!`)
 				} else m.reply('අංකය BOT හි ලියාපදිංචි නෑ!')
 			}
 			break
@@ -1236,7 +1237,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					}
 					m.reply(`${getCase(text)}`)
 				} catch (e) {
-					m.reply(`case ${text} හොයාගත නොහැකිය!`)
+					m.reply(`❌ *${text}* command හොයාගත නොහැකිය!`)
 				}
 			}
 			break
@@ -1330,7 +1331,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						});
 						sleep(2000)
 						m.reply('Session Garbage සාර්ථකව මකා දැමිණ', { edit: key })
-					} else m.reply(teks + `\nKetik _${prefix + command} true_\nමැකීමට`)
+					} else m.reply(teks + `\n_${prefix + command} true_ ටයිප් කරන්න මැකීමට`)
 				});
 			}
 			break
@@ -1354,32 +1355,32 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						});
 						sleep(2000)
 						m.reply('Garbage සාර්ථකව මකා දැමිණ', { edit: key })
-					} else m.reply(teks + `\nKetik _${prefix + command} true_\nමැකීමට`)
+					} else m.reply(teks + `\n_${prefix + command} true_ ටයිප් කරන්න මැකීමට`)
 				});
 			}
 			break
-			case 'setnamebot': case 'setbotname': {
+			case 'setනාමයbot': case 'setbotනාමය': {
 				if (!isCreator) return m.reply(mess.owner)
 				if (text || m.quoted) {
 					const teksnya = text ? text : m.quoted.text
 					await updateSettings({
 						filePath: settingsPath,
-						botname: teksnya.trim()
+						botනාමය: teksnya.trim()
 					});
 					m.reply('සාර්ථකයි')
-				} else m.reply(`Contoh: ${prefix + command} textnya`)
+				} else m.reply(`උදාහරණ: ${prefix + command} පෙළ`)
 			}
 			break
-			case 'setpacknamebot': case 'setbotpackname': {
+			case 'setpackනාමයbot': case 'setbotpackනාමය': {
 				if (!isCreator) return m.reply(mess.owner)
 				if (text || m.quoted) {
 					const teksnya = text ? text : m.quoted.text
 					await updateSettings({
 						filePath: settingsPath,
-						packname: teksnya.trim()
+						packනාමය: teksnya.trim()
 					});
 					m.reply('සාර්ථකයි')
-				} else m.reply(`Contoh: ${prefix + command} textnya`)
+				} else m.reply(`උදාහරණ: ${prefix + command} පෙළ`)
 			}
 			break
 			case 'setauthorbot': case 'setbotauthor': {
@@ -1391,7 +1392,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						author: teksnya.trim()
 					});
 					m.reply('සාර්ථකයි')
-				} else m.reply(`Contoh: ${prefix + command} textnya`)
+				} else m.reply(`උදාහරණ: ${prefix + command} පෙළ`)
 			}
 			break
 			case 'setapikey': {
@@ -1403,7 +1404,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					filePath: settingsPath,
 					apikey: text.trim()
 				});
-				m.reply(`*Apikey වෙනස් කෙරිණ ${old_key} ලෙස ${q}*`)
+				m.reply(`✅ *API Key* *${old_key}* *→* *${q}* *ලෙස වෙනස් කෙරිණ!*`)
 			}
 			break
 			case 'sc': case 'script': {
@@ -1457,7 +1458,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 									return m.reply(statusMessages[i.status]);
 								} else if (i.status == 408) {
 									await m.reply(`@${nmrnya.split('@')[0]} මෑතකදී මෙම සමූහයෙන් ඉවත් වී ඇත!\n\nඉලක්කය Private නිසා\n\nආරාධනය යවනු ලබේ\n-> wa.me/${nmrnya.replace(/\D/g, '')}\nපෞද්ගලික ලෙස`)
-									await m.reply(`${'https://chat.whatsapp.com/' + invv}\n------------------------------------------------------\n\nAdmin: @${m.sender.split('@')[0]}\nඔබව මෙම සමූහයට ආරාධනා කරයි\nකැමති නම් සම්බන්ධ වන්න🙇`, { detectLink: true, chat: nmrnya, quoted: fkontak }).catch((err) => m.reply('Gagal Mengirim Undangan!'))
+									await m.reply(`${'https://chat.whatsapp.com/' + invv}\n------------------------------------------------------\n\nAdmin: @${m.sender.split('@')[0]}\nඔබව මෙම සමූහයට ආරාධනා කරයි\nකැමති නම් සම්බන්ධ වන්න🙇`, { detectLink: true, chat: nmrnya, quoted: fkontak }).catch((err) => m.reply('❌ ආරාධනය යැවීම අසාර්ථකයි!'))
 								} else if (i.status == 403) {
 									let a = i.content.content[0].attrs
 									await nimesha.sendGroupInviteV4(m.chat, nmrnya, a.code, a.expiration, m.metadata.subject, `Admin: @${m.sender.split('@')[0]}\nඔබව මෙම සමූහයට ආරාධනා කරයි\nකැමති නම් සම්බන්ධ වන්න🙇`, null, { mentions: [m.sender] })
@@ -1468,7 +1469,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					} catch (e) {
 						m.reply('දෝෂයක් ඇති! User එකතු කිරීම අසාර්ථකයි')
 					}
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+				} else m.reply(`⚠️ *Add Command*\n\nකෙනෙකුව සමූහයට එකතු කිරීමට:\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
 			case 'kick': case 'dor': {
@@ -1480,8 +1481,10 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					const findJid = nimesha.findJidByLid(numbersOnly.replace(/[^0-9]/g, '') + '@lid', store);
 					const klss = numbersOnly.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 					const nmrnya = nimesha.findJidByLid(klss, store, true)
-					await nimesha.groupParticipantsUpdate(m.chat, [nmrnya], 'remove').catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+					await nimesha.groupParticipantsUpdate(m.chat, [nmrnya], 'remove')
+						.then(() => m.reply(`╔══════════════════╗\n║  🦵 *සමූහයෙන් ඉවත් කිරීම* 🦵\n╠══════════════════╣\n║\n║ ✅ @${nmrnya.split('@')[0]}\n║ *සාර්ථකව සමූහයෙන්*\n║ *ඉවත් කරන ලදී!*\n║\n║ 🏅 සමූහය: ${m.metadata.subject}\n║ 👤 විසින්: @${m.sender.split('@')[0]}\n╚══════════════════╝`, { mentions: [nmrnya, m.sender] }))
+						.catch(() => m.reply('❌ Kick කිරීම අසාර්ථකයි!'))
+				} else m.reply(`⚠️ *Kick Command*\n\nකෙනෙකුව ඉවත් කිරීමට:\n📌 Reply කිරීමෙන්: *(reply කරන්න)*\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
 			case 'promote': {
@@ -1493,8 +1496,10 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					const findJid = nimesha.findJidByLid(numbersOnly.replace(/[^0-9]/g, '') + '@lid', store);
 					const klss = numbersOnly.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 					const nmrnya = nimesha.findJidByLid(klss, store, true)
-					await nimesha.groupParticipantsUpdate(m.chat, [nmrnya], 'promote').catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+					await nimesha.groupParticipantsUpdate(m.chat, [nmrnya], 'promote')
+						.then(() => m.reply(`╔══════════════════╗\n║  👑 *පරිපාලක උසස්වීම* 👑\n╠══════════════════╣\n║\n║ ✅ @${nmrnya.split('@')[0]}\n║ *සාර්ථකව Admin ලෙස*\n║ *පත් කරන ලදී!*\n║\n║ 🏅 සමූහය: ${m.metadata.subject}\n║ 👤 විසින්: @${m.sender.split('@')[0]}\n╚══════════════════╝`, { mentions: [nmrnya, m.sender] }))
+						.catch(() => m.reply('❌ promote කිරීම අසාර්ථකයි!'))
+				} else m.reply(`⚠️ *Promote Command*\n\nකෙනෙකුව Admin කිරීමට:\n📌 Reply කිරීමෙන්: *(reply කරන්න)*\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
 			case 'demote': {
@@ -1506,8 +1511,10 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					const findJid = nimesha.findJidByLid(numbersOnly.replace(/[^0-9]/g, '') + '@lid', store);
 					const klss = numbersOnly.replace(/[^0-9]/g, '') + (findJid ? '@lid' :  '@s.whatsapp.net')
 					const nmrnya = nimesha.findJidByLid(klss, store, true)
-					await nimesha.groupParticipantsUpdate(m.chat, [nmrnya], 'demote').catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+					await nimesha.groupParticipantsUpdate(m.chat, [nmrnya], 'demote')
+						.then(() => m.reply(`╔══════════════════╗\n║  🚫 *Admin ධුර ඉවත්කිරීම* 🚫\n╠══════════════════╣\n║\n║ ✅ @${nmrnya.split('@')[0]}\n║ *Admin ධුරයෙන් සාර්ථකව*\n║ *ඉවත් කරන ලදී!*\n║\n║ 🏅 සමූහය: ${m.metadata.subject}\n║ 👤 විසින්: @${m.sender.split('@')[0]}\n╚══════════════════╝`, { mentions: [nmrnya, m.sender] }))
+						.catch(() => m.reply('❌ demote කිරීම අසාර්ථකයි!'))
+				} else m.reply(`⚠️ *Demote Command*\n\nAdmin ධුරය ඉවත් කිරීමට:\n📌 Reply කිරීමෙන්: *(reply කරන්න)*\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
 			case 'warn': case 'warning': {
@@ -1527,9 +1534,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						delete db.groups[m.chat].warn[nmrnya]
 					} else {
 						db.groups[m.chat].warn[nmrnya] += 1
-						m.reply(`Peringatan ${db.groups[m.chat].warn[nmrnya]}/4, akan dikick sewaktu waktu❗`)
+						m.reply(`අවවාදය ${db.groups[m.chat].warn[nmrnya]}/4, පාරිය වේලාවකත් kick කේරේ❗`)
 					}
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+				} else m.reply(`⚠️ *Warn Command*\n\nඅවවාද දීමට:\n📌 Reply කිරීමෙන්: *(reply කරන්න)*\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
 			case 'unwarn': case 'delwarn': case 'unwarning': case 'delwarning': {
@@ -1545,17 +1552,17 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						delete db.groups[m.chat].warn[nmrnya]
 						m.reply('Warning සාර්ථකව ඉවත් කෙරිණ')
 					}
-				} else m.reply(`Contoh: ${prefix + command} 94xxx`)
+				} else m.reply(`⚠️ *Unwarn Command*\n\nඅවවාදය ඉවත් කිරීමට:\n📌 Reply කිරීමෙන්: *(reply කරන්න)*\n📌 අංකය සමඟ: ${prefix + command} *94xxxxxxxxx*\n\nඋදාහරණ: ${prefix + command} 94712345678`)
 			}
 			break
-			case 'setname': case 'setnamegc': case 'setsubject': case 'setsubjectgc': {
+			case 'setනාමය': case 'setනාමයgc': case 'setsubject': case 'setsubjectgc': {
 				if (!m.isGroup) return m.reply(mess.group)
 				if (!m.isAdmin) return m.reply(mess.admin)
 				if (!m.isBotAdmin) return m.reply(mess.botAdmin)
 				if (text || m.quoted) {
 					const teksnya = text ? text : m.quoted.text
 					await nimesha.groupUpdateSubject(m.chat, teksnya).catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} textnya`)
+				} else m.reply(`⚠️ *Setනාමය Command*\n\nසමූහයේ නම වෙනස් කිරීමට:\n📌 ${prefix + command} *අලුත් නම*\n\nඋදාහරණ: ${prefix + command} Miss Shasikala Group`)
 			}
 			break
 			case 'setdesc': case 'setdescgc': case 'setdesk': case 'setdeskgc': {
@@ -1565,7 +1572,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (text || m.quoted) {
 					const teksnya = text ? text : m.quoted.text
 					await nimesha.groupUpdateDescription(m.chat, teksnya).catch((err) => m.reply('අසාර්ථකයි!'))
-				} else m.reply(`Contoh: ${prefix + command} textnya`)
+				} else m.reply(`⚠️ *Setdesc Command*\n\nසමූහ විස්තරය වෙනස් කිරීමට:\n📌 ${prefix + command} *විස්තරය*\n\nඋදාහරණ: ${prefix + command} සාදරයෙන් පිළිගනිමු! 🌸`)
 			}
 			break
 			case 'setppgroups': case 'setppgrup': case 'setppgc': {
@@ -1573,10 +1580,10 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!m.isAdmin) return m.reply(mess.admin)
 				if (!m.isBotAdmin) return m.reply(mess.botAdmin)
 				if (!m.quoted) return m.reply('Bot Profile ඡායාරූපයට Reply කරන්න')
-				if (!/image/.test(quoted.type)) return m.reply(`Caption සමග Image Reply කරන්න ${prefix + command}`)
+				if (!/image/.test(quoted.type)) return m.reply(`📌 රූපයකට Reply කරන්න (caption: *${prefix + command}*)`)
 				let media = await quoted.download();
 				let { img } = await generateProfilePicture(media, text.length > 0 ? null : 512)
-				await nimesha.query({
+				await nimesha.සොයන දෙය({
 					tag: 'iq',
 					attrs: {
 						target: m.chat,
@@ -1614,7 +1621,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!m.isAdmin) return m.reply(mess.admin)
 				if (!m.isBotAdmin) return m.reply(mess.botAdmin)
 				await nimesha.groupRevokeInvite(m.chat).then((a) => {
-					m.reply(`සාර්ථකයි Menyetel Ulang, Tautan Undangan Grup ${m.metadata.subject}`)
+					m.reply(`✅ සාර්ථකයි! සමූහ link reset කෙරිණ: ${m.metadata.subject}`)
 				}).catch((err) => m.reply('අසාර්ථකයි!'))
 			}
 			break
@@ -1625,7 +1632,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				let set = db.groups[m.chat]
 				switch (args[0]?.toLowerCase()) {
 					case 'close': case 'open':
-					await nimesha.groupSettingUpdate(m.chat, args[0] == 'close' ? 'announcement' : 'not_announcement').then(a => m.reply(`*සාර්ථකයි ${args[0] == 'open' ? 'Membuka' : 'Menutup'} Group*`))
+					await nimesha.groupSettingUpdate(m.chat, args[0] == 'close' ? 'announcement' : 'not_announcement').then(a => m.reply(`*${args[0] == 'open' ? '🔓 සමූහය විවෘත කෙරිණ!' : '🔒 සමූහය වසා දමන ලදී!'}*`))
 					break
 					case 'join':
 					const _list = await nimesha.groupRequestParticipantsList(m.chat).then(a => a.map(b => b.jid))
@@ -1642,7 +1649,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						nimesha.sendMessage(m.chat, { disappearingMessagesInChat: 0 })
 					} else m.reply('කරුණාකර තෝරන්න:\nදිනා 90, දිනා 7, දිනා 1, off')
 					break
-					case 'antilink': case 'antivirtex': case 'antidelete': case 'welcome': case 'antitoxic': case 'waktusholat': case 'nsfw': case 'antihidetag': case 'setinfo': case 'antitagsw': case 'leave': case 'promote': case 'demote':
+					case 'antilink': case 'antivirtex': case 'antidelete': case 'welcome': case 'antitoxic': case 'කාලයsholat': case 'nsfw': case 'antihidetag': case 'setinfo': case 'antitagsw': case 'leave': case 'promote': case 'demote':
 					if (/on|true/i.test(args[1])) {
 						if (set[args[0]]) return m.reply('*මීට පෙර සක්‍රිය කර ඇත*')
 						set[args[0]] = true
@@ -1650,16 +1657,16 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					} else if (/off|false/i.test(args[1])) {
 						set[args[0]] = false
 						m.reply('*සාර්ථකයි Change To Off*')
-					} else m.reply(`❗${args[0].charAt(0).toUpperCase() + args[0].slice(1)} on/off`)
+					} else m.reply(`⚠️ *${args[0].charAt(0).toUpperCase() + args[0].slice(1)}* on හෝ off ලෙස ලියන්න`)
 					break
 					case 'setwelcome': case 'setleave': case 'setpromote': case 'setdemote':
 					if (args[1]) {
 						set.text[args[0]] = args.slice(1).join(' ');
 						m.reply(`සාර්ථකයි Mengubah ${args[0].split('set')[1]} ලෙස:\n${set.text[args[0]]}`)
-					} else m.reply(`උදාහරණ:\n${prefix + command} ${args[0]} Isi පණිවිඩnya\n\nMisal Dengan tag:\n${prefix + command} ${args[0]} Kepada @\nMaka akan ලෙස:\nKepada @0\n\nMisal dengan Tag admin:\n${prefix + command} ${args[0]} Dari @admin untuk @\nMaka akan ලෙස:\nDari @${m.sender.split('@')[0]} untuk @0\n\nMisal dengan Nama grup:\n${prefix + command} ${args[0]} Dari @admin untuk @ di @subject\nMaka akan ලෙස:\nDari @${m.sender.split('@')[0]} untuk @0 di ${m.metadata.subject}`)
+					} else m.reply(`📌 *${args[0]} Command*\n\nඋදාහරණ: ${prefix + command} ${args[0]} සාදරයෙන් @ !\n\n*Special Tags:*\n• @ → user mention\n• @admin → admin mention\n• @subject → ${m.metadata.subject}\n\nඋදාහරණ: ${prefix + command} ${args[0]} ${m.metadata.subject} හි @ ට සාදරයෙන් ❤️`)
 					break
 					default:
-					m.reply(`සමූහ සැකසුම් ${m.metadata.subject}\n- open\n- close\n- join acc/reject\n- disappearing 90/7/1/off\n- antilink on/off ${set.antilink ? '🟢' : '🔴'}\n- antivirtex on/off ${set.antivirtex ? '🟢' : '🔴'}\n- antidelete on/off ${set.antidelete ? '🟢' : '🔴'}\n- welcome on/off ${set.welcome ? '🟢' : '🔴'}\n- leave on/off ${set.leave ? '🟢' : '🔴'}\n- promote on/off ${set.promote ? '🟢' : '🔴'}\n- demote on/off ${set.demote ? '🟢' : '🔴'}\n- setinfo on/off ${set.setinfo ? '🟢' : '🔴'}\n- nsfw on/off ${set.nsfw ? '🟢' : '🔴'}\n- waktusholat on/off ${set.waktusholat ? '🟢' : '🔴'}\n- antihidetag on/off ${set.antihidetag ? '🟢' : '🔴'}\n- antitagsw on/off ${set.antitagsw ? '🟢' : '🔴'}\n\n- setwelcome _textnya_\n- setleave _textnya_\n- setpromote _textnya_\n- setdemote _textnya_\n\nඋදාහරණ:\n${prefix + command} antilink off`)
+					m.reply(`සමූහ සැකසුම් ${m.metadata.subject}\n- open\n- close\n- join acc/reject\n- disappearing 90/7/1/off\n- antilink on/off ${set.antilink ? '🟢' : '🔴'}\n- antivirtex on/off ${set.antivirtex ? '🟢' : '🔴'}\n- antidelete on/off ${set.antidelete ? '🟢' : '🔴'}\n- welcome on/off ${set.welcome ? '🟢' : '🔴'}\n- leave on/off ${set.leave ? '🟢' : '🔴'}\n- promote on/off ${set.promote ? '🟢' : '🔴'}\n- demote on/off ${set.demote ? '🟢' : '🔴'}\n- setinfo on/off ${set.setinfo ? '🟢' : '🔴'}\n- nsfw on/off ${set.nsfw ? '🟢' : '🔴'}\n- කාලයsholat on/off ${set.කාලයsholat ? '🟢' : '🔴'}\n- antihidetag on/off ${set.antihidetag ? '🟢' : '🔴'}\n- antitagsw on/off ${set.antitagsw ? '🟢' : '🔴'}\n\n- setwelcome _පෙළ_\n- setleave _පෙළ_\n- setpromote _පෙළ_\n- setdemote _පෙළ_\n\nඋදාහරණ:\n${prefix + command} antilink off`)
 				}
 			}
 			break
@@ -1686,7 +1693,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!m.isGroup) return m.reply(mess.group)
 				if (!m.isAdmin) return m.reply(mess.admin)
 				if (!m.isBotAdmin) return m.reply(mess.botAdmin)
-				if (!m.quoted) return m.reply(`Reply pesan dengan caption ${prefix + command}`)
+				if (!m.quoted) return m.reply(`📌 Message reply කරන්න (caption: *${prefix + command}*)`)
 				delete m.quoted.chat
 				await nimesha.sendMessage(m.chat, { forward: m.quoted.fakeObj(), mentions: m.metadata.participants.map(a => a.id) })
 			}
@@ -1745,7 +1752,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'totalfitur': {
 				const total = ((fs.readFileSync('./nima.js').toString()).match(/case '/g) || []).length
-				m.reply(`Total Fitur : ${total}`);
+				m.reply(`📊 *මුළු Commands:* ${total}`);
 			}
 			break
 			case 'daily': case 'claim': {
@@ -1872,7 +1879,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				let user = db.users[m.sender]
 				user.afkTime = + new Date
 				user.afkReason = text
-				m.reply(`@${m.sender.split('@')[0]} AFK ලෙස${text ? ': ' + text : ''}`)
+				m.reply(`💤 @${m.sender.split('@')[0]} AFK mode ON${text ? ' — _' + text + '_' : ''}`)
 			}
 			break
 			case 'readviewonce': case 'readviewone': case 'rvo': {
@@ -1906,16 +1913,16 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					});
 				} else if (_saluran.test(text) || text.endsWith('@newsletter') || !isNaN(text)) {
 					await nimesha.newsletterMsg(text.match(_saluran)[1]).then((n) => {
-						m.reply(`*[ INFORMATION CHANNEL ]*\n\nID: ${n.id}\nState: ${n.state.type}\nName: ${n.thread_metadata.name.text}\nCreate At: ${new Date(n.thread_metadata.creation_time * 1000).toLocaleString()}\nSubscriber: ${n.thread_metadata.subscribers_count}\nVerification: ${n.thread_metadata.verification}\nDescription: ${n.thread_metadata.description.text}\n`)
+						m.reply(`*[ INFORMATION CHANNEL ]*\n\nID: ${n.id}\nState: ${n.state.type}\nName: ${n.thread_metadata.නාමය.text}\nCreate At: ${new Date(n.thread_metadata.creation_time * 1000).toLocaleString()}\nSubscriber: ${n.thread_metadata.subscribers_count}\nVerification: ${n.thread_metadata.verification}\nDescription: ${n.thread_metadata.description.text}\n`)
 					}).catch((e) => m.reply('Channel හොයාගත නොහැකිය❗'))
 				} else m.reply('සමූහ හෝ Channel URL පමණ සහාය දෙයි!')
 			}
 			break
 			case 'addmsg': {
 				if (!m.quoted) return m.reply('Database හි Save කිරීමට Reply කරන්න')
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} file name`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} ගොනු නාමය`)
 				let msgs = db.database
-				if (text.toLowerCase() in msgs) return m.reply(`'${text}' පණිවිඩ ලැයිස්තුවේ ලියාපදිංචිය`)
+				if (text.toLowerCase() in msgs) return m.reply(`✅ *'${text}'* ලැයිස්තුවට ලියාපදිංචි කෙරිණ!`)
 				msgs[text.toLowerCase()] = m.quoted
 				delete msgs[text.toLowerCase()].chat
 				m.reply(`සාර්ථකව ලැයිස්තුවට පණිවිඩය  '${text}'\nලෙස ලබා ගන්නෙ ${prefix}getmsg ${text}\nලැයිස්තුව බලන්නෙ ${prefix}listmsg`)
@@ -1928,16 +1935,16 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					db.database = {}
 					m.reply('ලැයිස්තුවෙන් msg සියල්ල සාර්ථකව ඉවත් කෙරිණ')
 				} else {
-					if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' පණිවිඩ ලැයිස්තුවේ ලියාපදිංචි නැත`)
+					if (!(text.toLowerCase() in msgs)) return m.reply(`❌ *'${text}'* ලැයිස්තුවේ නැත!`)
 					delete msgs[text.toLowerCase()]
 					m.reply(`සාර්ථකව ඉවත් කෙරිණ '${text}' ලැයිස්තුවෙන්`)
 				}
 			}
 			break
 			case 'getmsg': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} file name\n\nලැයිස්තුව බලන්නෙ ${prefix}listmsg`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} ගොනු නාමය\n\nලැයිස්තුව බලන්නෙ ${prefix}listmsg`)
 				let msgs = db.database
-				if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' ලැයිස්තුවේ ලියාපදිංචි නැත`)
+				if (!(text.toLowerCase() in msgs)) return m.reply(`❌ *'${text}'* ලැයිස්තුවේ නැත!`)
 				await nimesha.relayMessage(m.chat, msgs[text.toLowerCase()], {})
 			}
 			break
@@ -2008,8 +2015,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'confes': case 'confess': case 'menfes': case 'menfess': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (m.isGroup) return m.reply(mess.private)
-				if (menfes[m.sender]) return m.reply(`ඔබ Session හි ${command}!`)
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} 94xxxx|Nama Samaran`)
+				if (menfes[m.sender]) return m.reply(`⚠️ ඔබ දැනටමත් Session හි ${command}!`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} 94xxxx|අන් නාමය`)
 				let [teks1, teks2] = text.split`|`
 				if (teks1) {
 					const tujuan = teks1.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
@@ -2025,11 +2032,11 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					};
 					const timeout = setTimeout(() => {
 						if (menfes[m.sender]) {
-							m.reply(`_Session කාලය ඉකිවිය_`);
+							m.reply(`⏰ _Session කාලය ඉකිවිය!_`);
 							delete menfes[m.sender];
 						}
 						if (menfes[tujuan]) {
-							nimesha.sendMessage(tujuan, { text: `_Session කාලය ඉකිවිය_` });
+							nimesha.sendMessage(tujuan, { text: `⏰ _Session කාලය ඉකිවිය!_` });
 							delete menfes[tujuan];
 						}
 						menfesTimeouts.delete(m.sender);
@@ -2040,11 +2047,11 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					nimesha.sendMessage(tujuan, { text: `_${command} සම්බන්ධ වී ඇත_\n*සටහන:* අවසන් කිරීමට ටයිප් කරන්න _*${prefix}del${command}*_` });
 					m.reply(`_ආරම්භ කරමින්... ${command}..._\n*පණිවිඩ/media යැවීම ආරම්භ කරන්න*\n*කාලසීමාව ${command} විනාඩි 10 ක් පමණි*\n*සටහන:* අවසන් කිරීමට ටයිප් කරන්න _*${prefix}del${command}*_`)
 					setLimit(m, db)
-				} else m.reply(`Masukkan අංකය!\nඋදාහරණ : ${prefix + command} 94xxxx|Nama Samaran`)
+				} else m.reply(`📌 අංකය ඇතුළත් කරන්න!\nඋදාහරණ : ${prefix + command} 94xxxx|අන් නාමය`)
 			}
 			break
 			case 'delconfes': case 'delconfess': case 'delmenfes': case 'delmenfess': {
-				if (!menfes[m.sender]) return m.reply(`ඔබ Session එකේ නෑ ${command.split('del')[1]}!`)
+				if (!menfes[m.sender]) return m.reply(`⚠️ ඔබ Session එකේ නෑ ${command.split('del')[1]}!`)
 				let anu = menfes[m.sender]
 				if (menfesTimeouts.has(m.sender)) {
 					clearTimeout(menfesTimeouts.get(m.sender));
@@ -2062,8 +2069,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'cai': case 'roomai': case 'chatai': case 'autoai': {
 				if (m.isGroup) return m.reply(mess.private)
-				if (chat_ai[m.sender]) return m.reply(`ඔබ Session හි ${command}!`)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} halo ngab\nWith Prompt: ${prefix + command} halo ngab|Kamu adalah assisten yang siap membantu dalam hal apapun yang ku minta.\n\nමැකීමට room: ${prefix + 'del' + command}`)
+				if (chat_ai[m.sender]) return m.reply(`⚠️ ඔබ දැනටමත් Session හි ${command}!`)
+				if (!text) return m.reply(`📌 *AI Chat Command*\nඋදාහරණ: ${prefix + command} හෙලෝ!\nPrompt සමඟ: ${prefix + command} හෙලෝ|ඔබ Miss Shasikala.\n\nRoom ඉවත් කිරීමට: *${prefix + 'del' + command}*`)
 				let [teks1, teks2] = text.split`|`
 				chat_ai[m.sender] = [{ role: 'system', content: teks2 || '' }, { role: 'user', content: text.split`|` ? teks1 : text || '' }]
 				let hasil = await fetchApi('/ai/chat4', {
@@ -2076,7 +2083,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'delcai': case 'delroomai': case 'delchatai': case 'delautoai': {
-				if (!chat_ai[m.sender]) return m.reply(`ඔබ Session එකේ නෑ ${command.split('del')[1]}!`)
+				if (!chat_ai[m.sender]) return m.reply(`⚠️ ඔබ Session එකේ නෑ ${command.split('del')[1]}!`)
 				m.reply(`සාර්ථකයි Mengakhiri Sesi ${command.split('del')[1]}!`)
 				delete chat_ai[m.sender];
 			}
@@ -2185,7 +2192,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				m.reply(mess.wait)
 				let media = await quoted.download()
 				let audio = await toAudio(media, 'mp4')
-				await m.reply({ document: audio, mimetype: 'audio/mpeg', fileName: `Convert By Nima Bot.mp3`})
+				await m.reply({ document: audio, mimetype: 'audio/mpeg', fileName: `Convert By නාමය Bot.mp3`})
 			}
 			break
 			case 'tovn': case 'toptt': case 'tovoice': {
@@ -2197,7 +2204,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'togif': {
-				if (!/webp|video/.test(mime)) return m.reply(`Reply Video/Stiker dengan caption *${prefix + command}*`)
+				if (!/webp|video/.test(mime)) return m.reply(`📌 Video/Sticker reply කරන්න (caption: *${prefix + command}*)`)
 				m.reply(mess.wait)
 				let media = await nimesha.downloadAndSaveMediaMessage(qmsg)
 				let ran = `./database/temp/${getRandom('.gif')}`;
@@ -2211,7 +2218,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'toimage': case 'toimg': {
-				if (!/webp|video|image/.test(mime)) return m.reply(`Reply Video/Stiker dengan caption *${prefix + command}*`)
+				if (!/webp|video|image/.test(mime)) return m.reply(`📌 Video/Sticker reply කරන්න (caption: *${prefix + command}*)`)
 				m.reply(mess.wait)
 				let media = await nimesha.downloadAndSaveMediaMessage(qmsg)
 				let ran = `./database/temp/${getRandom('.png')}`;
@@ -2225,7 +2232,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'toptv': {
-				if (!/video/.test(mime)) return m.reply(`Kirim/Reply Video ඔව්ng Ingin Dijadikan PTV Message Dengan Caption ${prefix + command}`)
+				if (!/video/.test(mime)) return m.reply(`📌 Video Reply කරන්න caption සමඟ ${prefix + command}`)
 				if ((m.quoted ? m.quoted.type : m.type) === 'videoMessage') {
 					const anu = await quoted.download()
 					const message = await generateWAMessageContent({ video: anu }, { upload: nimesha.waUploadToServer })
@@ -2254,10 +2261,10 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'translate': case 'tr': {
 				if (text && text == 'list') {
-					let list_tr = `╭──❍「 *Language Code* 」❍\n│• af : Afrikaans\n│• ar : Arab\n│• zh : Chinese\n│• en : English\n│• en-us : English (United States)\n│• fr : French\n│• de : German\n│• hi : Hindi\n│• hu : Hungarian\n│• is : Icelandic\n│• id : Indonesian\n│• it : Italian\n│• ja : Japanese\n│• ko : Korean\n│• la : Latin\n│• no : Norwegian\n│• pt : Portuguese\n│• pt : Portuguese\n│• pt-br : Portuguese (Brazil)\n│• ro : Romanian\n│• ru : Russian\n│• sr : Serbian\n│• es : Spanish\n│• sv : Swedish\n│• ta : Tamil\n│• th : Thai\n│• tr : Turkish\n│• vi : Vietnamese\n╰──────❍`;
+					let list_tr = `╭──❍「 *Language Code* 」❍\n│• af : Afrikaans\n│• ar : Arab\n│• zh : Chinese\n│• en : English\n│• en-us : English (United States)\n│• fr : French\n│• de : German\n│• hi : Hindi\n│• hu : Hungarian\n│• is : Icelandic\n│• id : Indonesian\n│• it : Italian\n│• ja : Japanese\n│• ko : Korean\n│• la : Latin\n│• no : Norwegian\n│• pt : Portuguese\n│• pt : Portuguese\n│• pt-br : Portuguese (Brazil)\n│• ro : Romanian\n│• ru : Russian\n│• sr : Serbian\n│• es : Spanish\n│• sv : Swedish\n│• ta : Tamil\n│• th : Thai\n│• tr : Turkish\n│• vi : Vietනාමයse\n╰──────❍`;
 					m.reply(list_tr)
 				} else {
-					if (!m.quoted && (!text|| !args[1])) return m.reply(`Caption සමග Text Reply/Send කරන්න ${prefix + command}`)
+					if (!m.quoted && (!text|| !args[1])) return m.reply(`📌 Text Reply/Send කරන්න (caption: *${prefix + command}*)`)
 					let lang = args[0] ? args[0] : 'id'
 					let teks = args[1] ? args.slice(1).join(' ') : m.quoted.text
 					try {
@@ -2270,7 +2277,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'toqr': case 'qr': {
-				if (!text) return m.reply(`QR බවට හරවන Text *${prefix + command}* textnya`)
+				if (!text) return m.reply(`QR බවට හරවන Text *${prefix + command}* පෙළ`)
 				m.reply(mess.wait)
 				let anu = await fetchApi('/tools/to-qr', { data: text }, { buffer: true });
 				await m.reply({ image: anu, caption: 'ගනින්' })
@@ -2283,7 +2290,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						let media = await quoted.download();
 						const form = new FormData();
 					    form.append('buffer', media, {
-					        filename: 'image.jpg',
+					        fileනාමය: 'image.jpg',
 					        contentType: 'image/jpeg'
 					    });
 						let hasil = await fetchApi('/tools/remini', form, { buffer: true });
@@ -2302,7 +2309,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 							setLimit(m, db)
 						});
 					}
-				} else m.reply(`Kirim/Reply Gambar dengan format\nඋදාහරණ: ${prefix + command}`)
+				} else m.reply(`📌 රූපයක් Reply/Send කරන්න\nඋදාහරණ: ${prefix + command}`)
 			}
 			break
 			case 'dehaze': case 'colorize': case 'colorfull': {
@@ -2311,13 +2318,13 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					let media = await quoted.download()
 					const form = new FormData();
 				    form.append('buffer', media, {
-				        filename: 'image.jpg',
+				        fileනාමය: 'image.jpg',
 				        contentType: 'image/jpeg'
 				    });
 					let hasil = await fetchApi('/tools/recolor', form, { buffer: true });
 					m.reply({ image: hasil, caption: 'නිවැරදියි' });
 					setLimit(m, db)
-				} else m.reply(`Kirim/Reply Gambar dengan format\nඋදාහරණ: ${prefix + command}`)
+				} else m.reply(`📌 රූපයක් Reply/Send කරන්න\nඋදාහරණ: ${prefix + command}`)
 			}
 			break
 			case 'hitamkan': case 'toblack': {
@@ -2327,13 +2334,13 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					const form = new FormData();
 					form.append('style', 'summer');
 				    form.append('buffer', media, {
-				        filename: 'image.jpg',
+				        fileනාමය: 'image.jpg',
 				        contentType: 'image/jpeg'
 				    });
 					let hasil = await fetchApi('/create/skin-tone', form, { buffer: true });
 					m.reply({ image: hasil, caption: 'නිවැරදියි' });
 					setLimit(m, db)
-				} else m.reply(`Kirim/Reply Gambar dengan format\nඋදාහරණ: ${prefix + command}`)
+				} else m.reply(`📌 රූපයක් Reply/Send කරන්න\nඋදාහරණ: ${prefix + command}`)
 			}
 			break
 			case 'ssweb': {
@@ -2365,7 +2372,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					const exifData = JSON.parse(img.exif.slice(22).toString());
 					m.reply(util.format(exifData))
 				} catch (e) {
-					m.reply(`Sticker හි EXIF ඇත, නමුත් format JSON නොවේ:\n\n${img.exif.toString()}`);
+					m.reply(`⚠️ Sticker EXIF ඇත, නමුත් JSON format නොවේ:\n\n${img.exif.toString()}`);
 				}
 			}
 			break
@@ -2373,7 +2380,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} jakarta`)
 				try {
 					let { result: data } = await fetchApi('/tools/cuaca', { city: text });
-					m.reply(`*🏙 නගර කාලගුණය ${data.name}*\n\n*🌤️ කාලගුණය:* ${data.weather[0].main}\n*📝 විස්තරය:* ${data.weather[0].description}\n*🌡️ සාමාන්‍ය උෂ්ණත්වය:* ${data.main.temp} °C\n*🤔 දැනෙන ලෙස:* ${data.main.feels_like} °C\n*🌬️ පීඩනය:* ${data.main.pressure} hPa\n*💧 ආර්ද්‍රතාවය:* ${data.main.humidity}%\n*🌪️ සුළං වේගය:* ${data.wind.speed} Km/h\n*📍 ස්ථානය:*\n- *Bujur :* ${data.coord.lat}\n- *Lintang :* ${data.coord.lon}\n*🌏 රට:* ${data.sys.country}`)
+					m.reply(`*🏙 නගර කාලගුණය ${data.නාමය}*\n\n*🌤️ කාලගුණය:* ${data.weather[0].main}\n*📝 විස්තරය:* ${data.weather[0].description}\n*🌡️ සාමාන්‍ය උෂ්ණත්වය:* ${data.main.temp} °C\n*🤔 දැනෙන ලෙස:* ${data.main.feels_like} °C\n*🌬️ පීඩනය:* ${data.main.pressure} hPa\n*💧 ආර්ද්‍රතාවය:* ${data.main.humidity}%\n*🌪️ සුළං වේගය:* ${data.wind.speed} Km/h\n*📍 ස්ථානය:*\n- *Bujur :* ${data.coord.lat}\n- *Lintang :* ${data.coord.lon}\n*🌏 රට:* ${data.sys.country}`)
 				} catch (e) {
 					m.reply('නගරය හොයාගත නොහැකිය!')
 				}
@@ -2382,15 +2389,15 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'sticker': case 'stiker': case 's': case 'stickergif': case 'stikergif': case 'sgif': case 'stickerwm': case 'swm': case 'curi': case 'colong': case 'take': case 'stickergifwm': case 'sgifwm': {
 				if (!/image|video|sticker/.test(quoted.type)) return m.reply(`Caption සමග Image/Video/GIF Reply/Send කරන්න ${prefix + command}\nකාලසීමාව Image/Video/Gif 1-9 Detik`)
 				let media = await quoted.download()
-				let teks1 = text.split`|`[0] ? text.split`|`[0] : packname
+				let teks1 = text.split`|`[0] ? text.split`|`[0] : packනාමය
 				let teks2 = text.split`|`[1] ? text.split`|`[1] : author
 				if (/image|webp/.test(mime)) {
 					m.reply(mess.wait)
-					await nimesha.sendAsSticker(m.chat, media, m, { packname: teks1, author: teks2 })
+					await nimesha.sendAsSticker(m.chat, media, m, { packනාමය: teks1, author: teks2 })
 				} else if (/video/.test(mime)) {
 					if ((qmsg).seconds > 11) return m.reply('උපරිම 10 seconds!')
 					m.reply(mess.wait)
-					await nimesha.sendAsSticker(m.chat, media, m, { packname: teks1, author: teks2 })
+					await nimesha.sendAsSticker(m.chat, media, m, { packනාමය: teks1, author: teks2 })
 				} else m.reply(`Caption සමග Image/Video/GIF Reply/Send කරන්න ${prefix + command}\nකාලසීමාව Video/Gif 1-9 Detik`)
 			}
 			break
@@ -2406,7 +2413,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					let media = await quoted.download()
 					let mem = await UguuSe(media);
 					let smeme = await fetchApi('/create/meme2', { url: mem.url, text: atas, text2: bawah }, { buffer: true });
-					await nimesha.sendAsSticker(m.chat, smeme, m, { packname, author })
+					await nimesha.sendAsSticker(m.chat, smeme, m, { packනාමය, author })
 					setLimit(m, db)
 				} catch (e) {
 					console.log(e)
@@ -2421,9 +2428,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!emoji1 && !emoji2) return m.reply(`උදාහරණ: ${prefix + command} 😅+🤔`)
 				try {
 					let { result } = await fetchApi('/tools/emojimix', { emoji1, emoji2 });
-					if (result.length < 1) return m.reply(`Emoji Mix ${text} හොයාගත නොහැකිය!`)
+					if (result.length < 1) return m.reply(`❌ *${text}* Emoji Mix හොයාගත නොහැකිය!`)
 					for (let res of result) {
-						await nimesha.sendAsSticker(m.chat, res.url, m, { packname, author })
+						await nimesha.sendAsSticker(m.chat, res.url, m, { packනාමය, author })
 					}
 					setLimit(m, db)
 				} catch (e) {
@@ -2468,12 +2475,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				try {
 					const style = command === 'attp2' ? Math.floor(Math.random() * 10) + 10 : Math.floor(Math.random() * 10) + 1
 					const hasil = await fetchApi('/create/attp', { text, style }, { buffer: true })
-					await nimesha.sendAsSticker(m.chat, hasil, m, { packname, author })
+					await nimesha.sendAsSticker(m.chat, hasil, m, { packනාමය, author })
 					setLimit(m, db)
 				} catch(e) {
 					try {
 						const hasil2 = await fetchApi('/create/attp', { text, style: Math.floor(Math.random() * 5) + 1 }, { buffer: true })
-						await nimesha.sendAsSticker(m.chat, hasil2, m, { packname, author })
+						await nimesha.sendAsSticker(m.chat, hasil2, m, { packනාමය, author })
 						setLimit(m, db)
 					} catch(e2) {
 						m.reply('ATTP අසාර්ථකයි!')
@@ -2485,7 +2492,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'quote':
 			case 'fakechat': {
 			  if (!isLimit) return m.reply(mess.limit)
-			  if (!text && !m.quoted) return m.reply(`Reply/Send කරන්න *${prefix + command}*`)
+			  if (!text && !m.quoted) return m.reply(`📌 Reply/Send කරන්න: *${prefix + command}*`)
 			
 			  try {
 			    let mediaBuffer
@@ -2498,8 +2505,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			    if (m.quoted && m.quoted.isMedia) {
 			      quotedMediaBuffer = await m.quoted.download()
 			    }
-			    const senderName = m.pushName || store.contacts?.[m.sender]?.name || '+' + m.sender.split('@')[0]
-			    const quotedName = store.contacts?.[m.quoted?.sender]?.name || '+' + (m.quoted?.sender || '').split('@')[0]
+			    const senderName = m.pushName || store.contacts?.[m.sender]?.නාමය || '+' + m.sender.split('@')[0]
+			    const quotedName = store.contacts?.[m.quoted?.sender]?.නාමය || '+' + (m.quoted?.sender || '').split('@')[0]
 			    const params = {
 			      type: 'quote',
 			      backgroundColor: '#1b2226',
@@ -2511,7 +2518,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			          avatar: true,
 			          from: {
 			            id: 1,
-			            name: senderName,
+			            නාමය: senderName,
 			            number: '+' + m.sender.split('@')[0],
 			            time: new Date().toLocaleTimeString('id-ID', {
 			              hour: '2-digit',
@@ -2524,7 +2531,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			          ...(m.quoted ? {
 			                replyMessage: {
 			                  chatId: Math.floor(Math.random() * 9999999),
-			                  name: quotedName,
+			                  නාමය: quotedName,
 			                  text: m?.quoted?.text || '',
 			                  number: '+' + m.quoted.sender.split('@')[0],
 			                  ...(quotedMediaBuffer ? { media: { buffer: quotedMediaBuffer.toString('base64') } } : {})
@@ -2534,7 +2541,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			      ]
 			    };
 				let res = await fetchApi('/create/qc', params, { method: 'POST', buffer: true });
-				await nimesha.sendAsSticker(m.chat, Buffer.from(res, 'base64'), m, { packname, author })
+				await nimesha.sendAsSticker(m.chat, Buffer.from(res, 'base64'), m, { packනාමය, author })
 			    setLimit(m, db)
 			  } catch (e) {
 			    console.error(e)
@@ -2544,7 +2551,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'brat': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text && (!m.quoted || !m.quoted.text)) return m.reply(`Kirim/reply pesan *${prefix + command}* Text එක`)
+				if (!text && (!m.quoted || !m.quoted.text)) return m.reply(`📌 Reply කරන්න *${prefix + command}* Text එක`)
 				try {
 					let res = await fetchApi('/create/brat', { text }, { buffer: true });
 					await nimesha.sendAsSticker(m.chat, res, m)
@@ -2556,7 +2563,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'bratvid': case 'bratvideo': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text && (!m.quoted || !m.quoted.text)) return m.reply(`Kirim/reply pesan *${prefix + command}* Text එක`)
+				if (!text && (!m.quoted || !m.quoted.text)) return m.reply(`📌 Reply කරන්න *${prefix + command}* Text එක`)
 				const teks = (m.quoted ? m.quoted.text : text).split(' ');
 				const tempDir = path.join(process.cwd(), 'database/temp');
 				try {
@@ -2579,7 +2586,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					fs.writeFileSync(fileListPath, fileListContent);
 					const outputVideoPath = path.join(tempDir, `${time + '-' + m.sender}-output.mp4`);
 					execSync(`ffmpeg -y -f concat -safe 0 -i ${fileListPath} -vf 'fps=30' -c:v libx264 -preset veryfast -pix_fmt yuv420p -t 00:00:10 ${outputVideoPath}`);
-					nimesha.sendAsSticker(m.chat, outputVideoPath, m, { packname, author })
+					nimesha.sendAsSticker(m.chat, outputVideoPath, m, { packනාමය, author })
 					framePaths.forEach((filePath) => fs.unlinkSync(filePath));
 					fs.unlinkSync(fileListPath);
 					fs.unlinkSync(outputVideoPath);
@@ -2598,7 +2605,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						let media = await quoted.download()
 						const form = new FormData();
 					    form.append('buffer', media, {
-					        filename: 'image.jpg',
+					        fileනාමය: 'image.jpg',
 					        contentType: 'image/jpeg'
 					    });
 						let hasil = await fetchApi('/create/wasted', form, { buffer: true });
@@ -2632,7 +2639,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'nuliskanan': case 'nuliskiri': case 'foliokanan': case 'foliokiri': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`Command Send කරන්න *${prefix + command}* Text එක`)
+				if (!text) return m.reply(`📌 *${prefix + command}* *(text)* ලෙස send කරන්න`)
 				m.reply(mess.wait)
 				const splitText = text.replace(/(\S+\s*){1,9}/g, '$&\n')
 				const fixHeight = splitText.split('\n').slice(0, 31).join('\n')
@@ -2667,7 +2674,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 							m.reply({ audio: buff, mimetype: 'audio/mpeg' })
 							fs.unlinkSync(ran)
 						});
-					} else m.reply(`Caption සමග Audio Reply/Send කරන්න *${prefix + command}*`)
+					} else m.reply(`📌 Audio file Reply/Send කරන්න (caption: *${prefix + command}*)`)
 				} catch (e) {
 					m.reply('අසාර්ථකයි!')
 				}
@@ -2701,9 +2708,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			
 			// Ai Menu
 			case 'ai': case 'google': case 'bard': case 'gemini': {
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} query`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} සොයන දෙය`)
 				try {
-					let hasil = await fetchApi('/ai/gemini-flash-lite', { query: text });
+					let hasil = await fetchApi('/ai/gemini-flash-lite', { සොයන දෙය: text });
 					m.reply(hasil.result.text)
 				} catch (e) {
 					m.reply(pickRandom(['AI Feature ගැටලුවකට ලක් ව ඇත!','AI සම්බන්ධ කිරීමට නොහැකිය!','AI System දැනට කාර්යබහුලයි!','Feature දැනට භාවිතා කළ නොහැකිය!']))
@@ -2713,9 +2720,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			
 			// Search Menu
 			case 'gimage': case 'bingimg': {
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} query`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} සොයන දෙය`)
 				try {
-					let anu = await fetchApi('/search/google', { query: text });
+					let anu = await fetchApi('/search/google', { සොයන දෙය: text });
 					let una = pickRandom(anu.result)
 					await m.reply({ image: { url: una.pagemap?.cse_thumbnail?.[0]?.src || una.pagemap?.cse_image?.[0].src || una.pagemap?.metatags?.[0]?.["og:image"] }, caption: 'සෙවීමේ ප්‍රතිඵල ' + text + '\nTitle: ' + una.title + '\nSnippet: ' + una.snippet + '\nSource: ' + una.link || una.formattedUrl })
 					setLimit(m, db)
@@ -2730,11 +2737,11 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				try {
 					const res = await yts.search(text);
 					const hasil = pickRandom(res.all)
-					const teksnya = `*📍Title:* ${hasil.title || 'නැහැ tersedia'}\n*✏Description:* ${hasil.description || 'නැහැ tersedia'}\n*🌟Channel:* ${hasil.author?.name || 'නැහැ tersedia'}\n*⏳Duration:* ${hasil.seconds || 'නැහැ tersedia'} second (${hasil.timestamp || 'නැහැ tersedia'})\n*🔎Source:* ${hasil.url || 'නැහැ tersedia'}\n\n_සටහන: Download කිරීමට_\n_තෝරන්න ${prefix}ytmp3 url_video හෝ ${prefix}ytmp4 url_video_`;
+					const teksnya = `*📍Title:* ${hasil.title || 'නැහැ tersedia'}\n*✏Description:* ${hasil.description || 'නැහැ tersedia'}\n*🌟Channel:* ${hasil.author?.නාමය || 'නැහැ tersedia'}\n*⏳Duration:* ${hasil.seconds || 'නැහැ tersedia'} second (${hasil.timestamp || 'නැහැ tersedia'})\n*🔎Source:* ${hasil.url || 'නැහැ tersedia'}\n\n_සටහන: Download කිරීමට_\n_තෝරන්න ${prefix}ytmp3 url_video හෝ ${prefix}ytmp4 url_video_`;
 					await m.reply({ image: { url: hasil.thumbnail }, caption: teksnya })
 				} catch (e) {
 					try {
-						const res = await fetchApi('/search/youtube', { query: text });
+						const res = await fetchApi('/search/youtube', { සොයන දෙය: text });
 						const hasil = pickRandom(res.result.items)
 						const teksnya = `*📍Title:* ${hasil.snippet.title || 'නැහැ tersedia'}\n*✏Description:* ${hasil.snippet.description || 'නැහැ tersedia'}\n*🌟Channel:* ${hasil.snippet.channelTitle || 'නැහැ tersedia'}\n*⏳Duration:* ${hasil.duration || 'නැහැ tersedia'}\n*🔎Source:* https://youtu.be/${hasil.id.videoId || 'නැහැ tersedia'}\n\n_සටහන: Download කිරීමට_\n_තෝරන්න ${prefix}ytmp3 url_video හෝ ${prefix}ytmp4 url_video_`;
 						await m.reply({ image: { url: hasil.snippet.thumbnails.medium.url }, caption: teksnya })
@@ -2749,7 +2756,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} hu tao`)
 				try {
 					m.reply(mess.wait)
-					const res = await fetchApi('/search/pixiv', { query: text });
+					const res = await fetchApi('/search/pixiv', { සොයන දෙය: text });
 					let hasil = pickRandom(res.result.body.illusts);
 					const response = await fetch(hasil.url, { headers: { 'referer': 'https://www.pixiv.net' }});
 					const image = await response.buffer();
@@ -2765,7 +2772,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} hu tao`)
 				try {
-					const res = await fetchApi('/search/pinterest', { query: text });
+					const res = await fetchApi('/search/pinterest', { සොයන දෙය: text });
 					const hasil = pickRandom(res.result)
 					const image = await getBuffer(hasil);
 					await m.reply({ image, caption: 'Hasil සිට: ' + text })
@@ -2779,7 +2786,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} hu tao`)
 				try {
-					let anu = await fetchApi('/search/pinterest', { query: text });
+					let anu = await fetchApi('/search/pinterest', { සොයන දෙය: text });
 					if (anu.length < 1) {
 						m.reply('Post ලබා ගත නොහැකිය!');
 					} else {
@@ -2796,7 +2803,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} black rover`)
 				try {
-					let anu = await fetchApi('/search/meloboom', { query: text });
+					let anu = await fetchApi('/search/meloboom', { සොයන දෙය: text });
 					let result = pickRandom(anu.result.data)
 					await m.reply({ audio: { url: anu.result.populated.media[result.media.audio[0]].url }, fileName: result.slug + '.mp3', mimetype: 'audio/mpeg' })
 					setLimit(m, db)
@@ -2808,10 +2815,10 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'npm': case 'npmjs': {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} axios`)
 				try {
-					let anu = await fetchApi('/search/npm', { query: text });
+					let anu = await fetchApi('/search/npm', { සොයන දෙය: text });
 					if (anu.result.objects.length > 1) return m.reply('සෙවීමේ ප්‍රතිඵල හොයාගත නොහැකිය')
 					let txt = anu.result.objects.map(({ package: pkg }) => {
-						return `*${pkg.name}* (v${pkg.version})\n_${pkg.links.npm}_\n_${pkg.description}_`
+						return `*${pkg.නාමය}* (v${pkg.version})\n_${pkg.links.npm}_\n_${pkg.description}_`
 					}).join`\n\n`
 					m.reply(txt)
 				} catch (e) {
@@ -2820,16 +2827,16 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'style': {
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Nima`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} නාමය`)
 				let anu = await fetchApi('/search/styletext', { text });
-				let txt = anu.result.map(a => `*${a.name}*\n${a.result}`).join`\n\n`
+				let txt = anu.result.map(a => `*${a.නාමය}*\n${a.result}`).join`\n\n`
 				m.reply(txt)
 			}
 			break
 			case 'spotify': case 'spotifysearch': {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} alan walker alone`)
 				try {
-					let hasil = await fetchApi('/search/spotify', { query: text });
+					let hasil = await fetchApi('/search/spotify', { සොයන දෙය: text });
 					let txt = hasil.result.map(a => {
 						return `*Title : ${a.title}*\n- Artist : ${a.artist}\n- Url : ${a.url}`
 					}).join`\n\n`
@@ -2842,7 +2849,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'tenor': {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} alone`)
 				try {
-					const anu = await fetchApi('/search/tenor', { query: text });
+					const anu = await fetchApi('/search/tenor', { සොයන දෙය: text });
 					const hasil = pickRandom(anu.result)
 					await m.reply({ video: { url: hasil.media[0].mp4.url }, caption: `👀 *Media:* ${hasil.url}\n📋 *Description:* ${hasil.content_description}\n🔛 *Url:* ${hasil.itemurl}`, gifPlayback: true, gifAttribution: 2 })
 				} catch (e) {
@@ -2855,7 +2862,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				try {
 					const anu = await fetchJson('https://api.urbandictionary.com/v0/define?term=' + text)
 					const hasil = pickRandom(anu.list)
-					await m.reply(`${hasil.definition}\n\nSumber: ${hasil.permalink}`)
+					await m.reply(`${hasil.definition}\n\n📚 මූලාශ්‍රය: ${hasil.permalink}`)
 				} catch (e) {
 					m.reply('Hasil හොයාගත නොහැකිය!')
 				}
@@ -2873,12 +2880,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					if (!(await nimesha.onWhatsApp(num))[0]?.exists) return m.reply('WhatsApp හි අංකය ලියාপදිංචි නෑ!')
 					let img = await nimesha.profilePictureUrl(num, 'image').catch(_ => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60')
 					let bio = await nimesha.fetchStatus(num).catch(_ => { })
-					let name = await nimesha.getName(num)
+					let නාමය = await nimesha.getName(num)
 					let business = await nimesha.getBusinessProfile(num)
 					let format = PhoneNum(`+${num.split('@')[0]}`)
 					let regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
 					let country = regionNames.of(format.getRegionCode('international'));
-					let wea = `WhatsApp තොරතුරු\n\n*° රට:* ${country.toUpperCase()}\n*° නම:* ${name ? name : '-'}\n*° Format අංකය:* ${format.getNumber('international')}\n*° URL:* wa.me/${num.split('@')[0]}\n*° Mentions:* @${num.split('@')[0]}\n*° Status:* ${bio?.status || '-'}\n*° Status දිනය:* ${bio?.setAt ? moment(bio.setAt.toDateString()).locale('id').format('LL') : '-'}\n\n${business ? `*WhatsApp Business තොරතුරු*\n\n*° Business ID:* ${business.wid}\n*° Website:* ${business.website ? business.website : '-'}\n*° Email:* ${business.email ? business.email : '-'}\n*° Category:* ${business.category}\n*° Address:* ${business.address ? business.address : '-'}\n*° Timezone:* ${business.business_hours.timezone ? business.business_hours.timezone : '-'}\n*° විස්තරය:* ${business.description ? business.description : '-'}` : '*සාමාන්‍ය WhatsApp ගිණුම*'}`
+					let wea = `WhatsApp තොරතුරු\n\n*° රට:* ${country.toUpperCase()}\n*° නම:* ${නාමය ? නාමය : '-'}\n*° Format අංකය:* ${format.getNumber('international')}\n*° URL:* wa.me/${num.split('@')[0]}\n*° Mentions:* @${num.split('@')[0]}\n*° Status:* ${bio?.status || '-'}\n*° Status දිනය:* ${bio?.setAt ? moment(bio.setAt.toDateString()).locale('id').format('LL') : '-'}\n\n${business ? `*WhatsApp Business තොරතුරු*\n\n*° Business ID:* ${business.wid}\n*° Website:* ${business.website ? business.website : '-'}\n*° Email:* ${business.email ? business.email : '-'}\n*° Category:* ${business.category}\n*° Address:* ${business.address ? business.address : '-'}\n*° Timezone:* ${business.business_hours.timezone ? business.business_hours.timezone : '-'}\n*° විස්තරය:* ${business.description ? business.description : '-'}` : '*සාමාන්‍ය WhatsApp ගිණුම*'}`
 					img ? await nimesha.sendMessage(m.chat, { image: { url: img }, caption: wea, mentions: [num] }, { quoted: m }) : m.reply(wea)
 				} catch (e) {
 					m.reply('Nomer නැහැ ditemukan!')
@@ -2887,12 +2894,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'ghstalk': case 'githubstalk': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} usernamenya`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} userනාමයnya`)
 				try {
 					const res = await fetchJson('https://api.github.com/users/' + text)
-					m.reply({ image: { url: res.avatar_url }, caption: `*Username :* ${res.login}\n*Nickname :* ${res.name || 'නැත'}\n*Bio :* ${res.bio || 'නැත'}\n*ID:* ${res.id}\n*Node ID :* ${res.node_id}\n*වර්ගය:* ${res.type}\n*Admin:* ${res.admin ? 'ඔව්' : 'නැහැ'}\n*Company :* ${res.company || 'නැත'}\n*Blog :* ${res.blog || 'නැත'}\n*Location :* ${res.location || 'නැත'}\n*Email :* ${res.email || 'නැත'}\n*Public Repo :* ${res.public_repos}\n*Public Gists :* ${res.public_gists}\n*Followers :* ${res.followers}\n*Following :* ${res.following}\n*Created At :* ${res.created_at} *Updated At :* ${res.updated_at}` })
+					m.reply({ image: { url: res.avatar_url }, caption: `*Userනාමය :* ${res.login}\n*Nickනාමය :* ${res.නාමය || 'නැත'}\n*Bio :* ${res.bio || 'නැත'}\n*ID:* ${res.id}\n*Node ID :* ${res.node_id}\n*වර්ගය:* ${res.type}\n*Admin:* ${res.admin ? 'ඔව්' : 'නැහැ'}\n*Company :* ${res.company || 'නැත'}\n*Blog :* ${res.blog || 'නැත'}\n*Location :* ${res.location || 'නැත'}\n*Email :* ${res.email || 'නැත'}\n*Public Repo :* ${res.public_repos}\n*Public Gists :* ${res.public_gists}\n*Followers :* ${res.followers}\n*Following :* ${res.following}\n*Created At :* ${res.created_at} *Updated At :* ${res.updated_at}` })
 				} catch (e) {
-					m.reply('Username නැහැ ditemukan!')
+					m.reply('Userනාමය නැහැ ditemukan!')
 				}
 			}
 			break
@@ -2900,7 +2907,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			// Downloader Menu
 			case 'ytmp3': case 'ytaudio': case 'ytplayaudio': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} url_youtube`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL`)
 				if (!text.includes('youtu')) return m.reply('URL YouTube ප්‍රතිඵලය ඇතුළත් නෑ!')
 				m.reply(mess.wait)
 				try {
@@ -2952,7 +2959,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} url_youtube`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL`)
 				if (!text.includes('youtu')) return m.reply('URL YouTube ප්‍රතිඵලය ඇතුළත් නෑ!')
 				m.reply(mess.wait)
 				try {
@@ -2972,7 +2979,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'ig': case 'instagram': case 'instadl': case 'igdown': case 'igdl': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} url_instagram`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Instagram URL`)
 				if (!text.includes('instagram.com')) return m.reply('URL Instagram ප්‍රතිඵලය ඇතුළත් නෑ!')
 				m.reply(mess.wait)
 				try {
@@ -2994,17 +3001,17 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'tiktok': case 'tiktokdown': case 'ttdown': case 'ttdl': case 'tt': case 'ttmp4': case 'ttvideo': case 'tiktokmp4': case 'tiktokvideo': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} url_tiktok`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} TikTok URL`)
 				if (!text.includes('tiktok.com')) return m.reply('URL TikTok ප්‍රතිඵලය ඇතුළත් නෑ!')
 				try {
 					const hasil = await fetchApi('/download/tiktok', { url: text })
 					m.reply(mess.wait)
 					if (hasil.result.download.type == "video") {
-						await m.reply({ video: { url: hasil.result.download?.video?.nowm_hd || hasil.result.download?.video?.nowm }, caption: `*📍Title:* ${hasil.result.desc || '-'}\n*🕓Create At:* ${hasil.result.create_time}\n*🎃Author:* ${hasil.result.author.nickname} (@${hasil.result.author.unique_id})` });
+						await m.reply({ video: { url: hasil.result.download?.video?.nowm_hd || hasil.result.download?.video?.nowm }, caption: `*📍Title:* ${hasil.result.desc || '-'}\n*🕓Create At:* ${hasil.result.create_time}\n*🎃Author:* ${hasil.result.author.nickනාමය} (@${hasil.result.author.unique_id})` });
 					} else if (hasil.result.download.type == "images") {
 						await nimesha.sendAlbumMessage(m.chat, {
 							album: hasil.result.download.images.map(a => ({ image: { url: a.url }})),
-							caption: `*📍Title:* ${hasil.result.desc || '-'}\n*🕓Create At:* ${hasil.result.create_time}\n*🎃Author:* ${hasil.result.author.nickname} (@${hasil.result.author.unique_id})`
+							caption: `*📍Title:* ${hasil.result.desc || '-'}\n*🕓Create At:* ${hasil.result.create_time}\n*🎃Author:* ${hasil.result.author.nickනාමය} (@${hasil.result.author.unique_id})`
 						}, { quoted: m });
 					} else {
 						return m.reply('Url නැහැ Valid!')
@@ -3018,7 +3025,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'ttmp3': case 'tiktokmp3': case 'ttaudio': case 'tiktokaudio': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} url_tiktok`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} TikTok URL`)
 				if (!text.includes('tiktok.com')) return m.reply('URL TikTok ප්‍රතිඵලය ඇතුළත් නෑ!')
 				try {
 					const hasil = await fetchApi('/download/tiktok', { url: text });
@@ -3028,7 +3035,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						mimetype: 'audio/mpeg',
 						contextInfo: {
 							externalAdReply: {
-								title: 'TikTok • ' + hasil.result.author.nickname,
+								title: 'TikTok • ' + hasil.result.author.nickනාමය,
 								body: hasil.result.statistics.like + ' suka, ' + hasil.result.statistics.command + ' komentar. ' + hasil.result.desc,
 								previewType: 'PHOTO',
 								thumbnailUrl: hasil.result.download?.music_info?.cover_hd || hasil.result.download.music_info.cover_medium,
@@ -3046,7 +3053,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'fb': case 'fbdl': case 'fbdown': case 'facebook': case 'facebookdl': case 'facebookdown': case 'fbdownload': case 'fbmp4': case 'fbvideo': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} url_facebook`)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Facebook URL`)
 				if (!text.includes('facebook.com')) return m.reply('URL Facebook ප්‍රතිඵලය ඇතුළත් නෑ!')
 				try {
 					const hasil = await fetchApi('/download/facebook', { url: text });
@@ -3068,7 +3075,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!isUrl(args[0]) && !args[0].includes('mediafire.com')) return m.reply('URL වලංගු නොවේ!')
 				try {
 					let { result: res } = await fetchApi('/download/mediafire', { url: text })
-					await nimesha.sendMedia(m.chat, res.link, res.filename, `*MEDIAFIRE DOWNLOADER*\n\n*${setv} Name* : ${res.filename}\n*${setv} Size* : ${res.size}`, m)
+					await nimesha.sendMedia(m.chat, res.link, res.fileනාමය, `*MEDIAFIRE DOWNLOADER*\n\n*${setv} Name* : ${res.fileනාමය}\n*${setv} Size* : ${res.size}`, m)
 					setLimit(m, db)
 				} catch (e) {
 					m.reply('Download Server offline!')
@@ -3188,37 +3195,37 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				let ddsa = [{ url: 'https://telegra.ph/file/9f60e4cdbeb79fc6aff7a.png', no: 1 },{ url: 'https://telegra.ph/file/797f86e444755282374ef.png', no: 2 },{ url: 'https://telegra.ph/file/970d2a7656ada7c579b69.png', no: 3 },{ url: 'https://telegra.ph/file/0470d295e00ebe789fb4d.png', no: 4 },{ url: 'https://telegra.ph/file/a9d7332e7ba1d1d26a2be.png', no: 5 },{ url: 'https://telegra.ph/file/99dcd999991a79f9ba0c0.png', no: 6 }]
 				let media = pickRandom(ddsa)
 				try {
-					await nimesha.sendAsSticker(m.chat, media.url, m, { packname, author, isAvatar: 1 })
+					await nimesha.sendAsSticker(m.chat, media.url, m, { packනාමය, author, isAvatar: 1 })
 				} catch (e) {
 					let anu = await fetch(media.url)
 					let una = await anu.buffer()
-					await nimesha.sendAsSticker(m.chat, una, m, { packname, author, isAvatar: 1 })
+					await nimesha.sendAsSticker(m.chat, una, m, { packනාමය, author, isAvatar: 1 })
 				}
 			}
 			break
 			case 'halah': case 'hilih': case 'huluh': case 'heleh': case 'holoh': {
-				if (!m.quoted && !text) return m.reply(`Caption සමග Text Reply/Send කරන්න ${prefix + command}`)
+				if (!m.quoted && !text) return m.reply(`📌 Text Reply/Send කරන්න (caption: *${prefix + command}*)`)
 				ter = command[1].toLowerCase()
 				tex = m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text
 				m.reply(tex.replace(/[aiueo]/g, ter).replace(/[AIUEO]/g, ter.toUpperCase()))
 			}
 			break
 			case 'bisakah': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} saya menang?`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} මා දිනාද?`)
 				let bisa = ['Bisa','Coba Saja','Pasti Bisa','Mungkin Saja','නැහැ Bisa','නැහැ Mungkin','Coba Ulangi','Ngimpi kah?','yakin bisa?']
 				let keh = bisa[Math.floor(Math.random() * bisa.length)]
 				m.reply(`*Bisakah ${text}*\nපිළිතුර: ${keh}`)
 			}
 			break
 			case 'apakah': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} saya bisa menang?`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} මට දිනිය හැකිද?`)
 				let apa = ['Iya','නැහැ','Bisa Jadi','Coba Ulangi','Mungkin Saja','Mungkin නැහැ','Mungkin Iya','Ntahlah']
 				let kah = apa[Math.floor(Math.random() * apa.length)]
 				m.reply(`*${command} ${text}*\nපිළිතුර: ${kah}`)
 			}
 			break
 			case 'kapan': case 'kapankah': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} saya menang?`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} මා දිනාද?`)
 				let kapan = ['Besok','Lusa','Nanti','4 Hari Lagi','5 Hari Lagi','6 Hari Lagi','1 Minggu Lagi','2 Minggu Lagi','3 Minggu Lagi','1 Bulan Lagi','2 Bulan Lagi','3 Bulan Lagi','4 Bulan Lagi','5 Bulan Lagi','6 Bulan Lagi','1 Tahun Lagi','2 Tahun Lagi','3 Tahun Lagi','4 Tahun Lagi','5 Tahun Lagi','6 Tahun Lagi','1 Abad lagi','3 Hari Lagi','Bulan Depan','Ntahlah','නැහැ Akan Pernah']
 				let koh = kapan[Math.floor(Math.random() * kapan.length)]
 				m.reply(`*${command} ${text}*\nපිළිතුර: ${koh}`)
@@ -3226,23 +3233,23 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'siapa': case 'siapakah': {
 				if (!m.isGroup) return m.reply(mess.group)
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} jawa?`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} ශ්‍රී ලංකාව?`)
 				let member = (store.groupMetadata[m.chat] ? store.groupMetadata[m.chat].participants : m.metadata.participants).map(a => a.id)
 				let siapakh = pickRandom(member)
 				m.reply(`@${siapakh.split('@')[0]}`);
 			}
 			break
 			case 'tanyakerang': case 'kerangajaib': case 'kerang': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} boleh pinjam 100?`)
-				let krng = ['Mungkin suatu hari', 'නැහැ juga', 'නැහැ keduanya', 'Kurasa tidak', 'ඔව්', 'නැහැ', 'Coba tanya lagi', 'නැත']
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} ණය ගත හැකිද?`)
+				let krng = ['Mungkin suatu දිනය', 'නැහැ juga', 'නැහැ keduanya', 'Kurasa tidak', 'ඔව්', 'නැහැ', 'Coba tanya lagi', 'නැත']
 				let jwb = pickRandom(krng)
 				m.reply(`*ප්‍රශ්නය: ${text}*\n*පිළිතුර: ${jwb}*`)
 			}
 			break
 			case 'cekmati': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} name`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} නාමය`)
 				let teksnya = text.replace(/@|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/\d/g, '');
-				let data = await axios.get(`https://api.agify.io/?name=${teksnya ? teksnya : 'bot'}`).then(res => res.data).catch(e => ({ age: Math.floor(Math.random() * 90) + 20 }));
+				let data = await axios.get(`https://api.agify.io/?නාමය=${teksnya ? teksnya : 'bot'}`).then(res => res.data).catch(e => ({ age: Math.floor(Math.random() * 90) + 20 }));
 				m.reply(`නම: ${text}\n*මරණය වයසෙදී:* ${data.age == null ? (Math.floor(Math.random() * 90) + 20) : data.age} Tahun.\n\n_කෙළිනු, ජීවිතය කෙළිනු_\n_මරණය කිසිවෙකු නොදනී_`)
 			}
 			break
@@ -3254,7 +3261,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'cekkhodam': {
-				if (!text) return m.reply(`උදාහරණ : ${prefix + command} name`)
+				if (!text) return m.reply(`උදාහරණ : ${prefix + command} නාමය`)
 				try {
 					const { result: hasil } = await fetchApi('/primbon/cekkhodam');
 					m.reply(`Khodam සිට *${text}* ලෙස *${hasil.nama}*\n_${hasil.deskripsi}_`)
@@ -3264,7 +3271,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			}
 			break
 			case 'rate': case 'nilai': {
-				m.reply(`Bot Rate: *${Math.floor(Math.random() * 100)}%*`)
+				m.reply(`🤖 Bot Rate: *${Math.floor(Math.random() * 100)}%*`)
 			}
 			break
 			case 'jodohku': {
@@ -3284,7 +3291,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'fitnah': {
 				let [teks1, teks2, teks3] = text.split`|`
-				if (!teks1 || !teks2 || !teks3) return m.reply(`උදාහරණ : ${prefix + command} pesan target|pesan mu|nomer/tag target`)
+				if (!teks1 || !teks2 || !teks3) return m.reply(`උදාහරණ : ${prefix + command} target message|your message|number/tag`)
 				let ftelo = { key: { fromMe: false, participant: teks3.replace(/[^0-9]/g, '') + '@s.whatsapp.net', ...(m.isGroup ? { remoteJid: m.chat } : { remoteJid: teks3.replace(/[^0-9]/g, '') + '@s.whatsapp.net'})}, message: { conversation: teks1 }}
 				nimesha.sendMessage(m.chat, { text: teks2 }, { quoted: ftelo });
 			}
@@ -3330,7 +3337,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			case 'suitpvp': case 'suit': {
 				if (Object.values(suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.sender))) return m.reply(`ඔබේ පෙර Suit Session නිම කරන්න`)
 				if (m.mentionedJid[0] === m.sender) return m.reply(`ඔබ සමග ඔබම ක්‍රීඩා කළ නොහැකිය!`)
-				if (!m.mentionedJid[0]) return m.reply(`_ඔබ challenge කිරීමට කාද?_\nඔවුන් Tag කරන්න..\n\nContoh : ${prefix}suit @${ownerNumber[0]}`, m.chat, { mentions: [ownerNumber[0] + '@s.whatsapp.net'] })
+				if (!m.mentionedJid[0]) return m.reply(`_ඔබ challenge කිරීමට කාද?_\nඔවුන් Tag කරන්න..\n\nඋදාහරණ: ${prefix}suit @${ownerNumber[0]}`, m.chat, { mentions: [ownerNumber[0] + '@s.whatsapp.net'] })
 				if (Object.values(suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.mentionedJid[0]))) return m.reply(`ඔබ challenge කළ කෙනා දැනට Suit ක්‍රීඩා කරනවා :(`)
 				let caption = `_*SUIT PvP*_\n\n@${m.sender.split('@')[0]} challenge @${m.mentionedJid[0].split('@')[0]} Suit ක්‍රීඩා කිරීමට\n\nකරුණාකර @${m.mentionedJid[0].split('@')[0]} terima/tolak ටයිප් කිරීමට`
 				let id = 'suit_' + Date.now();
@@ -3347,21 +3354,21 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				m.reply(caption)
 				await sleep(3 * 60 * 1000)
 				if (suit[id]) {
-					m.reply(`_Suit කාලය ඉකිවිය_`)
+					m.reply(`⏰ _Suit කාලය ඉකිවිය!_`)
 					delete suit[id]
 				}
 			}
 			break
 			case 'delsuit': case 'deletesuit': {
 				let roomnya = Object.values(suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.sender))
-				if (!roomnya) return m.reply(`ඔබ Suit Room හි නෑ!`)
+				if (!roomnya) return m.reply(`⚠️ ඔබ Suit Room හි නෑ!`)
 				delete suit[roomnya.id]
-				m.reply(`Suit Room Session සාර්ථකව ඉවත් කෙරිණ!`)
+				m.reply(`✅ Suit Room Session ඉවත් කෙරිණ!`)
 			}
 			break
 			case 'ttc': case 'ttt': case 'tictactoe': {
-				if (Object.values(tictactoe).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))) return m.reply(`Kamu masih didalam game!\nKetik *${prefix}del${command}* Jika Ingin Mengakhiri sesi`);
-				let room = Object.values(tictactoe).find(room => room.state === 'WAITING' && (text ? room.name === text : true))
+				if (Object.values(tictactoe).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))) return m.reply(`⚠️ ඔබ දැනටමත් ක්‍රීඩාවේ! නිමා කිරීමට: *${prefix}del${command}*`);
+				let room = Object.values(tictactoe).find(room => room.state === 'WAITING' && (text ? room.නාමය === text : true))
 				if (room) {
 					m.reply('Partner හොයාගත්!')
 					room.o = m.chat
@@ -3384,12 +3391,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						game: new TicTacToe(m.sender, 'o'),
 						state: 'WAITING',
 					}
-					if (text) room.name = text
+					if (text) room.නාමය = text
 					nimesha.sendMessage(m.chat, { text: 'Partner බලා සිටිනු' + (text ? ` command ටයිප් කරන්න ${prefix}${command} ${text}` : ''), mentions: m.mentionedJid }, { quoted: m })
 					tictactoe[room.id] = room
 					await sleep(300000)
 					if (tictactoe[room.id]) {
-						m.reply(`_Session කාලය ඉකිවිය_`)
+						m.reply(`⏰ _Session කාලය ඉකිවිය!_`)
 						delete tictactoe[room.id]
 					}
 				}
@@ -3397,9 +3404,9 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			break
 			case 'delttc': case 'delttt': {
 				let roomnya = Object.values(tictactoe).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))
-				if (!roomnya) return m.reply(`ඔබ TicTacToe Room හි නෑ!`)
+				if (!roomnya) return m.reply(`⚠️ ඔබ TicTacToe Room හි නෑ!`)
 				delete tictactoe[roomnya.id]
-				m.reply(`TicTacToe Room Session සාර්ථකව ඉවත් කෙරිණ!`)
+				m.reply(`✅ TicTacToe Room Session ඉවත් කෙරිණ!`)
 			}
 			break
 			case 'akinator': {
@@ -3412,11 +3419,11 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						delete akinator[m.sender];
 						return m.reply('Akinator Server ගැටලුවකට ලක් ව ඇත\nනැවත උත්සාහ කරන්න!')
 					}
-					let { key } = await m.reply(`🎮 Akinator Game :\n\n@${m.sender.split('@')[0]}\n${akinator[m.sender].question}\n\n- 0 - ඔව්\n- 1 - නැහැ\n- 2 - නැහැ Tau\n- 3 - Mungkin\n- 4 - Mungkin නැහැ\n\n${prefix + command} end (Untuk Keluar සිට sesi)`)
+					let { key } = await m.reply(`🎮 Akinator Game :\n\n@${m.sender.split('@')[0]}\n${akinator[m.sender].question}\n\n- 0 - ඔව්\n- 1 - නැහැ\n- 2 - නොදනිමි\n- 3 - සමහරවිට\n- 4 - සමහරවිට නැහැ\n\n${prefix + command} end (Untuk Keluar සිට sesi)`)
 					akinator[m.sender].key = key.id
 					await sleep(3600000)
 					if (akinator[m.sender]) {
-						m.reply(`_Session කාලය ඉකිවිය_`)
+						m.reply(`⏰ _Session කාලය ඉකිවිය!_`)
 						delete akinator[m.sender];
 					}
 				} else if (text == 'end') {
@@ -3439,7 +3446,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				await m.reply(`*Bomb ක්‍රීඩාව*\n\n${tebakbom[m.sender].board.join("")}\n\nසංඛ්‍යාව තෝරන්න! Bomb ලගා නොකරන්න!\nBomb: ${tebakbom[m.sender].bomb}\nNyawa : ${tebakbom[m.sender].nyawa.join("")}`);
 				await sleep(120000)
 				if (tebakbom[m.sender]) {
-					m.reply(`_Session කාලය ඉකිවිය_`)
+					m.reply(`⏰ _Session කාලය ඉකිවිය!_`)
 					delete tebakbom[m.sender];
 				}
 			}
@@ -3631,13 +3638,13 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				if (!text) return m.reply(`Mode: ${Object.keys(modes).join(' | ')}\nභාවිතා කිරීමේ උදාහරණ: ${prefix}math medium`)
 				if (!inputMode.includes(text.toLowerCase())) return m.reply('Mode හොයාගත නොහැකිය!')
 				let result = await genMath(text.toLowerCase())
-				let { key } = await m.reply(`*ප්‍රතිඵලය කොතරම්: ${result.soal.toLowerCase()}*?\n\nකාලය: ${(result.waktu / 1000).toFixed(2)} seconds`)
+				let { key } = await m.reply(`*ප්‍රතිඵලය කොතරම්: ${result.soal.toLowerCase()}*?\n\nකාලය: ${(result.කාලය / 1000).toFixed(2)} seconds`)
 				kuismath[m.chat + key.id] = {
 					jawaban: result.jawaban,
 					mode: text.toLowerCase(),
 					id: key.id
 				}
-				await sleep(kuismath, result.waktu)
+				await sleep(kuismath, result.කාලය)
 				if (rdGame(m.chat + key.id)) {
 					m.reply('Waktu Habis\nපිළිතුරු: ' + kuismath[m.chat + key.id].jawaban)
 					delete kuismath[m.chat + key.id]
@@ -3652,7 +3659,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 				switch(args[0]) {
 					case 'create': case 'join':
 					if (ulartangga[m.chat]) {
-						if (Object.keys(ulartangga[m.chat].players).length > 8) return m.reply(`Jumlah Pemain Sudah Maksimal\nSilahkan ආරම්භ කරමින්... Permainan\n${prefix + command} start`);
+						if (Object.keys(ulartangga[m.chat].players).length > 8) return m.reply(`⚠️ ක්‍රීඩකයින් සීමාව ඉකිවිය! ආරම්භ කිරීමට: *${prefix + command} start*`);
 						if (ulartangga[m.chat].players.some(a => a.id == m.sender)) return m.reply('ඔබ දැනටමත් සම්බන්ධ වී ඇත!')
 						ulartangga[m.chat].players.push({ id: m.sender, move: 0 });
 						m.reply('සාර්ථකයි Join Sesi Game')
@@ -3676,14 +3683,14 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					if (!ulartangga[m.chat]) return m.reply('දැනට ක්‍රීඩා Session නැත!')
 					if (!ulartangga[m.chat].players.some(a => a.id == m.sender)) return m.reply('ඔබ ක්‍රීඩකයෙකු නොවේ!')
 					const player = ulartangga[m.chat].players.findIndex(a => a.id == m.sender)
-					if (ulartangga[m.chat].start) return m.reply('Game Sudah dimulai!\nනැහැ Bisa Keluar Sekarang')
+					if (ulartangga[m.chat].start) return m.reply('⚠️ ක්‍රීඩාව ආරම්භ වී ඇත! දැන් ඉවත් විය නොහැක.')
 					if (ulartangga[m.chat].players.length < 1 || ulartangga[m.chat].host === m.sender) {
-						m.reply(ulartangga[m.chat].host === m.sender ? 'Host Meninggalkan Permainan\nPermainan dihentikan!' : 'ක්‍රීඩකයන් 1ට වඩා අඩු, ක්‍රීඩාව නතර කෙරිණ!');
+						m.reply(ulartangga[m.chat].host === m.sender ? '🚪 Host ඉවත් වූ නිසා ක්‍රීඩාව නිමා!' : 'ක්‍රීඩකයන් 1ට වඩා අඩු, ක්‍රීඩාව නතර කෙරිණ!');
 						delete ulartangga[m.chat];
 						break;
 					}
 					ulartangga[m.chat].players.splice(player, 1);
-					m.reply('සාර්ථකයි Meninggalkan Permainan');
+					m.reply('✅ ක්‍රීඩාවෙන් ඉවත් වූ!');
 					break
 					case 'end':
 					if (!ulartangga[m.chat]) return m.reply('දැනට ක්‍රීඩා Session නැත!')
@@ -3706,7 +3713,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					case 'start':
 					if (!chess[m.chat]) return m.reply('දැනට ක්‍රීඩා Session නැත!')
 					if (!chess[m.chat].acc) return m.reply('ක්‍රීඩකයන් සම්පූර්ණ නැත!')
-					if (chess[m.chat].player1 !== m.sender) return m.reply('Hanya Pemain Utama ඔව්ng bisa ආරම්භ කරමින්...!')
+					if (chess[m.chat].player1 !== m.sender) return m.reply('⚠️ ප්‍රධාන ක්‍රීඩකයාට පමණයි ආරම්භ කිරීමට!')
 					if (chess[m.chat].turn !== m.sender && !chess[m.chat].start) {
 						const encodedFen = encodeURI(chess[m.chat]._fen);
 						let boardUrls = [`https://www.chess.com/dynboard?fen=${encodedFen}&size=3&coordinates=inside`,`https://www.chess.com/dynboard?fen=${encodedFen}&board=graffiti&piece=graffiti&size=3&coordinates=inside`,`https://chessboardimage.com/${encodedFen}.png`,`https://backscattering.de/web-boardimage/board.png?fen=${encodedFen}`,`https://fen2image.chessvision.ai/${encodedFen}`];
@@ -3721,7 +3728,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 							} catch (e) {}
 						}
 						if (!chess[m.chat].key) {
-							m.reply(`Gagal ආරම්භ කරමින්... Permainan!\nGagal Mengirim Papan Permainan!`)
+							m.reply(`❌ ක්‍රීඩාව ආරම්භ කිරීම අසාර්ථකයි!`)
 						}
 					} else if ([chess[m.chat].player1, chess[m.chat].player2].includes(m.sender)) {
 						const isPlayer2 = chess[m.chat].player2 === m.sender
@@ -3742,12 +3749,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					case 'join':
 					if (chess[m.chat]) {
 						if (chess[m.chat].player1 !== m.sender) {
-							if (chess[m.chat].acc) return m.reply(`Pemain Sudah Terisi\nSilahkan Coba Lagi Nanti`)
+							if (chess[m.chat].acc) return m.reply(`⚠️ ක්‍රීඩකයින් සම්පූර්ණ! පසුව නැවත උත්සාහ කරන්න.`)
 							let teks = chess[m.chat].player2 === m.sender ? 'සම්බන්ධ වීමට ස්තූතියි' : `නිසා @${chess[m.chat].player2.split('@')[0]} නැහැ Merespon\nAkan digantikan Oleh @${m.sender.split('@')[0]}`
 							chess[m.chat].player2 = m.sender
 							chess[m.chat].acc = true
 							m.reply(`${teks}\nකරුණාකර @${chess[m.chat].player1.split('@')[0]} Untuk ආරම්භ කරමින්... Game (${prefix + command} start)`)
-						} else m.reply(`Kamu Sudah Bergabung\nBiarkan Orang Lain Menjadi Lawanmu!`)
+						} else m.reply(`⚠️ ඔබ දැනටමත් සම්බන්ධ වී ඇත!`)
 					} else m.reply('දැනට ක්‍රීඩා Session නැත!')
 					break
 					case 'end': case 'leave':
@@ -3818,7 +3825,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					if (blackjack[m.chat] || session) {
 						if (blackjack[m.chat]?.players?.some(a => a.id === m.sender)) return m.reply('ඔබ දැනටමත් සම්බන්ධ වී ඇත!')
 						if (session) return m.reply('ඔබ වෙනත් Group Session හි ඇත! නව Session හි සම්බන්ධ වීමට පෙර ඉවත් වන්න.');
-						if (blackjack[m.chat].players.length > 10) return m.reply(`Jumlah Pemain Sudah Maksimal\nSilahkan ආරම්භ කරමින්... Permainan\n${prefix + command} start`);
+						if (blackjack[m.chat].players.length > 10) return m.reply(`⚠️ ක්‍රීඩකයින් සීමාව ඉකිවිය! ආරම්භ කිරීමට: *${prefix + command} start*`);
 						blackjack[m.chat].players.push({ id: m.sender, cards: [] });
 						m.reply('සාර්ථකයි Join Game Blackjack')
 					} else {
@@ -3831,23 +3838,23 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					if (!m.isGroup) return m.reply(mess.group)
 					if (!blackjack[m.chat]) return m.reply('දැනට Blackjack ක්‍රීඩා Session නැත!')
 					if (blackjack[m.chat]?.host !== m.sender) return m.reply(`Room සෑදූ @${blackjack[m.chat].host.split('@')[0]} yang bisa ආරම්භ කරමින්... Sessi!`)
-					if (blackjack[m.chat].players.length < 2) return m.reply('Minimal 2 Pemain Untuk ආරම්භ කරමින්... Permainan!');
+					if (blackjack[m.chat].players.length < 2) return m.reply('⚠️ ආරම්භ කිරීමට ක්‍රීඩකයින් 2ක් අවශ්‍යයි!');
 					if (blackjack[m.chat].started) return m.reply('ක්‍රීඩාව දැනටමත් ආරම්භ කෙරිණ!')
 					blackjack[m.chat].distributeCards();
 					m.reply(`🃏GAME BLACKJACK♦️\nආරම්භ Card: ${blackjack[m.chat].startCard.rank + blackjack[m.chat].startCard.suit}\nDeck Count: ${blackjack[m.chat].deck.length}\n${blackjack[m.chat].players.map(a => `- @${a.id.split('@')[0]} : (${a.cards.length} kartu)`).join('\n')}\n\nPrivate Chat පරීක්ෂා කරන්න\nwa.me/${botNumber.split('@')[0]}`);
 					for (let p of blackjack[m.chat].players) {
 						const startCard = blackjack[m.chat].startCard;
-						let buttons = p.cards.map(a => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
-						if (!blackjack[m.chat].hasMatching(p.id)) buttons.push({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
+						let buttons = p.cards.map(a => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
+						if (!blackjack[m.chat].hasMatching(p.id)) buttons.push({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
 						await nimesha.sendListMsg(p.id, { text: `ආරම්භ Card: ${startCard.rank + startCard.suit}`, footer: `${p.cards.map(c => c.rank + c.suit).join(', ')}`, buttons }, { quoted: m });
 					}
 					break
 					case 'hit': case 'minum': {
 						if (!session) return m.reply('දැනට Blackjack ක්‍රීඩා Session නැත!')
 						if (!session.started) return m.reply('ක්‍රීඩාව ආරම්භ කර නොමැත!')
-						if (session.players.length < 2) return m.reply('Minimal 2 Pemain Untuk ආරම්භ කරමින්... Permainan!');
+						if (session.players.length < 2) return m.reply('⚠️ ආරම්භ කිරීමට ක්‍රීඩකයින් 2ක් අවශ්‍යයි!');
 						if (!session.players?.some(a => a.id === m.sender)) return m.reply('ඔබ සම්බන්ධ නොවී ඇත!');
-						if (!args[0]) return m.reply(`භාවිතා කරන්න format:\n${prefix + command} play <kartu>\nContoh: ${prefix + command} hit`);
+						if (!args[0]) return m.reply(`භාවිතා කරන්න format:\n${prefix + command} play <kartu>\nඋදාහරණ: ${prefix + command} hit`);
 						const player = session.players.find(p => p.id === m.sender);
 						const hitIndex = player.cards.findIndex(c => (c.rank + c.suit) === (session.startCard.rank + session.startCard.suit));
 						if (session.submitCard.some(s => s.id === m.sender) || session.skip.includes(m.sender)) {
@@ -3858,8 +3865,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 								const newCard = session.deck.shift();
 								player.cards.push(newCard);
 								await sleep(1000);
-								let buttons = player.cards.map(a => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
-								if (!session.hasMatching(player.id)) buttons.push({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
+								let buttons = player.cards.map(a => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
+								if (!session.hasMatching(player.id)) buttons.push({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
 								await nimesha.sendListMsg(player.id, { text: `ආරම්භ Card: ${session.startCard.rank + session.startCard.suit}`, footer: `${player.cards.map(c => c.rank + c.suit).join(', ')}`, buttons }, { quoted: m });
 							} else {
 								let reuse = session.reuseSubmitCardsForDrinking()
@@ -3877,7 +3884,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 											return;
 										}
 										const leaderCards = session.players.find(a => a.id === session.leader);
-										let buttons = leaderCards.cards.map(c => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
+										let buttons = leaderCards.cards.map(c => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
 										await nimesha.sendListMsg(session.leader, { text: 'නව Round ආරම්භ කිරීමට Card තෝරන්න', footer: leaderCards.cards.map(c => c.rank + c.suit).join(', '), buttons }, { quoted: m });
 									}
 								}
@@ -3893,7 +3900,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 									return;
 								}
 								const leaderCards = session.players.find(a => a.id === session.leader);
-								let buttons = leaderCards.cards.map(c => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
+								let buttons = leaderCards.cards.map(c => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
 								await nimesha.sendListMsg(session.leader, { text: 'නව Round ආරම්භ කිරීමට Card තෝරන්න', footer: leaderCards.cards.map(c => c.rank + c.suit).join(', '), buttons }, { quoted: m });
 							}
 						}
@@ -3902,16 +3909,16 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 					case 'play': {
 						if (!session) return m.reply('දැනට Blackjack ක්‍රීඩා Session නැත!')
 						if (!session.started) return m.reply('ක්‍රීඩාව ආරම්භ කර නොමැත!')
-						if (session.players.length < 2) return m.reply('Minimal 2 Pemain Untuk ආරම්භ කරමින්... Permainan!');
+						if (session.players.length < 2) return m.reply('⚠️ ආරම්භ කිරීමට ක්‍රීඩකයින් 2ක් අවශ්‍යයි!');
 						if (!session.players?.some(a => a.id === m.sender)) return m.reply('ඔබ සම්බන්ධ නොවී ඇත!');
-						if (!args[1]) return m.reply(`භාවිතා කරන්න format:\n${prefix + command} play <kartu>\nContoh: ${prefix + command} play 3♥️`);
+						if (!args[1]) return m.reply(`භාවිතා කරන්න format:\n${prefix + command} play <kartu>\nඋදාහරණ: ${prefix + command} play 3♥️`);
 						const player = session.players.find(p => p.id === m.sender);
 						const idx = player.cards.findIndex(c => normalize(c.rank + c.suit) === normalize(args[1]));
 						if (idx === -1) return m.reply('Card වලංගු නොවේ!');
 						if (session.submitCard.some(s => s.id === m.sender) || session.skip.includes(m.sender)) return m.reply('ඔබ මෙම Round හි ක්‍රීඩා කළා!');
 						const card = player.cards[idx];
 						if (Object.keys(session.startCard).length) {
-							if (card.suit !== session.startCard.suit) return m.reply(`Card ගැලපෙන්නේ නෑ! Suit ${session.startCard.suit}`);
+							if (card.suit !== session.startCard.suit) return m.reply(`❌ Card ගැලපෙන්නේ නෑ! Suit ${session.startCard.suit}`);
 						} else if (m.sender !== session.leader) return m.reply('Round Leader ට පමණ ආරම්භ කළ හැකිය!');
 						player.cards.splice(idx, 1);
 						session.secondDeck.push(card);
@@ -3935,8 +3942,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 							for (let s of session.players) {
 								if (s.id === session.leader) continue;
 								const startCard = session.startCard;
-								let buttons = s.cards.map(a => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
-								if (!session.hasMatching(s.id)) buttons.push({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
+								let buttons = s.cards.map(a => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${a.rank}${a.suit}`, id: `.${command} play ${a.rank}${a.suit}` })}));
+								if (!session.hasMatching(s.id)) buttons.push({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: 'Minum', id: `.${command} minum` }) });
 								await nimesha.sendListMsg(s.id, { text: `ආරම්භ Card: ${startCard.rank + startCard.suit}`, footer: `${s.cards.map(c => c.rank + c.suit).join(', ')}`, buttons }, { quoted: m });
 							}
 							return;
@@ -3951,11 +3958,11 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 									return;
 								}
 								const leaderCards = session.players.find(a => a.id === session.leader);
-								let buttons = leaderCards.cards.map(c => ({ name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
+								let buttons = leaderCards.cards.map(c => ({ නාමය: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: `${c.rank}${c.suit}`, id: `.${command} play ${c.rank}${c.suit}` })}));
 								await nimesha.sendListMsg(session.leader, { text: 'නව Round ආරම්භ කිරීමට Card තෝරන්න', footer: leaderCards.cards.map(c => c.rank + c.suit).join(', '), buttons }, { quoted: m });
 							}
 						}
-						await m.reply(`Kamu ක්‍රීඩා කළා ${card.rank}${card.suit}`);
+						await m.reply(`✅ ඔබ खेले ${card.rank}${card.suit}`);
 						await nimesha.sendText(session.id, `@${m.sender.split('@')[0]} ක්‍රීඩා කළා ${card.rank}${card.suit}`, m);
 					}
 					break
@@ -3991,7 +3998,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						set.template = parseInt(Number(args[1]))
 						m.reply('සාර්ථකයි Mengubah Template Menu')
 					} else m.reply(`Template තෝරන්න:\n- 1 (Button Menu)\n- 2 (List Menu)\n- 3 (Document Menu)`)
-				} else await templateMenu(nimesha, set.template, m, prefix, setv, db, { botNumber, author, packname, isVip, isPremium, my })
+				} else await templateMenu(nimesha, set.template, m, prefix, setv, db, { botNumber, author, packනාමය, isVip, isPremium, my })
 			}
 			break
 			case 'allmenu': {
@@ -4010,7 +4017,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 ├ *මුදල්* : ${db.users[m.sender] ? db.users[m.sender].money.toLocaleString('id-ID') : '0'}
 ╰─┬────❍
 ╭─┴─❍「 *බොට් තොරතුරු* 」❍
-├ *බොට්ගෙ නම* : ${set?.botname || 'Miss Shasikala'}
+├ *බොට්ගෙ නම* : ${set?.botනාමය || 'Miss Shasikala'}
 ├ *බලගැන්වීම* : @${'0@s.whatsapp.net'.split('@')[0]}
 ├ *අයිතිකරු* : @${ownerNumber[0].split('@')[0]}
 ├ *ප්‍රකාරය* : ${nimesha.public ? 'පොදු' : 'පෞද්ගලික'}
@@ -4019,7 +4026,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 ╰─┬────❍
 ╭─┴─❍「 *විස්තර* 」❍
 ├ *දිනය* : ${tanggal}
-├ *දවස* : ${hari}
+├ *දවස* : ${දිනය}
 ├ *වෙලාව* : ${jam} WIB
 ╰──────❍
 ╭──❍「 *බොට් ( BOT )* 」❍
@@ -4065,7 +4072,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}demote (පාලක තනතුරු ඉවත් කිරීම)
 │${setv} ${prefix}warn (අවවාද කිරීම)
 │${setv} ${prefix}unwarn (අවවාද ඉවත් කිරීම)
-│${setv} ${prefix}setname (සමූහයේ නම වෙනස් කිරීම)
+│${setv} ${prefix}setනාමය (සමූහයේ නම වෙනස් කිරීම)
 │${setv} ${prefix}setdesc (විස්තරය වෙනස් කිරීම)
 │${setv} ${prefix}setppgc (සමූහ ඡායාරූපය සැකසීම)
 │${setv} ${prefix}delete (පණිවිඩ මැකීම)
@@ -4245,8 +4252,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}addlimit (සීමාව වැඩි කිරීම)
 │${setv} ${prefix}adduang (මුදල් එක් කිරීම)
 │${setv} ${prefix}setbotauthor (නිර්මාණකරු නම)
-│${setv} ${prefix}setbotname (බොට්ගේ නම)
-│${setv} ${prefix}setbotpackname (පැකේජ නම)
+│${setv} ${prefix}setbotනාමය (බොට්ගේ නම)
+│${setv} ${prefix}setbotpackනාමය (පැකේජ නම)
 │${setv} ${prefix}setapikey (API කේතය සැකසීම)
 │${setv} ${prefix}addowner (හිමිකරුවෙකු එක් කිරීම)
 │${setv} ${prefix}delowner (හිමිකරුවෙකු ඉවත් කිරීම)
@@ -4280,7 +4287,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 						},
 						externalAdReply: {
 							title: author,
-							body: packname,
+							body: packනාමය,
 							showAdAttribution: false,
 							thumbnailUrl: profile,
 							mediaType: 1,
@@ -4342,7 +4349,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}demote (පාලක තනතුරු ඉවත් කිරීම)
 │${setv} ${prefix}warn (අවවාද කිරීම)
 │${setv} ${prefix}unwarn (අවවාද ඉවත් කිරීම)
-│${setv} ${prefix}setname (සමූහයේ නම වෙනස් කිරීම)
+│${setv} ${prefix}setනාමය (සමූහයේ නම වෙනස් කිරීම)
 │${setv} ${prefix}setdesc (විස්තරය වෙනස් කිරීම)
 │${setv} ${prefix}setppgc (සමූහ ඡායාරූපය සැකසීම)
 │${setv} ${prefix}delete (පණිවිඩ මැකීම)
@@ -4574,8 +4581,8 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 │${setv} ${prefix}addlimit (සීමාව වැඩි කිරීම)
 │${setv} ${prefix}adduang (මුදල් එක් කිරීම)
 │${setv} ${prefix}setbotauthor (නිර්මාණකරු නම)
-│${setv} ${prefix}setbotname (බොට්ගේ නම)
-│${setv} ${prefix}setbotpackname (පැකේජ නම)
+│${setv} ${prefix}setbotනාමය (බොට්ගේ නම)
+│${setv} ${prefix}setbotpackනාමය (පැකේජ නම)
 │${setv} ${prefix}setapikey (API කේතය සැකසීම)
 │${setv} ${prefix}addowner (හිමිකරුවෙකු එක් කිරීම)
 │${setv} ${prefix}delowner (හිමිකරුවෙකු ඉවත් කිරීම)
@@ -4635,21 +4642,21 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 	} catch (e) {
 		console.log(e);
 		if (e?.message?.includes('No sessions')) return;
-		const errorKey = e?.code || e?.name || e?.message?.slice(0, 100) || 'unknown_error';
+		const errorKey = e?.code || e?.නාමය || e?.message?.slice(0, 100) || 'unknown_error';
 		const now = Date.now();
 		if (!errorCache[errorKey]) errorCache[errorKey] = [];
 		errorCache[errorKey] = errorCache[errorKey].filter(ts => now - ts < 600000);
 		if (errorCache[errorKey].length >= 3) return;
 		errorCache[errorKey].push(now);
-		m.reply('Error: ' + (e?.name || e?.code || e?.output?.statusCode || e?.status || 'නොදනී') + '\nError log හිමිකරුට යැව්වා\n\n')
+		m.reply('Error: ' + (e?.නාමය || e?.code || e?.output?.statusCode || e?.status || 'නොදනී') + '\nError log හිමිකරුට යැව්වා\n\n')
 		return nimesha.sendFromOwner(ownerNumber, `සුභ දවසක්, error එකක් ඇති, නිවැරදි කිරීමට අමතක නොකරන්න\n\nVersion : *${require('./package.json').version}*\n\n*Log error:*\n\n` + util.format(e), m, { contextInfo: { isForwarded: true }})
 	}
 }
 
-let file = require.resolve(__filename)
+let file = require.resolve(__fileනාමය)
 fs.watchFile(file, () => {
 	fs.unwatchFile(file)
-	console.log(chalk.redBright(`Update ${__filename}`))
+	console.log(chalk.redBright(`Update ${__fileනාමය}`))
 	delete require.cache[file]
 	require(file)
 

@@ -26,7 +26,7 @@ let phoneNumber;
 
 const userInfoSyt = () => {
 	try {
-		return os.userInfo().username
+		return os.userInfo().userනාමය
 	} catch (e) {
 		return process.env.USER || process.env.USERNAME || 'unknown';
 	}
@@ -35,7 +35,7 @@ const userInfoSyt = () => {
 global.fetchApi = async (path='/', data={}, options={}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const base = options.name ? (options.name in global.APIs ? global.APIs[options.name] : options.name) : global.APIs.nima
+      const base = options.නාමය ? (options.නාමය in global.APIs ? global.APIs[options.නාමය] : options.නාමය) : global.APIs.nima
       const apikey = global.APIKeys[base]
       let method = (options.method || 'GET').toUpperCase()
       let url = base + path
@@ -71,7 +71,7 @@ const msgRetryCounterCache = new NodeCache();
 
 assertInstalled(process.platform === 'win32' ? 'where ffmpeg' : 'command -v ffmpeg', 'FFmpeg', 0);
 console.log(chalk.greenBright('✅ පද්ධතියට අවශ්‍ය සියලුම බාහිර ගොනු (Dependencies) සක්‍රීයයි'));
-console.log(chalk.green.bold(`╔═════[${`${chalk.cyan(userInfoSyt())}@${chalk.cyan(os.hostname())}`}]═════`));
+console.log(chalk.green.bold(`╔═════[${`${chalk.cyan(userInfoSyt())}@${chalk.cyan(os.hostනාමය())}`}]═════`));
 print('OS', `${os.platform()} ${os.release()} ${os.arch()}`);
 print('Uptime', `${Math.floor(os.uptime() / 3600)} පැය ${Math.floor((os.uptime() % 3600) / 60)} විනාඩි`);
 print('Shell', process.env.SHELL || process.env.COMSPEC || 'unknown');
@@ -205,40 +205,40 @@ async function startnimaBot() {
 		if ((connection === 'connecting' || !!qr) && pairingCode && phoneNumber && !nima.authState.creds.registered && !pairingStarted) {
 			setTimeout(async () => {
 				pairingStarted = true;
-				console.log('Pairing Code එක ලබා ගැනීමට උත්සාහ කරයි...')
+				console.log('🔑 Pairing Code ලබා ගනිමින්...')
 				let code = await nima.requestPairingCode(phoneNumber);
-				console.log(chalk.blue('ඔබේ Pairing Code එක :'), chalk.green(code), '\n', chalk.yellow('මෙය තත්පර 15කින් කල් ඉකුත් වේ'));
+				console.log(chalk.blue('🔑 *Pairing Code:*'), chalk.green(code), '\n', chalk.yellow('⏰ _තත්පර 15කින් expire වේ_'));
 			}, 3000)
 		}
 		if (connection === 'close') {
 			const reason = new Boom(lastDisconnect?.error)?.output.statusCode
 			if (reason === DisconnectReason.connectionLost) {
-				console.log('සේවාදායකය (Server) සමඟ සම්බන්ධතාවය බිඳ වැටුණි, නැවත සම්බන්ධ වීමට උත්සාහ කරයි...');
+				console.log('🔄 Server connection lost, reconnect...');
 				startnimaBot()
 			} else if (reason === DisconnectReason.connectionClosed) {
-				console.log('සම්බන්ධතාවය වැසී ගියේය, නැවත සම්බන්ධ වීමට උත්සාහ කරයි...');
+				console.log('🔄 Connection closed, reconnect...');
 				startnimaBot()
 			} else if (reason === DisconnectReason.restartRequired) {
-				console.log('නැවත ආරම්භ කිරීම (Restart) අවශ්‍ය වේ...');
+				console.log('🔄 Restart required, reconnect...');
 				startnimaBot()
 			} else if (reason === DisconnectReason.timedOut) {
-				console.log('සම්බන්ධ වීමේ කාලය ඉක්මවා ගියේය, නැවත සම්බන්ධ වීමට උත්සාහ කරයි...');
+				console.log('⏰ Connection timeout, reconnect...');
 				startnimaBot()
 			} else if (reason === DisconnectReason.badSession) {
-				console.log('වැරදි Session එකක්. කරුණාකර Session එක මකා දමා නැවත ස්කෑන් කරන්න...');
+				console.log('❌ Bad session! Session delete කර නැවත scan කරන්න.');
 				startnimaBot()
 			} else if (reason === DisconnectReason.connectionReplaced) {
-				console.log('වෙනත් තැනකින් සම්බන්ධ වී ඇත. කරුණාකර වත්මන් Session එක වසා දමන්න...');
+				console.log('⚠️ වෙනත් device එකකින් login! Current session close කරන්න.');
 			} else if (reason === DisconnectReason.loggedOut) {
-				console.log('සම්බන්ධතාවයෙන් ඉවත් වී ඇත (Logged Out). නැවත ස්කෑන් කර ධාවනය කරන්න...');
+				console.log('🚪 Logged Out! නැවත scan කර run කරන්න.');
 				exec('rm -rf ./nimadev/*')
 				process.exit(1)
 			} else if (reason === DisconnectReason.forbidden) {
-				console.log('සම්බන්ධතාවය අසාර්ථකයි. නැවත ස්කෑන් කර ධාවනය කරන්න...');
+				console.log('❌ Connection failed! නැවත scan කරන්න.');
 				exec('rm -rf ./nimadev/*')
 				process.exit(1)
 			} else if (reason === DisconnectReason.multideviceMismatch) {
-				console.log('Multi-device ගැටලුවක්. නැවත ස්කෑන් කරන්න...');
+				console.log('⚠️ Multi-device error! නැවත scan කරන්න.');
 				exec('rm -rf ./nimadev/*')
 				process.exit(0)
 			} else {
@@ -246,7 +246,7 @@ async function startnimaBot() {
 			}
 		}
 		if (connection == 'open') {
-			console.log('සාර්ථකව සම්බන්ධ විය: ' + JSON.stringify(nima.user, null, 2));
+			console.log('✅ සාර්ථකව connected: ' + JSON.stringify(nima.user, null, 2));
 			let botNumber = await nima.decodeJid(nima.user.id);
 			if (global.db?.set[botNumber] && !global.db?.set[botNumber]?.join) {
 				if (my.ch.length > 0 && my.ch.includes('@newsletter')) {
@@ -264,7 +264,7 @@ async function startnimaBot() {
 ╠══════════════════╣
 ║ ✅ *සාර්ථකව සම්බන්ධ විය!*
 ║
-║ 🤖 *Bot:* ${global.botname || 'Miss Shasikala'}
+║ 🤖 *Bot:* ${global.botනාමය || 'Miss Shasikala'}
 ║ 📱 *අංකය:* +${botNumber.replace('@s.whatsapp.net', '')}
 ║ 🕐 *වේලාව:* ${timeStr}
 ║ 📅 *දිනය:* ${dateStr}
@@ -272,7 +272,7 @@ async function startnimaBot() {
 ║ 💫 _සියලු commands සූදානම්_
 ║ 💫 _භාවිතයට සුදානම් වෙලා ඉන්නවා_
 ╠══════════════════╣
-║ 🌸 *${global.botname || 'Miss Shasikala'}*
+║ 🌸 *${global.botනාමය || 'Miss Shasikala'}*
 ║ 👑 *By ${global.ownerName || global.author || 'Nimesha Madhushan'}*
 ╚══════════════════╝`;
 			setTimeout(async () => {
@@ -286,9 +286,9 @@ async function startnimaBot() {
 				res.end(await toBuffer(qr))
 			});
 		}
-		if (isNewLogin) console.log(chalk.green('නව උපාංගයකින් ලොග් වීමක් හඳුනා ගන්නා ලදී...'))
+		if (isNewLogin) console.log(chalk.green('📱 නව device login හඳුනා ගන්නා ලදී!'))
 		if (receivedPendingNotifications == 'true') {
-			console.log('කරුණාකර විනාඩියක් පමණ රැඳී සිටින්න...')
+			console.log('⏳ විනාඩියක් රැඳෙන්න...')
 			nima.ev.flush()
 		}
 	});
@@ -306,7 +306,7 @@ async function startnimaBot() {
 			global.store.contacts[trueJid] = {
 				...global.store.contacts[trueJid],
 				id: trueJid,
-				name: contact.notify
+				නාමය: contact.notify
 			}
 			if (contact.id.endsWith('@lid')) {
 				global.store.contacts[trueJid].lid = jidNormalizedUser(contact.id);
@@ -361,11 +361,11 @@ startnimaBot()
 
 // පද්ධතියෙන් ඉවත් වීම පාලනය (Process Exit)
 const cleanup = async (signal) => {
-	console.log(`${signal} ලැබුණි. දත්ත ගබඩාව සුරකිමින්...`)
+	console.log(`${signal} ලැබුණි. 💾 Database save කරමින්...`)
 	if (global.db) await database.write(global.db)
 	if (global.store) await storeDB.write(global.store)
 	server.close(() => {
-		console.log('සේවාදායකය වැසුණි. ඉවත් වෙමින්...')
+		console.log('✅ Server closed. Exiting...')
 		process.exit(0)
 	})
 }
@@ -376,7 +376,7 @@ process.on('exit', () => cleanup('exit'))
 
 server.on('error', (error) => {
 	if (error.code === 'EADDRINUSE') {
-		console.log(`Address localhost:${PORT} දැනටමත් භාවිතයේ ඇත. කරුණාකර පසුව උත්සාහ කරන්න!`);
+		console.log(`❌ Port ${PORT} දැනටමත් use කරයි! පසුව try කරන්න.`);
 		server.close();
 	} else console.error('Server error:', error);
 });

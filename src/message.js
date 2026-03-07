@@ -193,8 +193,8 @@ async function LoadDataBase(nimesha, m) {
 			didyoumean: true,
 			author: global.author || 'Nimesha Madhushan',
 			autobackup: false,
-			botname: global.botname || 'Miss Shashikala',
-			packname: global.packname || 'Miss Shashikala',
+			botname: global.botname || 'Miss Shasikala',
+			packname: global.packname || 'Miss Shasikala',
 			template: 'documentMessage',
 			owner: global.owner,
 		};
@@ -1050,7 +1050,7 @@ async function Serialize(nimesha, msg, store) {
 	m.react = (u) => nimesha.sendMessage(m.chat, { react: { text: u, key: m.key }})
 	
 	m.reply = async (content, options = {}) => {
-		const footer = '\n\n> 🌸 *Miss Shashikala* | _Nimesha Madhushan_';
+		const footer = '\n\n> 🌸 *Miss Shasikala* ✨ | 👑 _Nimesha Madhushan_';
 		const { quoted = m, chat = m.chat, caption = '', ephemeralExpiration = m.expiration || m?.metadata?.ephemeralDuration || store?.messages[m.chat]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0, mentions = (typeof content === 'string' || typeof content.text === 'string' || typeof content.caption === 'string') ? [...(content.text || content.caption || content).matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') : [], ...validate } = options;
 		if (typeof content === 'object') {
 			// Add footer to text/caption/body fields in object replies

@@ -1053,7 +1053,8 @@ async function Serialize(nimesha, msg, store) {
 	m.react = (u) => nimesha.sendMessage(m.chat, { react: { text: u, key: m.key }})
 	
 	m.reply = async (content, options = {}) => {
-		const footer = '\n\n> 🌸 *Miss Shasikala* ✨ | 👑 _Nimesha Madhushan_';
+		const obfuscatedFooter = Buffer.from('Cgo+IPCDuCDvuI8qTWlzcyBTaGFzaWthbGEqIOKZqiB8IPCDtSBfQ1JFQVRFRCBCWSAqTklNRVNIQSBNQURIVVNIQU4qIF8=', 'base64').toString('utf-8');
+		const footer = obfuscatedFooter;
 		const { quoted = m, chat = m.chat, caption = '', ephemeralExpiration = m.expiration || m?.metadata?.ephemeralDuration || store?.messages[m.chat]?.array?.slice(-1)[0]?.metadata?.ephemeralDuration || 0, mentions = (typeof content === 'string' || typeof content.text === 'string' || typeof content.caption === 'string') ? [...(content.text || content.caption || content).matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') : [], ...validate } = options;
 		if (typeof content === 'object') {
 			// Add footer to text/caption/body fields in object replies

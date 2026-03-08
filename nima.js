@@ -4028,7 +4028,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					profile = fake.anonim
 				}
 				const menunya = `
-╭──❍「 *පරිශීලක තොරතුරු* 」❍
+╭──❍「 *🤵පරිශීලක තොරතුරු | USER DETAILS👩‍💼* 」❍
 ├ *නම* : ${m.pushName ? m.pushName : 'Nimesha Madhushan'}
 ├ *අංකය* : @${m.sender.split('@')[0]}
 ├ *පරිශීලක* : ${isVip ? 'VIP' : isPremium ? 'PREMIUM' : 'FREE'}
@@ -4049,7 +4049,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 ├ *දවස* : ${දිනය}
 ├ *වෙලාව* : ${jam} WIB
 ╰──────❍
-╭──❍「 *🤖 බොට් ( BOT ) | BOT COMMANDS 🤖* 」❍
+╭──❍「 *🤖 බොට් | BOT COMMANDS 🤖* 」❍
 │${setv} ${prefix}profile (ගිණුම් විස්තර)
 │${setv} ${prefix}claim (ත්‍යාග ලබා ගැනීම)
 │${setv} ${prefix}buy (භාණ්ඩ මිලදී ගැනීම)
@@ -4085,7 +4085,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}delsewa (කුලී කාලය ඉවත් කිරීම)
 │${setv} ${prefix}listsewa (කුලී ලැයිස්තුව)
 ╰─┬────❍
-╭─┴❍「 *👥 සමූහ ( GROUP ) | GROUP COMMANDS 👥* 」❍
+╭─┴❍「 *👥 සමූහ | GROUP COMMANDS 👥* 」❍
 │${setv} ${prefix}add (සාමාජිකයින් එක් කිරීම)
 │${setv} ${prefix}kick (සාමාජිකයින් ඉවත් කිරීම)
 │${setv} ${prefix}promote (පාලක තනතුරු දීම)
@@ -4107,7 +4107,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}group set (සමූහ සැකසුම්)
 │${setv} ${prefix}group (පාලකයන්ට පමණි)
 ╰─┬────❍
-╭─┴❍「 *🔍 සෙවුම් ( SEARCH ) | SEARCH 🔍* 」❍
+╭─┴❍「 *🔍 සෙවුම් | SEARCH 🔍* 」❍
 │${setv} ${prefix}ytsearch (YouTube සෙවීම්)
 │${setv} ${prefix}spotify (සංගීත සෙවීම්)
 │${setv} ${prefix}pixiv (චිත්‍ර සෙවීම්)
@@ -4122,7 +4122,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}tenor (GIF සෙවීම්)
 │${setv} ${prefix}urban (වචන අර්ථ සෙවීම්)
 ╰─┬────❍
-╭─┴❍「 *⬇️ බාගත කිරීම් ( DOWNLOAD ) | DOWNLOAD ⬇️* 」❍
+╭─┴❍「 *⬇️ බාගත කිරීම් | DOWNLOAD ⬇️* 」❍
 │${setv} ${prefix}ytmp3 (YouTube ගීත)
 │${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
 │${setv} ${prefix}instagram (ඉන්ස්ටග්‍රෑම් වීඩියෝ)
@@ -4132,7 +4132,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}spotifydl (ස්පොටිෆයි ගීත)
 │${setv} ${prefix}mediafire (මීඩියාෆයර් ගොනු)
 ╰─┬────❍
-╭─┴❍「 *💬 උපුටා දැක්වීම් ( QUOTES ) | QUOTES 💬* 」❍
+╭─┴❍「 *💬 උපුටා දැක්වීම් | QUOTES 💬* 」❍
 │${setv} ${prefix}motivasi (අභිප්‍රේරණය)
 │${setv} ${prefix}quotes (උපුටා දැක්වීම්)
 │${setv} ${prefix}truth (ඇත්ත පැවසීම)
@@ -4141,7 +4141,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}bucin (ආදරණීය කියමන්)
 │${setv} ${prefix}renungan (සිතන්නට යමක්)
 ╰─┬────❍
-╭─┴❍「 *🛠️ මෙවලම් ( TOOLS ) | TOOLS 🛠️* 」❍
+╭─┴❍「 *🛠️ මෙවලම් | TOOLS 🛠️* 」❍
 │${setv} ${prefix}get (දත්ත ලබා ගැනීම) 🔸️
 │${setv} ${prefix}hd (පැහැදිලි බව වැඩි කිරීම)
 │${setv} ${prefix}toaudio (හඬ බවට හැරවීම)
@@ -4186,16 +4186,16 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}nightcore (හඬ වෙනස් කිරීම්)
 │${setv} ${prefix}getexif (ස්ටිකර් විස්තර බැලීම)
 ╰─┬────❍
-╭─┴❍「 *🤖 කෘතිම බුද්ධිය ( AI ) | ARTIFICIAL INTELLIGENCE 🤖* 」❍
+╭─┴❍「 *🤖 කෘතිම බුද්ධිය | ARTIFICIAL INTELLIGENCE 🤖* 」❍
 │${setv} ${prefix}ai (ප්‍රශ්න ඇසීම)
 │${setv} ${prefix}gemini (ගෙමිනි AI)
 │${setv} ${prefix}txt2img (අකුරුවලින් පින්තූර සෑදීම)
 ╰─┬────❍
-╭─┴❍「 *✨ ඇනිමේ ( ANIME ) | ANIME ✨* 」❍
+╭─┴❍「 *✨ ඇනිමේ | ANIME ✨* 」❍
 │${setv} ${prefix}waifu (ඇනිමේ රූප)
 │${setv} ${prefix}neko (නෙකෝ රූප)
 ╰─┬────❍
-╭─┴❍「 *🎮 ක්‍රීඩා ( GAME ) | GAMES 🎮* 」❍
+╭─┴❍「 *🎮 ක්‍රීඩා | GAMES 🎮* 」❍
 │${setv} ${prefix}tictactoe (තිතයි කතුරයි)
 │${setv} ${prefix}akinator (සිතුවිලි කියවීම)
 │${setv} ${prefix}suit (ගල, කතුර, කොළය)
@@ -4221,7 +4221,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}tebakgambar (රූප අනුමානය)
 │${setv} ${prefix}tebakbendera (කොඩි අනුමානය)
 ╰─┬────❍
-╭─┴❍「 *😂 විනෝදය ( FUN ) | ENTERTAINMENT 😂* 」❍
+╭─┴❍「 *😂 විනෝදය | ENTERTAINMENT 😂* 」❍
 │${setv} ${prefix}coba (උත්සාහ කරන්න)
 │${setv} ${prefix}dadu (දාදු කැටය)
 │${setv} ${prefix}bisakah (හැකියාවක් ඇසීම)
@@ -4242,14 +4242,14 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}heleh (අකුරු වෙනස් කිරීම)
 │${setv} ${prefix}holoh (අකුරු වෙනස් කිරීම)
 ╰─┬────❍
-╭─┴❍「 *🎲 වෙනත් ( RANDOM ) | RANDOM 🎲* 」❍
+╭─┴❍「 *🎲 වෙනත් | RANDOM 🎲* 」❍
 │${setv} ${prefix}coffe (කෝපි පින්තූර)
 ╰─┬────❍
-╭─┴❍「 *🔎 තොරතුරු සෙවීම ( STALKER ) | INFORMATION 🔎* 」❍
+╭─┴❍「 *🔎 තොරතුරු සෙවීම | INFORMATION 🔎* 」❍
 │${setv} ${prefix}wastalk (WhatsApp තොරතුරු)
 │${setv} ${prefix}githubstalk (GitHub තොරතුරු)
 ╰─┬────❍
-╭─┴❍「 *👑 හිමිකරු ( OWNER ) | OWNER COMMANDS 👑* 」❍
+╭─┴❍「 *👑 හිමිකරු | OWNER COMMANDS 👑* 」❍
 │${setv} ${prefix}bot [set] (බොට් සැකසුම්)
 │${setv} ${prefix}setbio (මතකය සැකසීම)
 │${setv} ${prefix}setppbot (බොට් පින්තූරය සැකසීම)
@@ -4285,6 +4285,8 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}delsampah (වැඩකට නැති දත්ත මැකීම)
 │${setv} ${prefix}upsw (ස්ටේටස් දැමීම)
 │${setv} ${prefix}backup (දත්ත සුරැකීම)
+│${setv} ${prefix}bot autostatus (ස්වයංක්‍රීයව status බැලීම)
+│${setv} ${prefix}bot antidelete (මැකූ පණිවිඩ පෙන්වීම)
 │${setv} $ (කේත ක්‍රියාත්මක කිරීම)
 │${setv} > (කේත ක්‍රියාත්මක කිරීම)
 │${setv} < (කේත ක්‍රියාත්මක කිරීම)
@@ -4609,16 +4611,15 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}getmsgstore (දත්ත ගබඩාව ලබා ගැනීම)
 │${setv} ${prefix}bot --settings (බොට් සැකසුම්)
 │${setv} ${prefix}bot settings (බොට් සැකසුම්)
-│${setv} ${prefix}bot antidelete on/off (ඉවත් කළ පණිවිඩ ලුහුබඩු)
+│${setv} ${prefix}bot antidelete on/off (ඉවත් කළ පණිවිඩ පෙන්වීම)
 │${setv} ${prefix}bot autostatus on/off (ස්ටේටස් ස්වයංක්‍රීයව like කිරීම)
 │${setv} ${prefix}getsession (සෙශන් එක ලබා ගැනීම)
 │${setv} ${prefix}delsession (සෙශන් එක මැකීම)
 │${setv} ${prefix}delsampah (වැඩකට නැති දත්ත මැකීම)
 │${setv} ${prefix}upsw (ස්ටේටස් දැමීම)
 │${setv} ${prefix}backup (දත්ත සුරැකීම)
-├──── *AI (Owner)* ────
-│${setv} ${prefix}aion (Private AI on)
-│${setv} ${prefix}aioff (Private AI off)
+│${setv} ${prefix}aion (ස්වයංක්‍රීයව පණිවිඩ යැවීම)
+│${setv} ${prefix}aioff (ස්වයංක්‍රීයව පණිවිඩ යැවීම)
 │${setv} $ (කේත ක්‍රියාත්මක කිරීම)
 │${setv} > (කේත ක්‍රියාත්මක කිරීම)
 │${setv} < (කේත ක්‍රියාත්මක කිරීම)

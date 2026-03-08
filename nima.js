@@ -43,7 +43,7 @@ const { getRandom, getBuffer, fetchJson, runtime, clockString, sleep, isUrl, for
 
 const menfesTimeouts = new Map();
 const settingsPath = path.join(__dirname, 'settings.js');
-const cases = db.cases ? db.cases : (db.cases = [...fs.readFileSync('./nima.js', 'utf-8').matchAll(/case\s+['"]([^'"]+)['"]/g)].map(match => match[1]));
+const cases = global.db && global.db.cases ? global.db.cases : (global.db = global.db || {}, global.db.cases = [...fs.readFileSync('./nima.js', 'utf-8').matchAll(/case\s+['"]([^'"]+)['"]/g)].map(match => match[1]));
 
 module.exports = nimesha = async (nimesha, m, msg, store) => {
 	await LoadDataBase(nimesha, m);

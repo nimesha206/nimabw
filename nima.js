@@ -2500,32 +2500,32 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						if (buf.length < 200) throw new Error('invalid')
 						return buf
 					},
-				// 4. api.itzpire.com
-				async () => {
-					const res = await fetch(`https://api.itzpire.com/sticker/attp?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
-					if (!res.ok) throw new Error('itzpire failed')
-					return Buffer.from(await res.arrayBuffer())
-				},
-				// 5. apis.davidcyriltech.my.id
-				async () => {
-					const res = await fetch(`https://apis.davidcyriltech.my.id/attp?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
-					const data = await res.json()
-					const imgUrl = data?.result || data?.url || data?.image
-					if (!imgUrl) throw new Error('no url')
-					const r2 = await fetch(imgUrl, { signal: AbortSignal.timeout(15000) })
-					return Buffer.from(await r2.arrayBuffer())
-				},
-				// 6. attp.xteam.xyz (alt endpoint)
-				async () => {
-					const res = await fetch(`https://attp.xteam.xyz/?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
-					if (!res.ok) throw new Error('attp.xteam failed')
-					return Buffer.from(await res.arrayBuffer())
-				},
-				// 7. api.nima.biz.id style 2
-				async () => {
-					return await fetchApi('/create/attp', { text, style: Math.floor(Math.random() * 5) + 6 }, { buffer: true })
-				},
-			]
+					// 4. api.itzpire.com
+					async () => {
+						const res = await fetch(`https://api.itzpire.com/sticker/attp?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						if (!res.ok) throw new Error('itzpire failed')
+						return Buffer.from(await res.arrayBuffer())
+					},
+					// 5. apis.davidcyriltech.my.id
+					async () => {
+						const res = await fetch(`https://apis.davidcyriltech.my.id/attp?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						const data = await res.json()
+						const imgUrl = data?.result || data?.url || data?.image
+						if (!imgUrl) throw new Error('no url')
+						const r2 = await fetch(imgUrl, { signal: AbortSignal.timeout(15000) })
+						return Buffer.from(await r2.arrayBuffer())
+					},
+					// 6. attp.xteam.xyz (alt endpoint)
+					async () => {
+						const res = await fetch(`https://attp.xteam.xyz/?text=${encodeURIComponent(text)}`, { signal: AbortSignal.timeout(15000) })
+						if (!res.ok) throw new Error('attp.xteam failed')
+						return Buffer.from(await res.arrayBuffer())
+					},
+					// 7. api.nima.biz.id style 2
+					async () => {
+						return await fetchApi('/create/attp', { text, style: Math.floor(Math.random() * 5) + 6 }, { buffer: true })
+					},
+				]
 			let success = false
 			for (let i = 0; i < atpMethods.length; i++) {
 				try {

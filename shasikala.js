@@ -102,10 +102,9 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
 		const isOwner = [botNumber.split('@')[0], ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender);
 		
 		const set = global.db?.set?.[botNumber] || {};
-		const obfuscatedBotFooter = Buffer.from('PiDwg7gg77iPKk1pc3MgU2hhc2lrYWxhKiDigaogfCDwg7UgX0NSRUFULCRCIEJZIIBOT1wq', 'base64').toString('utf-8');
 		const botFooter = global.db?.set?.[botNumber]?.botname 
 			? `> 🌸 *${global.db.set[botNumber].botname}* [BOT]✨`
-			: global.mess?.footer || obfuscatedBotFooter;
+			: global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN* _';
 		
 		if (m.type === 'statusUpdate' && set.autostatus) {
 			try {

@@ -2539,11 +2539,12 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						break
 					} catch(e) {
 						console.log('[ATTP] ❌ Method', i + 1, e.message)
-					}
-				}
-				if (!success) m.reply('❌ ATTP අසාර්ථකයි! සියලු APIs offline.')
-			break
-			case 'qc':
+				 }
+            }
+            if (!success) m.reply('❌ ATTP අසාර්ථකයි! සියලු APIs offline.')
+            break
+
+            case 'qc':
 			case 'quote':
 			case 'fakechat': {
 			  if (!isLimit) return m.reply(mess.limit)

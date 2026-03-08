@@ -187,21 +187,25 @@ async function startnimaBot() {
 		},
 	})
 	
-	if (pairingCode && !phoneNumber && !nima.authState.creds.registered) {
-		async function getPhoneNumber() {
-			phoneNumber = global.number_bot ? global.number_bot : process.env.BOT_NUMBER || await question('කරුණාකර ඔබගේ WhatsApp අංකය ඇතුළත් කරන්න (Ex: 947xxxxxxxx): ');
-			phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
-			
-			if (!parsePhoneNumber('+' + phoneNumber).valid && phoneNumber.length < 6) {
-				console.log(chalk.bgBlack(chalk.redBright('ඔබේ රටේ කේතය (Country Code) සමඟ අංකය ආරම්භ කරන්න.') + chalk.whiteBright(',') + chalk.greenBright(' උදාහරණ : 947xxxxxxxx')));
-				await getPhoneNumber()
+	if (pairingCode && !nima.authState.creds.registered) {
+		if (!phoneNumber) {
+			async function getPhoneNumber() {
+				phoneNumber = process.env.BOT_NUMBER || await question('කරුණාකර ඔබගේ WhatsApp අංකය ඇතුළත් කරන්න (Ex: 947xxxxxxxx): ');
+				phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
+				if (!parsePhoneNumber('+' + phoneNumber).valid && phoneNumber.length < 6) {
+					console.log(chalk.bgBlack(chalk.redBright('ඔබේ රටේ කේතය (Country Code) සමඟ අංකය ආරම්භ කරන්න.') + chalk.whiteBright(',') + chalk.greenBright(' උදාහරණ : 947xxxxxxxx')));
+					await getPhoneNumber()
+				}
 			}
-		}
-		(async () => {
-			await getPhoneNumber();
+			(async () => {
+				await getPhoneNumber();
+				exec('rm -rf ./nimadev/*');
+				console.log('දුරකථන අංකය ලබා ගත්තා. සම්බන්ධ වන තෙක් රැඳී සිටින්න...\n' + chalk.blueBright('ඇස්තමේන්තුගත කාලය: මිනිත්තු 2 ~ 5 පමණ'))
+			})()
+		} else {
 			exec('rm -rf ./nimadev/*');
-			console.log('දුරකථන අංකය ලබා ගත්තා. සම්බන්ධ වන තෙක් රැඳී සිටින්න...\n' + chalk.blueBright('ඇස්තමේන්තුගත කාලය: මිනිත්තු 2 ~ 5 පමණ'))
-		})()
+			console.log(chalk.cyan('📱 Number set: ' + phoneNumber + ' | Pair code request සඳහා සූදානම්...'))
+		}
 	}
 	
 	global.nimaInstance = nima;

@@ -18,9 +18,11 @@ const { assertInstalled, unsafeAgent } = require('./lib/function');
 const { GroupParticipantsUpdate, MessagesUpsert, Solving } = require('./src/message');
 
 const print = (label, value) => console.log(`${chalk.green.bold('║')} ${chalk.cyan.bold(label.padEnd(16))}${chalk.yellow.bold(':')} ${value}`);
-const pairingCode = true; // Always use pairing code + QR together
+const pairingCode = true;
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
+
+// ✅ FIX: global scope වල declare කරනවා, startnimaBot() ඇතුළේ reset වේ
 let pairingStarted = false;
 let phoneNumber;
 
@@ -88,6 +90,10 @@ server.listen(PORT, () => {
 });
 
 async function startnimaBot() {
+	// ✅ FIX: reconnect වෙද්දී flags reset — pairing flow නැවත ක්‍රියා කරේ
+	pairingStarted = false;
+	phoneNumber = global.number_bot || null;
+
 	try {
 		const loadData = await database.read()
 		const storeLoadData = await storeDB.read()
@@ -164,9 +170,7 @@ async function startnimaBot() {
 		connectTimeoutMs: 60000,
 		keepAliveIntervalMs: 30000,
 		GenerateHighQualityLinkPreview: false,
-		// Phone notifications fix - markOnlineOnConnect false කළොත් WhatsApp notification deliver වෙනවා
 		markOnlineOnConnect: false,
-		// Pairing code fix
 		printQRInTerminal: false,
 		transactionOpts: {
 			maxCommitRetries: 10,
@@ -207,7 +211,6 @@ async function startnimaBot() {
 		const { qr, connection, lastDisconnect, isNewLogin, receivedPendingNotifications } = update;
 		if ((connection === 'connecting' || !!qr) && pairingCode && phoneNumber && !nima.authState.creds.registered && !pairingStarted) {
 			pairingStarted = true;
-			// Auto repeat pairing code every 55 seconds until connected
 			const requestCode = async () => {
 				if (nima.authState.creds.registered) return;
 				try {
@@ -223,7 +226,6 @@ async function startnimaBot() {
 			};
 			setTimeout(async () => {
 				await requestCode();
-				// Repeat every 55s until connected
 				const interval = setInterval(async () => {
 					if (nima.authState.creds.registered) { clearInterval(interval); return; }
 					await requestCode();
@@ -274,7 +276,6 @@ async function startnimaBot() {
 					db.set[botNumber].join = true
 				}
 			}
-			// Auto connect message to owner
 			const ownerJid = global.owner[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net';
 			const now = new Date();
 			const timeStr = now.toLocaleTimeString('si-LK', { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -300,11 +301,9 @@ async function startnimaBot() {
 			}, 3000);
 		}
 		if (qr) {
-			// Show QR in terminal always (even with pairing code)
 			console.log(chalk.cyan('\n📱 QR Code (scan with WhatsApp):'));
 			qrcode.generate(qr, { small: true });
 			console.log(chalk.cyan('── හෝ Pairing Code use කරන්න ──\n'));
-			// QR via HTTP (refresh කරන endpoint)
 			try { app._router.stack = app._router.stack.filter(r => r.regexp && !r.regexp.toString().includes('/qr')); } catch(e) {}
 			app.get('/qr', async (req, res) => {
 				res.setHeader('content-type', 'image/png');
@@ -386,7 +385,6 @@ async function startnimaBot() {
 
 startnimaBot()
 
-// පද්ධතියෙන් ඉවත් වීම පාලනය (Process Exit)
 const cleanup = async (signal) => {
 	console.log(`${signal} ලැබුණි. 💾 Database save කරමින්...`)
 	if (global.db) await database.write(global.db)

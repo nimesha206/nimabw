@@ -1,26 +1,20 @@
 const fs = require('fs');
 const chalk = require('chalk');
 
-/*
-	* Create By Nimesha Madhushan
-	* Follow https://github.com/nimesha206
-	* Whatsapp : https://whatsapp.com/channel/0029Vb68g1c3LdQLQDkbAQ3M
-*/
+const SecureConfig = require('./config');
 
-//~~~~~~~~~~~~< GLOBAL SETTINGS >~~~~~~~~~~~~\\
-
-global.owner = ['94726800969']
-global.ownerName = 'Nimesha Madhushan'  // Bot හිමිකරු - වෙනස් නොකරන්න
-global.author = 'Nimesha Madhushan'
-global.botname = 'Miss Shasikala'
-global.packname = 'Miss Shasikala'
+global.owner = SecureConfig.ownerNumber;
+global.ownerName = SecureConfig.ownerName;
+global.author = SecureConfig.ownerName;
+global.botname = SecureConfig.botName;
+global.packname = SecureConfig.botName;
 global.listprefix = ['+','!','.']
 
 global.listv = ['•','●','■','✿','▲','➩','➢','➣','➤','✦','✧','△','❀','○','□','♤','♡','◇','♧','々','〆']
-global.tempatDB = 'database.json' // Taruh url mongodb di sini jika menggunakan mongodb. Format : 'mongodb+srv://...'
-global.tempatStore = 'baileys_store.json' // Taruh url mongodb di sini jika menggunakan mongodb. Format : 'mongodb+srv://...'
+global.tempatDB = 'database.json'
+global.tempatStore = 'baileys_store.json'
 global.pairing_code = true
-global.number_bot = '94784134577' // Kalo pake panel bisa masukin nomer di sini, jika belum ambil session. Format : '628xx'
+global.number_bot = '94784134577'
 
 global.fake = {
 	anonim: 'https://ibb.co/rKyYj3Rr',
@@ -34,7 +28,7 @@ global.my = {
 	tt: 'https://www.tiktok.com/@sashi2006',
 	gh: 'https://github.com/nimesha206',
 	gc: 'https://whatsapp.com/channel/0029Vb68g1c3LdQLQDkbAQ3M',
-	ch: '120363419075720962@newsletter',
+	ch: SecureConfig.groupJid,
 }
 
 global.limit = {
@@ -51,9 +45,9 @@ global.money = {
 
 global.mess = {
 	key: 'ඔබගේ API යතුර කල් ඉකුත් වී ඇත. කරුණාකර https://nima.biz.id වෙත පිවිසෙන්න',
-	owner: 'Nimesha Madhushan',
-	admin: 'Nimesha Madhushan',
-	botAdmin: 'Nimesha Madhushan',
+	owner: SecureConfig.ownerName,
+	admin: SecureConfig.ownerName,
+	botAdmin: SecureConfig.ownerName,
 	group: 'කණ්ඩායම් වල පමණක් භාවිතා කරන්න!',
 	private: 'පුද්ගලික කතාබස් වල පමණක් භාවිතා කරන්න!',
 	limit: 'ඔබගේ සීමාව අවසන් වී ඇත!',
@@ -67,17 +61,13 @@ global.APIs = {
 	nima: 'https://api.nima.biz.id',
 }
 global.APIKeys = {
-	'https://api.nima.biz.id': 'nz-8ce9753907',
+	'https://api.nima.biz.id': SecureConfig.apiKey,
 }
 
-// Lainnya
-
-global.badWords = ['dongo'] // input kata-kata toxic yg lain. ex: ['dongo','dongonya']
+global.badWords = ['dongo']
 global.chatLength = 500
-global.geminiMemorySize = 50  // Gemini history memory - messages 50ක් දක්වා මතක තියාගනී
-// Gemini Auto Reply API Key
-// https://aistudio.google.com/app/apikey යන්න ගිහින් free API key එකක් ගන්න
-global.geminiApiKey = 'AIzaSyARjH2TwsNEpQ3vPHzDecf5a7v7evmQmZc'
+global.geminiMemorySize = 50
+global.geminiApiKey = SecureConfig.geminiApiKey;
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
@@ -85,7 +75,4 @@ fs.watchFile(file, () => {
 	console.log(chalk.redBright(`Update ${__filename}`))
 	delete require.cache[file]
 	require(file)
-
-});
-
-
+})

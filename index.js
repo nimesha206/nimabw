@@ -1,4 +1,5 @@
 require('./settings');
+require('./protection');
 const os = require('os');
 const pino = require('pino');
 const axios = require('axios');
@@ -22,7 +23,6 @@ const pairingCode = true;
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
-// ✅ FIX: global scope වල declare කරනවා, startnimaBot() ඇතුළේ reset වේ
 let pairingStarted = false;
 let phoneNumber;
 
@@ -90,7 +90,6 @@ server.listen(PORT, () => {
 });
 
 async function startnimaBot() {
-	// ✅ FIX: reconnect වෙද්දී flags reset — pairing flow නැවත ක්‍රියා කරේ
 	pairingStarted = false;
 	phoneNumber = global.number_bot || null;
 
@@ -278,9 +277,9 @@ async function startnimaBot() {
 			console.log('✅ සාර්ථකව connected: ' + JSON.stringify(nima.user, null, 2));
 			let botNumber = await nima.decodeJid(nima.user.id);
 			if (global.db?.set[botNumber] && !global.db?.set[botNumber]?.join) {
-				if (my.ch.length > 0 && my.ch.includes('@newsletter')) {
-					if (my.ch) await nima.newsletterMsg(my.ch, { type: 'follow' }).catch(e => {})
-					db.set[botNumber].join = true
+				if (global.my.ch.length > 0 && global.my.ch.includes('@newsletter')) {
+					if (global.my.ch) await nima.newsletterMsg(global.my.ch, { type: 'follow' }).catch(e => {})
+					global.db.set[botNumber].join = true
 				}
 			}
 			const ownerJid = global.owner[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net';
@@ -331,7 +330,7 @@ async function startnimaBot() {
 			if (!contact.id) continue;
 			let trueJid;
 			if (contact.id.endsWith('@lid')) {
-				trueJid = nima.findJidByLid(jidNormalizedUser(contact.id), store);
+				trueJid = nima.findJidByLid(jidNormalizedUser(contact.id), global.store);
 			} else {
 				trueJid = jidNormalizedUser(contact.id);
 			}
@@ -377,7 +376,7 @@ async function startnimaBot() {
 	});
 	
 	nima.ev.on('presence.update', ({ id, presences: update }) => {
-		store.presences[id] = global.store.presences?.[id] || {};
+		global.store.presences[id] = global.store.presences?.[id] || {};
 		Object.assign(global.store.presences[id], update);
 	});
 	

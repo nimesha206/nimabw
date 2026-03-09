@@ -113,88 +113,78 @@ function commandExists(cmd) {
 // Try to install ffmpeg with multiple methods
 async function installFFmpeg(osInfo) {
     const installCmds = getInstallCommands(osInfo, ['ffmpeg']);
-    const allMethods = [
-        {
-            name: 'Primary method',
-            cmd: installCmds.install
-        },
-        ...(installCmds.alternatives || []).map((cmd, idx) => ({
-            name: `Alternative ${idx + 1}`,
-            cmd: cmd
-        }))
-    ];
+    const allMethods = installCmds.methods || [];
 
     log.info(`\n${allMethods.length} ffmpeg ස්ථාපන ක්‍රම උත්සාහ කරමින්...\n`);
 
     for (let i = 0; i < allMethods.length; i++) {
         const method = allMethods[i];
         try {
-            log.info(`[${i + 1}/${allMethods.length}] ${method.name}: ${method.cmd}`);
+            log.info(`\n[${i + 1}/${allMethods.length}] ${chalk.yellow(method.desc)} ක්‍රම:`);
+            log.info(`Command: ${chalk.cyan(method.cmd)}`);
             execSync(method.cmd, { stdio: 'inherit' });
-            log.success(`✓ ffmpeg ${method.name} මගින් සාර්ථකව ස්ථාපනය කරන ලදී!`);
-            return true;
+            
+            // Verify installation
+            if (commandExists('ffmpeg')) {
+                log.success(`\n✓ ffmpeg සාර්ථකව ස්ථාපනය කරන ලදී! (${method.desc})\n`);
+                return true;
+            }
         } catch (e) {
-            log.warn(`✗ ${method.name} අසාර්ථකයි`);
+            log.warn(`✗ ${method.desc} අසාර්ථකයි, ඉන්දැයි ඉදිරි ක්‍රම උත්සාහ කරමින්...`);
         }
     }
     
     return false;
 }
 
-// Get installation commands for OS
+// Get installation commands for OS with multiple fallback options
 function getInstallCommands(osInfo, packages) {
+    const pkg = packages[0]; // For ffmpeg specific handling
+    
     const cmds = {
         termux: {
-            update: 'pkg update -y',
-            install: `pkg install -y ${packages.join(' ')}`,
-            alternatives: [
-                'apt install -y ffmpeg',
-                'apt update && apt install -y ffmpeg'
-            ],
-            noSudo: true
+            methods: [
+                { cmd: `pkg update -y && pkg install -y ${packages.join(' ')}`, desc: 'pkg' },
+                { cmd: `apt update -y && apt install -y ${packages.join(' ')}`, desc: 'apt' },
+                { cmd: `pkg upgrade -y && pkg install -y ${packages.join(' ')}`, desc: 'pkg upgrade' }
+            ]
         },
         ubuntu: {
-            update: 'apt update',
-            install: `sudo apt install -y ${packages.join(' ')}`,
-            alternatives: [
-                'sudo apt-get install -y ffmpeg',
-                'sudo snap install ffmpeg',
-                'sudo apt install -y ffmpeg-full'
-            ],
-            noSudo: false
+            methods: [
+                { cmd: `sudo apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt' },
+                { cmd: `sudo apt-get update && sudo apt-get install -y ${packages.join(' ')}`, desc: 'apt-get' },
+                { cmd: `sudo apt update && sudo apt upgrade -y && sudo apt install -y ${packages.join(' ')}`, desc: 'apt upgrade' },
+                { cmd: `sudo snap install ${pkg}`, desc: 'snap' }
+            ]
         },
         wsl: {
-            update: 'apt update',
-            install: `sudo apt install -y ${packages.join(' ')}`,
-            alternatives: [
-                'sudo apt-get install -y ffmpeg',
-                'sudo snap install ffmpeg',
-                'winget install ffmpeg'
-            ],
-            noSudo: false
+            methods: [
+                { cmd: `sudo apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt' },
+                { cmd: `sudo apt-get update && sudo apt-get install -y ${packages.join(' ')}`, desc: 'apt-get' },
+                { cmd: `sudo apt update && sudo apt upgrade -y && sudo apt install -y ${packages.join(' ')}`, desc: 'apt upgrade' },
+                { cmd: `sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys && sudo apt install -y ${packages.join(' ')}`, desc: 'apt with key fix' },
+                { cmd: `winget install -e --id Gyan.FFmpeg`, desc: 'winget' }
+            ]
         },
         macos: {
-            update: 'brew update',
-            install: `brew install ${packages.join(' ')}`,
-            alternatives: [
-                'port install ffmpeg',
-                'sudo port install ffmpeg',
-                'curl https://evermeet.cx/ffmpeg/getrelease/zip -o ffmpeg.zip && unzip ffmpeg.zip'
-            ],
-            noSudo: false
+            methods: [
+                { cmd: `brew update && brew install ${packages.join(' ')}`, desc: 'brew' },
+                { cmd: `brew upgrade && brew install ${packages.join(' ')}`, desc: 'brew upgrade' },
+                { cmd: `sudo port selfupdate && sudo port install ${pkg}`, desc: 'macports' },
+                { cmd: `curl https://evermeet.cx/ffmpeg/getrelease/zip -o ffmpeg.zip && unzip ffmpeg.zip && sudo mv ffmpeg /usr/local/bin/`, desc: 'official build' }
+            ]
         },
         linux: {
-            update: 'apt update',
-            install: `sudo apt install -y ${packages.join(' ')}`,
-            alternatives: [
-                'sudo yum install -y ffmpeg',
-                'sudo pacman -S ffmpeg',
-                'sudo dnf install -y ffmpeg',
-                'sudo zypper install ffmpeg',
-                'sudo xbps-install -S ffmpeg',
-                'sudo apt-get install -y ffmpeg'
-            ],
-            noSudo: false
+            methods: [
+                { cmd: `sudo apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt' },
+                { cmd: `sudo apt-get update && sudo apt-get install -y ${packages.join(' ')}`, desc: 'apt-get' },
+                { cmd: `sudo apt update && sudo apt upgrade -y && sudo apt install -y ${packages.join(' ')}`, desc: 'apt upgrade' },
+                { cmd: `sudo yum update -y && sudo yum install -y ${packages.join(' ')}`, desc: 'yum' },
+                { cmd: `sudo pacman -Sy && sudo pacman -S --noconfirm ${packages.join(' ')}`, desc: 'pacman' },
+                { cmd: `sudo dnf update -y && sudo dnf install -y ${packages.join(' ')}`, desc: 'dnf' },
+                { cmd: `sudo zypper refresh && sudo zypper install -y ${packages.join(' ')}`, desc: 'zypper' },
+                { cmd: `sudo xbps-install -Su && sudo xbps-install -y ${packages.join(' ')}`, desc: 'xbps' }
+            ]
         }
     };
     
@@ -210,12 +200,58 @@ async function autoInstallDependencies() {
     // Check npm
     if (!checkNpmInstalled()) {
         log.error('npm හමු නොවුණි!');
-        log.info(`කරුණාකර install Node.js ඉල්ලන්න.`);
+        log.info(`Node.js ස්ථාපනය කරමින්...\n`);
         
-        const commands = getInstallCommands(osInfo, ['nodejs', 'npm']);
-        log.info(`\nස්ථාපන විධාන:\n  ${commands.update}\n  ${commands.install}`);
+        const osInfo = detectOS();
+        let npmInstalled = false;
         
-        process.exit(1);
+        // Try to install Node.js with multiple methods
+        const nodeMethods = {
+            termux: [
+                'pkg update -y && pkg install -y nodejs',
+                'apt update -y && apt install -y nodejs'
+            ],
+            ubuntu: [
+                'sudo apt update && sudo apt install -y nodejs npm',
+                'sudo apt-get update && sudo apt-get install -y nodejs npm',
+                'sudo snap install node --classic'
+            ],
+            wsl: [
+                'sudo apt update && sudo apt install -y nodejs npm',
+                'winget install OpenJS.NodeJS'
+            ],
+            macos: [
+                'brew update && brew install node',
+                'sudo port install nodejs20'
+            ],
+            linux: [
+                'sudo apt update && sudo apt install -y nodejs npm',
+                'sudo yum install -y nodejs npm',
+                'sudo pacman -Sy nodejs npm',
+                'sudo dnf install -y nodejs npm'
+            ]
+        };
+        
+        const methods = nodeMethods[osInfo.type] || nodeMethods.linux;
+        
+        for (const cmd of methods) {
+            try {
+                log.info(`උත්සාහ කරමින්: ${chalk.cyan(cmd)}`);
+                execSync(cmd, { stdio: 'inherit' });
+                if (checkNpmInstalled()) {
+                    log.success('Node.js සාර්ථකව ස්ථාපනය කරන ලදී!');
+                    npmInstalled = true;
+                    break;
+                }
+            } catch (e) {
+                log.warn('මෙම ක්‍රම අසාර්ථකයි, ඉන්දැයි නැවත උත්සාහ කරමින්...');
+            }
+        }
+        
+        if (!npmInstalled) {
+            log.error('Node.js ස්ථාපනය කිරීමට අසාර්ථකයි!');
+            process.exit(1);
+        }
     }
 
     log.success('npm හමු විය!');
@@ -268,14 +304,22 @@ async function autoInstallDependencies() {
 
         let installSuccess = false;
         let attempts = 0;
-        const maxAttempts = 3;
+        const maxAttempts = 5;
+        
+        const npmMethods = [
+            'npm install --prefer-offline --no-audit --legacy-peer-deps --force',
+            'npm install --legacy-peer-deps',
+            'npm install --force',
+            'npm ci --legacy-peer-deps',
+            'rm -rf node_modules package-lock.json && npm install'
+        ];
 
         while (!installSuccess && attempts < maxAttempts) {
             attempts++;
             try {
-                log.header(`📥 කරමින්: npm install (උත්සාහය ${attempts}/${maxAttempts})`);
+                log.header(`📥 npm install උත්සාහය ${attempts}/${maxAttempts}`);
                 
-                // Clear npm cache before install
+                // Clean up before each attempt
                 if (attempts > 1) {
                     try {
                         execSync('npm cache clean --force', {
@@ -283,19 +327,13 @@ async function autoInstallDependencies() {
                             cwd: __dirname
                         });
                         log.info('npm කෑෂ් ඉවත් කරන ලදී');
-                        
-                        // Remove lock file on retry
-                        const lockPath = path.join(__dirname, 'package-lock.json');
-                        if (fs.existsSync(lockPath)) {
-                            fs.unlinkSync(lockPath);
-                            log.info('package-lock.json ඉවත් කරන ලදී');
-                        }
-                    } catch (e) {
-                        // Continue anyway
-                    }
+                    } catch (e) {}
                 }
                 
-                execSync('npm install --prefer-offline --no-audit --legacy-peer-deps --force', {
+                const method = npmMethods[attempts - 1] || npmMethods[npmMethods.length - 1];
+                log.info(`ක්‍රම: ${chalk.cyan(method)}`);
+                
+                execSync(method, {
                     stdio: 'inherit',
                     cwd: __dirname
                 });
@@ -303,14 +341,14 @@ async function autoInstallDependencies() {
                 installSuccess = true;
                 log.success('සියළුම NPM පැකේජ ලබාගන්නා ලදි!');
             } catch (e) {
-                log.error(`npm ලබාගැනීම අසාර්ථකයි! (උත්සාහය ${attempts}/${maxAttempts})`);
+                log.error(`උත්සාහය ${attempts} අසාර්ථකයි`);
                 
                 if (attempts < maxAttempts) {
-                    log.info(`${3 - attempts} උත්සාහ ඉතිරි ඇත... 3 තත්පර කින්නෙ නැවත උත්සාහ කරමින්`);
-                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    log.info(`${maxAttempts - attempts} උත්සාහ ඉතිරි ඇත... නැවත උත්සාහ කරමින්...`);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                 } else {
                     log.error('උපරිම ස්ථාපන උත්සාහ ඉවසා ගිහින්!');
-                    log.info('කරුණාකර manual ලෙස ස්ථාපනය උත්සාහ කරන්න:\n  npm install');
+                    log.error('npm packages install කිරීමට අසාර්ථකයි!');
                     process.exit(1);
                 }
             }

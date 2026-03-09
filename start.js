@@ -75,60 +75,108 @@ const YOUTUBE_METHODS = {
 function detectOS() {
     const platform = os.platform();
     const release = os.release();
-    
-    // Termux නම් පරීක්ෂා කරමින්
-    const isTermux = fs.existsSync('/system/build.prop') || fs.existsSync('/data/data/com.termux');
-    
+
+    // ── Termux (Android) ──────────────────────────────────────
+    // PREFIX env var = most reliable Termux indicator
+    const isTermux =
+        process.env.PREFIX?.includes('com.termux') ||
+        fs.existsSync('/data/data/com.termux') ||
+        fs.existsSync('/data/data/com.termux/files/usr/bin/pkg') ||
+        fs.existsSync('/system/build.prop');
+
     if (isTermux) {
-        return {
-            type: 'termux',
-            display: 'Termux (Android)',
-            pm: 'pkg',
-            pmAlternate: 'apt'
-        };
+        return { type: 'termux', display: 'Termux (Android)', pm: 'pkg', pmAlternate: 'apt' };
     }
-    
-    // Ubuntu/Debian නම් පරීක්ෂා කරමින්
-    if (platform === 'linux') {
-        if (fs.existsSync('/etc/lsb-release') || fs.existsSync('/etc/debian_version')) {
-            const isWSL = release.toLowerCase().includes('microsoft') || fs.existsSync('/proc/version') && 
-                         fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
-            
-            if (isWSL) {
-                return {
-                    type: 'wsl',
-                    display: 'Windows WSL (Ubuntu)',
-                    pm: 'apt',
-                    pmAlternate: 'apt-get'
-                };
-            }
-            
-            return {
-                type: 'ubuntu',
-                display: 'Ubuntu/Debian/VPS',
-                pm: 'apt',
-                pmAlternate: 'apt-get'
-            };
-        }
-    }
-    
-    // macOS නම් පරීක්ෂා කරමින්
+
+    // ── macOS ──────────────────────────────────────────────────
     if (platform === 'darwin') {
-        return {
-            type: 'macos',
-            display: 'macOS',
-            pm: 'brew',
-            pmAlternate: 'homebrew'
-        };
+        return { type: 'macos', display: 'macOS', pm: 'brew', pmAlternate: 'port' };
     }
-    
-    // Default Linux ලෙස සැලකීම
-    return {
-        type: 'linux',
-        display: 'Linux (Generic)',
-        pm: 'apt',
-        pmAlternate: 'apt-get'
-    };
+
+    if (platform === 'linux') {
+        // ── WSL (Windows Subsystem for Linux) ─────────────────
+        try {
+            const procVer = fs.existsSync('/proc/version')
+                ? fs.readFileSync('/proc/version', 'utf8').toLowerCase() : '';
+            const isWSL = procVer.includes('microsoft') || procVer.includes('wsl') ||
+                          release.toLowerCase().includes('microsoft') ||
+                          process.env.WSL_DISTRO_NAME || process.env.WSLENV;
+            if (isWSL) {
+                return { type: 'wsl', display: 'Windows WSL', pm: 'apt', pmAlternate: 'apt-get' };
+            }
+        } catch {}
+
+        // ── Cloud / Docker / Railway / Render ─────────────────
+        const isDocker = fs.existsSync('/.dockerenv') ||
+            (fs.existsSync('/proc/1/cgroup') &&
+             fs.readFileSync('/proc/1/cgroup', 'utf8').includes('docker'));
+        const isCloud  = process.env.RAILWAY_ENVIRONMENT || process.env.RENDER ||
+                         process.env.HEROKU_APP_NAME || process.env.FLY_APP_NAME ||
+                         process.env.REPL_ID;
+
+        // ── Distro detection via /etc/os-release ──────────────
+        let distroId = '';
+        let distroLike = '';
+        try {
+            if (fs.existsSync('/etc/os-release')) {
+                const osr = fs.readFileSync('/etc/os-release', 'utf8');
+                distroId   = (osr.match(/^ID=(.+)$/m)?.[1] || '').replace(/"/g,'').toLowerCase();
+                distroLike = (osr.match(/^ID_LIKE=(.+)$/m)?.[1] || '').replace(/"/g,'').toLowerCase();
+            }
+        } catch {}
+
+        // Arch Linux
+        if (distroId === 'arch' || distroLike.includes('arch') ||
+            fs.existsSync('/etc/arch-release')) {
+            return { type: 'arch', display: 'Arch Linux', pm: 'pacman', pmAlternate: 'yay' };
+        }
+
+        // Alpine Linux
+        if (distroId === 'alpine' || fs.existsSync('/etc/alpine-release')) {
+            return { type: 'alpine', display: 'Alpine Linux', pm: 'apk', pmAlternate: 'apk' };
+        }
+
+        // Fedora
+        if (distroId === 'fedora' || distroLike.includes('fedora')) {
+            return { type: 'fedora', display: 'Fedora', pm: 'dnf', pmAlternate: 'dnf' };
+        }
+
+        // CentOS / RHEL / Rocky / AlmaLinux
+        if (['centos','rhel','rocky','almalinux','ol'].includes(distroId) ||
+            distroLike.includes('rhel') || distroLike.includes('centos') ||
+            fs.existsSync('/etc/centos-release') || fs.existsSync('/etc/redhat-release')) {
+            return { type: 'centos', display: 'CentOS/RHEL/Rocky', pm: 'yum', pmAlternate: 'dnf' };
+        }
+
+        // openSUSE
+        if (distroId.includes('suse') || distroLike.includes('suse') ||
+            fs.existsSync('/etc/SuSE-release')) {
+            return { type: 'opensuse', display: 'openSUSE', pm: 'zypper', pmAlternate: 'zypper' };
+        }
+
+        // Void Linux
+        if (distroId === 'void' || fs.existsSync('/etc/void-release')) {
+            return { type: 'void', display: 'Void Linux', pm: 'xbps-install', pmAlternate: 'xbps-install' };
+        }
+
+        // Debian / Ubuntu / Mint / Kali / Raspberry Pi OS (most common)
+        if (distroId === 'debian' || distroId === 'ubuntu' || distroId === 'kali' ||
+            distroLike.includes('debian') || distroLike.includes('ubuntu') ||
+            fs.existsSync('/etc/debian_version') || fs.existsSync('/etc/lsb-release')) {
+            const label = isDocker ? 'Docker (Debian/Ubuntu)' : isCloud ? 'Cloud VPS (Debian/Ubuntu)' : 'Ubuntu/Debian/VPS';
+            return { type: 'ubuntu', display: label, pm: 'apt', pmAlternate: 'apt-get' };
+        }
+
+        // Generic Linux fallback
+        return { type: 'linux', display: 'Linux (Generic)', pm: 'apt', pmAlternate: 'apt-get' };
+    }
+
+    // Windows (native node, not WSL)
+    if (platform === 'win32') {
+        return { type: 'windows', display: 'Windows', pm: 'winget', pmAlternate: 'choco' };
+    }
+
+    return { type: 'linux', display: 'Linux (Unknown)', pm: 'apt', pmAlternate: 'apt-get' };
 }
 
 // පැකේජ ස්ථාපනය වුණ නම් පරීක්ෂා කරමින්
@@ -717,6 +765,131 @@ function getInstallCommands(osInfo, packages) {
     return cmds[osInfo.type] || cmds.linux;
 }
 
+
+// ═══════════════════════════════════════════════════════════
+// 🎵 YT-DLP AUTO INSTALL / UPDATE / UPGRADE
+// python3 → pip3 → binary fallback
+// ═══════════════════════════════════════════════════════════
+
+async function installOrUpdateYtDlp(osInfo) {
+    log.header('📥 yt-dlp Install / Update / Upgrade');
+
+    const alreadyInstalled = commandExists('yt-dlp');
+    if (alreadyInstalled) {
+        log.info('yt-dlp දැනටමත් install වෙලා — update/upgrade කරමින්...');
+    } else {
+        log.info('yt-dlp නෑ — fresh install කරමින්...');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // Platform check නොකර — සියලු methods flat list එකක්
+    // ඕනම platform එකක එකක් හරි හරියනවා
+    // ══════════════════════════════════════════════════════════
+    const YTDLP_BIN_URL = 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
+    const termuxBin = '/data/data/com.termux/files/usr/bin/yt-dlp';
+    const prefixBin = `${process.env.PREFIX || ''}/bin/yt-dlp`;
+    const homeBin   = `${process.env.HOME   || ''}/bin/yt-dlp`;
+
+    const allMethods = [
+        // ── pip / python (ඕනම platform) ──────────────────────
+        { cmd: 'pip3 install -U yt-dlp',                                    desc: 'pip3 -U' },
+        { cmd: 'pip3 install --upgrade yt-dlp',                             desc: 'pip3 --upgrade' },
+        { cmd: 'pip3 install -U --break-system-packages yt-dlp',            desc: 'pip3 --break-system-packages' },
+        { cmd: 'pip install -U yt-dlp',                                     desc: 'pip -U' },
+        { cmd: 'python3 -m pip install -U yt-dlp',                          desc: 'python3 -m pip -U' },
+        { cmd: 'python3 -m pip install -U --break-system-packages yt-dlp',  desc: 'python3 -m pip --break-system-packages' },
+        { cmd: 'python -m pip install -U yt-dlp',                           desc: 'python -m pip -U' },
+        { cmd: 'sudo pip3 install -U yt-dlp',                               desc: 'sudo pip3 -U' },
+        { cmd: 'sudo python3 -m pip install -U yt-dlp',                     desc: 'sudo python3 -m pip -U' },
+        { cmd: 'pip3 install yt-dlp',                                       desc: 'pip3 fresh' },
+
+        // ── Termux ────────────────────────────────────────────
+        { cmd: 'pkg install -y yt-dlp',                                     desc: 'pkg install' },
+        { cmd: 'pkg upgrade -y && pkg install -y yt-dlp',                   desc: 'pkg upgrade+install' },
+        { cmd: 'apt install -y yt-dlp',                                     desc: 'apt install (termux)' },
+        { cmd: 'apt update -y && apt install -y yt-dlp',                    desc: 'apt update+install (termux)' },
+
+        // ── apt / apt-get (Ubuntu, Debian, Kali, Raspi, WSL) ─
+        { cmd: 'sudo apt install -y yt-dlp',                                desc: 'sudo apt install' },
+        { cmd: 'sudo apt update && sudo apt install -y yt-dlp',             desc: 'sudo apt update+install' },
+        { cmd: 'sudo apt-get install -y yt-dlp',                            desc: 'sudo apt-get install' },
+        { cmd: 'sudo apt-get update && sudo apt-get install -y yt-dlp',     desc: 'sudo apt-get update+install' },
+        { cmd: 'sudo snap install yt-dlp',                                  desc: 'snap install' },
+
+        // ── pacman / AUR (Arch, Manjaro) ──────────────────────
+        { cmd: 'sudo pacman -S --noconfirm yt-dlp',                         desc: 'pacman -S' },
+        { cmd: 'sudo pacman -Syu --noconfirm yt-dlp',                       desc: 'pacman -Syu' },
+        { cmd: 'yay -S --noconfirm yt-dlp',                                 desc: 'yay (AUR)' },
+        { cmd: 'paru -S --noconfirm yt-dlp',                                desc: 'paru (AUR)' },
+
+        // ── apk (Alpine, Docker Alpine) ───────────────────────
+        { cmd: 'apk add yt-dlp',                                            desc: 'apk add' },
+        { cmd: 'apk update && apk add yt-dlp',                              desc: 'apk update+add' },
+
+        // ── dnf (Fedora, RHEL 8+, Rocky, Alma) ───────────────
+        { cmd: 'sudo dnf install -y yt-dlp',                                desc: 'dnf install' },
+        { cmd: 'sudo dnf upgrade -y && sudo dnf install -y yt-dlp',         desc: 'dnf upgrade+install' },
+
+        // ── yum (CentOS 7, RHEL 7) ────────────────────────────
+        { cmd: 'sudo yum install -y yt-dlp',                                desc: 'yum install' },
+        { cmd: 'sudo yum update -y && sudo yum install -y yt-dlp',          desc: 'yum update+install' },
+
+        // ── zypper (openSUSE) ─────────────────────────────────
+        { cmd: 'sudo zypper install -y yt-dlp',                             desc: 'zypper install' },
+        { cmd: 'sudo zypper refresh && sudo zypper install -y yt-dlp',      desc: 'zypper refresh+install' },
+
+        // ── xbps (Void Linux) ─────────────────────────────────
+        { cmd: 'sudo xbps-install -y yt-dlp',                               desc: 'xbps install' },
+        { cmd: 'sudo xbps-install -Sy yt-dlp',                              desc: 'xbps sync+install' },
+
+        // ── brew (macOS / Linux brew) ─────────────────────────
+        { cmd: 'brew install yt-dlp',                                       desc: 'brew install' },
+        { cmd: 'brew upgrade yt-dlp',                                       desc: 'brew upgrade' },
+        { cmd: 'sudo port install yt-dlp',                                  desc: 'macports install' },
+
+        // ── Windows ───────────────────────────────────────────
+        { cmd: 'winget install -e --id yt-dlp.yt-dlp -h --accept-source-agreements', desc: 'winget' },
+        { cmd: 'choco install yt-dlp -y',                                   desc: 'chocolatey' },
+        { cmd: 'scoop install yt-dlp',                                      desc: 'scoop' },
+
+        // ── Binary direct download (ultimate fallback) ────────
+        { cmd: `curl -L "${YTDLP_BIN_URL}" -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp`,  desc: 'binary curl → /usr/local/bin' },
+        { cmd: `wget -q "${YTDLP_BIN_URL}" -O /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp`,  desc: 'binary wget → /usr/local/bin' },
+        { cmd: `curl -L "${YTDLP_BIN_URL}" -o /usr/bin/yt-dlp && chmod a+rx /usr/bin/yt-dlp`,              desc: 'binary curl → /usr/bin' },
+        { cmd: `wget -q "${YTDLP_BIN_URL}" -O /usr/bin/yt-dlp && chmod a+rx /usr/bin/yt-dlp`,              desc: 'binary wget → /usr/bin' },
+        { cmd: `curl -L "${YTDLP_BIN_URL}" -o "${termuxBin}" && chmod a+rx "${termuxBin}"`,                desc: 'binary curl → termux bin' },
+        { cmd: `wget -q "${YTDLP_BIN_URL}" -O "${termuxBin}" && chmod a+rx "${termuxBin}"`,                desc: 'binary wget → termux bin' },
+        { cmd: `curl -L "${YTDLP_BIN_URL}" -o "${prefixBin}" && chmod a+rx "${prefixBin}"`,                desc: 'binary curl → PREFIX/bin' },
+        { cmd: `wget -q "${YTDLP_BIN_URL}" -O "${prefixBin}" && chmod a+rx "${prefixBin}"`,                desc: 'binary wget → PREFIX/bin' },
+        { cmd: `mkdir -p "${homeBin.replace(/\/yt-dlp$/, '')}" && curl -L "${YTDLP_BIN_URL}" -o "${homeBin}" && chmod a+rx "${homeBin}"`, desc: 'binary curl → ~/bin' },
+        { cmd: `mkdir -p "${homeBin.replace(/\/yt-dlp$/, '')}" && wget -q "${YTDLP_BIN_URL}" -O "${homeBin}" && chmod a+rx "${homeBin}"`, desc: 'binary wget → ~/bin' },
+    ];
+
+    let attempt = 0;
+    for (const method of allMethods) {
+        attempt++;
+        try {
+            log.info(`[${attempt}/${allMethods.length}] ${method.desc}`);
+            execSync(method.cmd, { stdio: 'pipe', timeout: 120000, shell: '/bin/bash' });
+
+            if (commandExists('yt-dlp')) {
+                try {
+                    const ver = execSync('yt-dlp --version', { encoding: 'utf8', timeout: 5000 }).trim();
+                    log.success(`✅ yt-dlp ${ver} — සාර්ථකයි! (method: ${method.desc})`);
+                } catch {
+                    log.success(`✅ yt-dlp install/update සාර්ථකයි!`);
+                }
+                return true;
+            }
+        } catch (e) {
+            log.warn(`✗ [${attempt}] ${method.desc}`);
+        }
+    }
+
+    log.error('❌ yt-dlp install සියලු methods fail — bot limited mode හි run වෙනවා.');
+    return false;
+}
+
 async function autoInstallDependencies() {
     const osInfo = detectOS();
     
@@ -730,7 +903,14 @@ async function autoInstallDependencies() {
         await autoInstallNodeJS(osInfo);
         await autoInstallPython(osInfo);
     } catch (e) {
-        log.warn('System upgrade/install අසාර්ථකයි, ඉපිසිරුවමින්...');
+        log.warn('System upgrade/install අසාර්ථකයි, ඉදිරියට යමින්...');
+    }
+
+    // yt-dlp — bot start වෙන හැම විටම install / update / upgrade
+    try {
+        await installOrUpdateYtDlp(osInfo);
+    } catch (e) {
+        log.warn('yt-dlp install/update අසාර්ථකයි: ' + e.message);
     }
 
     // Check npm
@@ -908,7 +1088,9 @@ async function autoInstallDependencies() {
     //   sox         - shasikala method 30 audio convert
     //   node-fetch  - (npm) lib/scraper API methods 17-53 (cobalt, invidious, etc.)
     // ════════════════════════════════════════════════════════════
-    const mandatorySysDeps = ['ffmpeg', 'python3', 'yt-dlp'];
+    // yt-dlp සහ python3 mandatory ලිස්ට් එකෙන් ඉවත් කරලා
+    // වෙනම dedicated function එකෙන් handle කරනවා (pip3 / binary)
+    const mandatorySysDeps = ['ffmpeg'];
     const optionalSysDeps = {
         'curl':        'HTTP streaming + API calls (shasikala & lib/scraper 50+ methods)',
         'wget':        'direct file download fallback (shasikala method 29)',

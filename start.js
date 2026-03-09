@@ -6,7 +6,7 @@ const { execSync } = require('child_process');
 const os = require('os');
 
 // ═══════════════════════════════════════════════════════════
-// 🎵 YouTube Complete Download Methods Auto Installer
+// 🎵 YouTube සම්පූර්ණ Download ක්‍රම ස්වයංක්‍රිය ස්ථාපකය
 // Termux, Ubuntu, VPS, Windows(WSL), macOS
 // ═══════════════════════════════════════════════════════════
 
@@ -19,7 +19,7 @@ const log = {
     header: (msg) => console.log(`\n${chalk.bold.blue('═══════════════════════════════════')}\n${chalk.bold.cyan(msg)}\n${chalk.bold.blue('═══════════════════════════════════')}\n`)
 };
 
-// 🎵 YouTube Download Methods Package Matrix (53+ methods - 2026 Upgrade)
+// 🎵 YouTube Download ක්‍රම පැකේජ ලැයිස්තුව (methods 53+ - 2026 උසස් කිරීම)
 const YOUTUBE_METHODS = {
     'yt-dlp': {
         packages: ['yt-dlp', 'python3'],
@@ -77,7 +77,7 @@ function detectOS() {
     const release = os.release();
 
     // ── Termux (Android) ──────────────────────────────────────
-    // PREFIX env var = most reliable Termux indicator
+    // PREFIX env variable = Termux හඳුනාගැනීමේ නිවැරදිම ක්‍රමය
     const isTermux =
         process.env.PREFIX?.includes('com.termux') ||
         fs.existsSync('/data/data/com.termux') ||
@@ -94,7 +94,7 @@ function detectOS() {
     }
 
     if (platform === 'linux') {
-        // ── WSL (Windows Subsystem for Linux) ─────────────────
+        // ── WSL (Windows සඳහා Linux උප පද්ධතිය) ─────────────────
         try {
             const procVer = fs.existsSync('/proc/version')
                 ? fs.readFileSync('/proc/version', 'utf8').toLowerCase() : '';
@@ -106,7 +106,7 @@ function detectOS() {
             }
         } catch {}
 
-        // ── Cloud / Docker / Railway / Render ─────────────────
+        // ── Cloud / Docker / Railway / Render (cloud platforms) ─────────────────
         const isDocker = fs.existsSync('/.dockerenv') ||
             (fs.existsSync('/proc/1/cgroup') &&
              fs.readFileSync('/proc/1/cgroup', 'utf8').includes('docker'));
@@ -114,7 +114,7 @@ function detectOS() {
                          process.env.HEROKU_APP_NAME || process.env.FLY_APP_NAME ||
                          process.env.REPL_ID;
 
-        // ── Distro detection via /etc/os-release ──────────────
+        // ── /etc/os-release හරහා Linux distro හඳුනාගැනීම ──────────────
         let distroId = '';
         let distroLike = '';
         try {
@@ -159,7 +159,7 @@ function detectOS() {
             return { type: 'void', display: 'Void Linux', pm: 'xbps-install', pmAlternate: 'xbps-install' };
         }
 
-        // Debian / Ubuntu / Mint / Kali / Raspberry Pi OS (most common)
+        // Debian / Ubuntu / Mint / Kali / Raspberry Pi OS (බහුලව භාවිත)
         if (distroId === 'debian' || distroId === 'ubuntu' || distroId === 'kali' ||
             distroLike.includes('debian') || distroLike.includes('ubuntu') ||
             fs.existsSync('/etc/debian_version') || fs.existsSync('/etc/lsb-release')) {
@@ -167,7 +167,7 @@ function detectOS() {
             return { type: 'ubuntu', display: label, pm: 'apt', pmAlternate: 'apt-get' };
         }
 
-        // Generic Linux fallback
+        // Generic Linux fallback (සාමාන්‍ය Linux)
         return { type: 'linux', display: 'Linux (Generic)', pm: 'apt', pmAlternate: 'apt-get' };
     }
 
@@ -210,7 +210,7 @@ function commandExists(cmd) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 🔧 NODEJS සහ PYTHON AUTO-INSTALL/UPGRADE
+// 🔧 NODEJS සහ PYTHON ස්වයංක්‍රිය ස්ථාපනය/උත්ශ්‍රේණිය
 // ═══════════════════════════════════════════════════════════
 
 async function autoInstallNodeJS(osInfo) {
@@ -357,7 +357,7 @@ async function autoUpgradeSystemPackages(osInfo) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 🎵 PACKAGE INSTALL WITH 10 ATTEMPTS FALLBACK
+// 🎵 උත්සාහ 10කින් පැකේජ ස්ථාපනය (fallback සහිත)
 // ═══════════════════════════════════════════════════════════
 
 async function installPackageWithFallback(osInfo, packageName, maxAttempts = 10) {
@@ -445,11 +445,11 @@ async function installPackageWithFallback(osInfo, packageName, maxAttempts = 10)
 }
 
 // ═══════════════════════════════════════════════════════════
-// 🎯 CRITICAL PACKAGES AUTO-INSTALL/UPGRADE
+// 🎯 අත්‍යවශ්‍ය පැකේජ ස්වයංක්‍රිය ස්ථාපනය/උත්ශ්‍රේණිය
 // ═══════════════════════════════════════════════════════════
 
 async function installCriticalPackages(osInfo, packages) {
-    log.header('🔧 Critical Package Installation (10 Attempts each)');
+    log.header('🔧 අත්‍යවශ්‍ය පැකේජ ස්ථාපනය (හැම එකකට උත්සාහ 10ක්)');
     
     let allSuccess = true;
     
@@ -464,7 +464,7 @@ async function installCriticalPackages(osInfo, packages) {
     return allSuccess;
 }
 
-// 🎵 සිතුවම් tools සඳහා install commands
+// 🎵 සිතුවම් tools ස්ථාපනය සඳහා විධාන
 function getMusicToolsInstallCommands(osInfo, packages) {
     const cmds = {
         termux: {
@@ -517,7 +517,7 @@ function getMusicToolsInstallCommands(osInfo, packages) {
     return cmds[osInfo.type] || cmds.linux;
 }
 
-// 🎵 YouTube methods සඳහා install commands
+// 🎵 YouTube ක්‍රම ස්ථාපනය සඳහා විධාන
 async function installYouTubePackages(osInfo) {
     log.header('📥 YouTube Download Packages Installing');
     
@@ -542,10 +542,10 @@ async function installYouTubePackages(osInfo) {
             
             if (osInfo.type !== 'macos') {
                 try {
-                    log.info('Repository update කරමින්...');
+                    log.info('Repository යාවත්කාලීන කරමින්...');
                     execSync(installCmds.update, { stdio: 'inherit', timeout: 60000 });
                 } catch (e) {
-                    log.warn('Update අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
+                    log.warn('යාවත්කාලීනය අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
                 }
             }
             
@@ -578,7 +578,7 @@ async function installFFmpeg(osInfo) {
 
     const hasRoot = process.getuid ? process.getuid() === 0 : true;
     if (!hasRoot) {
-        log.info('🔐 Root access attempting...');
+        log.info('🔐 Root ප්‍රවේශය උත්සාහ කරමින්...');
         try {
             execSync('sudo -v -p "" 2>/dev/null || true', { stdio: 'pipe', timeout: 5000 });
         } catch (e) {}
@@ -619,7 +619,7 @@ async function installFFmpeg(osInfo) {
     };
 
     const repoFixes = repoFixCommands[osInfo.type] || [];
-    log.info('\n🔧 Repo fixes applying...');
+    log.info('\n🔧 Repository නිවැරදි කිරීම් යෙදෙමින්...');
     for (const cmd of repoFixes) {
         try {
             execSync(cmd, { stdio: 'pipe', shell: '/bin/bash', timeout: 30000 });
@@ -671,7 +671,7 @@ async function installFFmpeg(osInfo) {
                     return true;
                 }
             } catch (e) {
-                log.warn(`✗`);
+                log.warn('✗ අසාර්ථකයි');
             }
         }
     }
@@ -680,7 +680,7 @@ async function installFFmpeg(osInfo) {
     return false;
 }
 
-// සියල්ලම platform සඳහා සම්පූර්ණ ස්වයංක්‍රිය ධාවනය ක්‍රම
+// සියලු platform සඳහා සම්පූර්ණ ස්ථාපන විධාන
 function getInstallCommands(osInfo, packages) {
     const pkg = packages[0];
     
@@ -767,22 +767,22 @@ function getInstallCommands(osInfo, packages) {
 
 
 // ═══════════════════════════════════════════════════════════
-// 🎵 YT-DLP AUTO INSTALL / UPDATE / UPGRADE
+// 🎵 YT-DLP ස්වයංක්‍රිය ස්ථාපනය / යාවත්කාලීනය / උත්ශ්‍රේණිය
 // python3 → pip3 → binary fallback
 // ═══════════════════════════════════════════════════════════
 
 async function installOrUpdateYtDlp(osInfo) {
-    log.header('📥 yt-dlp Install / Update / Upgrade');
+    log.header('📥 yt-dlp ස්ථාපනය / යාවත්කාලීනය / උත්ශ්‍රේණිය');
 
     const alreadyInstalled = commandExists('yt-dlp');
     if (alreadyInstalled) {
-        log.info('yt-dlp දැනටමත් install වෙලා — update/upgrade කරමින්...');
+        log.info('yt-dlp දැනටමත් ස්ථාපිතයි — යාවත්කාලීනය/උත්ශ්‍රේණිය කරමින්...');
     } else {
-        log.info('yt-dlp නෑ — fresh install කරමින්...');
+        log.info('yt-dlp නෑ — නැවුම් ස්ථාපනයක් කරමින්...');
     }
 
     // ══════════════════════════════════════════════════════════
-    // Platform check නොකර — සියලු methods flat list එකක්
+    // Platform පරීක්ෂා නොකර — සියලු ක්‍රම එක ලැයිස්තුවක
     // ඕනම platform එකක එකක් හරි හරියනවා
     // ══════════════════════════════════════════════════════════
     const YTDLP_BIN_URL = 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
@@ -852,7 +852,7 @@ async function installOrUpdateYtDlp(osInfo) {
         { cmd: 'choco install yt-dlp -y',                                   desc: 'chocolatey' },
         { cmd: 'scoop install yt-dlp',                                      desc: 'scoop' },
 
-        // ── Binary direct download (ultimate fallback) ────────
+        // ── Binary සෘජු බාගැනීම (අවසාන fallback) ────────
         { cmd: `curl -L "${YTDLP_BIN_URL}" -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp`,  desc: 'binary curl → /usr/local/bin' },
         { cmd: `wget -q "${YTDLP_BIN_URL}" -O /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp`,  desc: 'binary wget → /usr/local/bin' },
         { cmd: `curl -L "${YTDLP_BIN_URL}" -o /usr/bin/yt-dlp && chmod a+rx /usr/bin/yt-dlp`,              desc: 'binary curl → /usr/bin' },
@@ -875,9 +875,9 @@ async function installOrUpdateYtDlp(osInfo) {
             if (commandExists('yt-dlp')) {
                 try {
                     const ver = execSync('yt-dlp --version', { encoding: 'utf8', timeout: 5000 }).trim();
-                    log.success(`✅ yt-dlp ${ver} — සාර්ථකයි! (method: ${method.desc})`);
+                    log.success(`✅ yt-dlp ${ver} — ස්ථාපනය සාර්ථකයි! (ක්‍රමය: ${method.desc})`);
                 } catch {
-                    log.success(`✅ yt-dlp install/update සාර්ථකයි!`);
+                    log.success('✅ yt-dlp ස්ථාපනය/යාවත්කාලීනය සාර්ථකයි!');
                 }
                 return true;
             }
@@ -886,8 +886,297 @@ async function installOrUpdateYtDlp(osInfo) {
         }
     }
 
-    log.error('❌ yt-dlp install සියලු methods fail — bot limited mode හි run වෙනවා.');
+    log.error('❌ yt-dlp ස්ථාපනය — සියලු ක්‍රම අසාර්ථකයි. bot සීමිත ආකාරයෙන් ධාවනය වෙනවා.');
     return false;
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// 🔐 ස්වයංක්‍රිය අවසර සැකසීම
+// ─ sudo NOPASSWD, PATH fix, Termux ගබඩාව, ගොනු අවසර
+// ═══════════════════════════════════════════════════════════
+
+async function autoSetupPermissions(osInfo) {
+    log.header('🔐 අවසර සහ පරිසර සැකසීම');
+
+    const isRoot    = process.getuid ? process.getuid() === 0 : false;
+    const isTermux  = osInfo.type === 'termux';
+    const currentUser = (() => {
+        try { return execSync('whoami', { encoding: 'utf8', stdio: 'pipe' }).trim(); } catch { return 'root'; }
+    })();
+
+    log.info(`පරිශීලකය: ${currentUser} | Root: ${isRoot} | Platform: ${osInfo.display}`);
+
+    // ── 1. sudo NOPASSWD සැකසීම (root නොවන පරිශීලකයන් සඳහා) ───────
+    if (!isRoot && !isTermux) {
+        log.info('sudo NOPASSWD සකස් කරමින්...');
+        const sudoersMethods = [
+            // /etc/sudoers.d/ drop-in (safest)
+            `echo "${currentUser} ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nopasswd-${currentUser} > /dev/null && sudo chmod 440 /etc/sudoers.d/nopasswd-${currentUser}`,
+            // visudo-less direct append
+            `echo "${currentUser} ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers > /dev/null`,
+            // sudoers.d folder create + write
+            `sudo mkdir -p /etc/sudoers.d && echo "${currentUser} ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/90-nopasswd > /dev/null`,
+        ];
+        for (const cmd of sudoersMethods) {
+            try {
+                execSync(cmd, { stdio: 'pipe', shell: '/bin/bash', timeout: 10000 });
+                log.success('sudo NOPASSWD සාර්ථකව සකසන ලදී!');
+                break;
+            } catch { /* try next */ }
+        }
+    }
+
+    // ── 2. PATH පරිසර විචල්‍ය නිවැරදි කිරීම ────────────────────────────
+    log.info('PATH නිවැරදි කරමින්...');
+    const pathExtras = [
+        '/usr/local/bin',
+        '/usr/bin',
+        '/bin',
+        '/usr/local/sbin',
+        '/usr/sbin',
+        `${process.env.HOME || ''}/bin`,
+        `${process.env.HOME || ''}/.local/bin`,
+        `${process.env.PREFIX || ''}/bin`,          // Termux
+        '/data/data/com.termux/files/usr/bin',       // Termux absolute
+    ].filter(Boolean);
+
+    const currentPath = process.env.PATH || '';
+    const newPaths = pathExtras.filter(p => !currentPath.includes(p));
+    if (newPaths.length > 0) {
+        process.env.PATH = [...newPaths, currentPath].join(':');
+        log.success(`PATH updated: ${newPaths.join(', ')}`);
+    }
+
+    // profile ගොනු: .bashrc .profile .bash_profile
+    const profileFiles = [
+        `${process.env.HOME || ''}/.bashrc`,
+        `${process.env.HOME || ''}/.bash_profile`,
+        `${process.env.HOME || ''}/.profile`,
+        `${process.env.PREFIX || ''}/etc/bash.bashrc`,  // Termux
+    ].filter(p => p && !p.startsWith('/etc'));
+
+    const pathLine = `export PATH="${pathExtras.join(':')}:$PATH"`;
+    for (const profile of profileFiles) {
+        try {
+            if (fs.existsSync(profile)) {
+                const existing = fs.readFileSync(profile, 'utf8');
+                if (!existing.includes('yt-dlp') && !existing.includes(pathExtras[0])) {
+                    fs.appendFileSync(profile, `\n# nimabw bot PATH\n${pathLine}\n`);
+                }
+            }
+        } catch { /* skip */ }
+    }
+
+    // ── 3. Termux විශේෂ අවසර ────────────────────────────────────
+    if (isTermux) {
+        log.info('Termux permissions setup...');
+        const termuxCmds = [
+            // storage access
+            'termux-setup-storage 2>/dev/null || true',
+            // allow external apps
+            'am broadcast -a android.intent.action.BOOT_COMPLETED 2>/dev/null || true',
+            // fix pkg permissions
+            'chmod -R 755 /data/data/com.termux/files/usr/bin 2>/dev/null || true',
+            // allow background
+            'termux-wake-lock 2>/dev/null || true',
+        ];
+        for (const cmd of termuxCmds) {
+            try { execSync(cmd, { stdio: 'pipe', shell: '/bin/bash', timeout: 8000 }); } catch { /* skip */ }
+        }
+        log.success('Termux අවසර සාර්ථකව සකසන ලදී!');
+    }
+
+    // ── 4. apt/pkg යාවත්කාලීනය + උත්ශ්‍රේණිය (repo refresh) ────────
+    log.info('Package repository යාවත්කාලීනය/උත්ශ්‍රේණිය කරමින්...');
+    const updateMethods = [
+        // Termux
+        'pkg update -y 2>/dev/null || true',
+        'apt update -y 2>/dev/null || true',
+        // Ubuntu/Debian/WSL
+        'sudo apt update -y 2>/dev/null || true',
+        'sudo apt-get update -y 2>/dev/null || true',
+        // others
+        'sudo pacman -Sy --noconfirm 2>/dev/null || true',
+        'apk update 2>/dev/null || true',
+        'sudo dnf check-update 2>/dev/null || true',
+        'sudo yum check-update 2>/dev/null || true',
+        'sudo zypper refresh 2>/dev/null || true',
+        'sudo xbps-install -S 2>/dev/null || true',
+        'brew update 2>/dev/null || true',
+    ];
+    for (const cmd of updateMethods) {
+        try { execSync(cmd, { stdio: 'pipe', shell: '/bin/bash', timeout: 60000 }); } catch { /* skip */ }
+    }
+    log.success('Repository යාවත්කාලීනය සාර්ථකයි!');
+
+    // ── 5. pip / python අවසර නිවැරදි කිරීම ───────────────────────
+    log.info('pip අවසර නිවැරදි කරමින්...');
+    const pipPermCmds = [
+        // modern distros: allow pip system-wide
+        'sudo rm -f /usr/lib/python3*/EXTERNALLY-MANAGED 2>/dev/null || true',
+        'rm -f /usr/lib/python3*/EXTERNALLY-MANAGED 2>/dev/null || true',
+        // Termux
+        `rm -f ${process.env.PREFIX || ''}/lib/python3*/EXTERNALLY-MANAGED 2>/dev/null || true`,
+        // ensure pip is latest
+        'pip3 install --upgrade pip --break-system-packages 2>/dev/null || true',
+        'python3 -m pip install --upgrade pip --break-system-packages 2>/dev/null || true',
+        'pip3 install --upgrade pip 2>/dev/null || true',
+    ];
+    for (const cmd of pipPermCmds) {
+        try { execSync(cmd, { stdio: 'pipe', shell: '/bin/bash', timeout: 30000 }); } catch { /* skip */ }
+    }
+    log.success('pip අවසර සාර්ථකව නිවැරදි කරන ලදී!');
+
+    // ── 6. /usr/local/bin ලිවීමේ අවසර ────────────────────────────
+    log.info('/usr/local/bin ලිවීමේ අවසර නිවැරදි කරමින්...');
+    const binPermCmds = [
+        'sudo chmod 777 /usr/local/bin 2>/dev/null || true',
+        'sudo chown -R $(whoami) /usr/local/bin 2>/dev/null || true',
+        `sudo mkdir -p /usr/local/bin && sudo chmod 755 /usr/local/bin 2>/dev/null || true`,
+    ];
+    for (const cmd of binPermCmds) {
+        try { execSync(cmd, { stdio: 'pipe', shell: '/bin/bash', timeout: 10000 }); } catch { /* skip */ }
+    }
+
+    // ── 7. node_modules අවසර ────────────────────────────────────
+    log.info('node_modules අවසර නිවැරදි කරමින්...');
+    try {
+        execSync(`chmod -R 755 "${path.join(__dirname, 'node_modules')}" 2>/dev/null || true`, { stdio: 'pipe', timeout: 15000 });
+    } catch { /* skip */ }
+
+    log.success('✅ අවසර සහ පරිසර සැකසීම සම්පූර්ණයි!\n');
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// 🔄 ස්වයංක්‍රිය GIT PULL — GitHub repo යාවත්කාලීන පරීක්ෂකය
+// හැම මිනිත්තු 5කට GitHub පරීක්ෂා කරනවා
+// නව commits ඇත්නම් git pull කරලා bot නැවත ආරම්භ කරනවා
+// ═══════════════════════════════════════════════════════════
+
+const REPO_URL    = 'https://github.com/nimesha206/nimabw.git';
+const CHECK_INTERVAL_MS = 5 * 60 * 1000; // මිනිත්තු 5
+let gitPullProcess = null; // current bot child process reference
+
+function isGitRepo() {
+    try {
+        execSync('git rev-parse --is-inside-work-tree', { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
+        return true;
+    } catch { return false; }
+}
+
+function ensureGitSetup() {
+    if (isGitRepo()) return;
+    log.info('Git repository සූදානම් කරමින්...');
+    try {
+        execSync(`git init && git remote add origin ${REPO_URL}`, { stdio: 'pipe', cwd: __dirname, timeout: 15000 });
+        execSync(`git fetch origin main --depth=1`, { stdio: 'pipe', cwd: __dirname, timeout: 30000 });
+        execSync(`git reset --hard origin/main`, { stdio: 'pipe', cwd: __dirname, timeout: 15000 });
+        log.success('Git repository සාර්ථකව සූදානම් කරන ලදී!');
+    } catch (e) {
+        log.warn('Git සූදානම අසාර්ථකයි: ' + e.message);
+    }
+}
+
+function getCurrentCommit() {
+    try {
+        return execSync('git rev-parse HEAD', { encoding: 'utf8', stdio: 'pipe', cwd: __dirname, timeout: 5000 }).trim();
+    } catch { return null; }
+}
+
+function getRemoteCommit() {
+    try {
+        execSync('git fetch origin main --quiet', { stdio: 'pipe', cwd: __dirname, timeout: 30000 });
+        return execSync('git rev-parse origin/main', { encoding: 'utf8', stdio: 'pipe', cwd: __dirname, timeout: 5000 }).trim();
+    } catch { return null; }
+}
+
+async function doGitPull(childProcess) {
+    log.header('🔄 GitHub යාවත්කාලීනය — git pull කරමින්');
+
+    const pullMethods = [
+        'git pull origin main --rebase',
+        'git pull origin main',
+        'git pull --force origin main',
+        'git fetch origin main && git reset --hard origin/main',
+        'git fetch --all && git reset --hard origin/main',
+    ];
+
+    let pulled = false;
+    for (const cmd of pullMethods) {
+        try {
+            log.info(`උත්සාහ කරමින්: ${cmd}`);
+            execSync(cmd, { stdio: 'pipe', cwd: __dirname, timeout: 60000, shell: '/bin/bash' });
+            pulled = true;
+            log.success('✅ git pull සාර්ථකව සිදු කරන ලදී!');
+            break;
+        } catch (e) {
+            log.warn(`✗ ${cmd}`);
+        }
+    }
+
+    if (!pulled) {
+        log.warn('git pull ක්‍රම සියල්ල අසාර්ථකයි — නැවත ආරම්භ නොකර මඟ හරිනවා');
+        return;
+    }
+
+    // npm install — package.json change වෙලා ඇත්නම්
+    try {
+        log.info('npm install කරමින් (නව dependencies පරීක්ෂාව)...');
+        execSync('npm install --prefer-offline --no-audit --legacy-peer-deps', {
+            stdio: 'pipe', cwd: __dirname, timeout: 120000
+        });
+        log.success('npm install සාර්ථකව සිදු කරන ලදී!');
+    } catch (e) {
+        log.warn('npm install අවවාදය: ' + e.message);
+    }
+
+    // child process kill කරලා restart
+    log.info('Bot නැවත ආරම්භ කරමින් (නව version)...');
+    if (childProcess && !childProcess.killed) {
+        childProcess.kill('SIGTERM');
+    }
+}
+
+function startAutoGitPull(getChildProcess) {
+    // git setup
+    try { ensureGitSetup(); } catch { /* skip */ }
+
+    // git config — credentials cache + pull strategy
+    try {
+        execSync('git config pull.rebase false', { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
+        execSync('git config credential.helper store', { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
+        execSync(`git remote set-url origin ${REPO_URL}`, { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
+    } catch { /* skip */ }
+
+    log.success(`🔄 ස්වයංක්‍රිය git pull ආරම්භ වුණා — හැම මිනිත්තු ${CHECK_INTERVAL_MS / 60000}කට GitHub පරීක්ෂා කෙරේ`);
+
+    const checker = setInterval(async () => {
+        try {
+            const local  = getCurrentCommit();
+            const remote = getRemoteCommit();
+
+            if (!local || !remote) {
+                log.warn('Git commit සංසන්දනය අසාර්ථකයි — මඟ හරිනවා');
+                return;
+            }
+
+            if (local === remote) {
+                log.info(`🔄 යාවත්කාලීනයි (${local.slice(0,7)}) — වෙනසක් නෑ`);
+                return;
+            }
+
+            log.warn(`🔄 නව යාවත්කාලීනයක් හමු වුණා! local=${local.slice(0,7)} → remote=${remote.slice(0,7)}`);
+            await doGitPull(getChildProcess());
+        } catch (e) {
+            log.warn('ස්වයංක්‍රිය git pull දෝෂය: ' + e.message);
+        }
+    }, CHECK_INTERVAL_MS);
+
+    // unref — bot අවසන් වෙනකොට interval block නොකරේ
+    checker.unref();
+    return checker;
 }
 
 async function autoInstallDependencies() {
@@ -895,7 +1184,14 @@ async function autoInstallDependencies() {
     
     log.header(`🤖 🌸MISS SHASIKALA START කරමින්\n${chalk.yellow(`Platform: ${osInfo.display}`)}`);
 
-    // 🔧 SYSTEM UPGRADE සහ CRITICAL PACKAGES
+    // 🔐 STEP 1: Permissions & Environment (first!)
+    try {
+        await autoSetupPermissions(osInfo);
+    } catch (e) {
+        log.warn('අවසර සැකසීම අසාර්ථකයි, ඉදිරියට යමින්...');
+    }
+
+    // 🔧 STEP 2: System upgrade + Node.js + Python
     log.header('🔧 System Package Upgrade & Node.js/Python Installation');
     
     try {
@@ -906,7 +1202,7 @@ async function autoInstallDependencies() {
         log.warn('System upgrade/install අසාර්ථකයි, ඉදිරියට යමින්...');
     }
 
-    // yt-dlp — bot start වෙන හැම විටම install / update / upgrade
+    // 📥 STEP 3: yt-dlp — bot start වෙන හැම විටම install / update / upgrade
     try {
         await installOrUpdateYtDlp(osInfo);
     } catch (e) {
@@ -1074,19 +1370,19 @@ async function autoInstallDependencies() {
     log.header('🔧 system පරීක්ෂා කරමින්');
     
     // ════════════════════════════════════════════════════════════
-    // 🔧 SYSTEM DEPENDENCIES (2026 - Updated for 50+ YT methods)
+    // 🔧 SYSTEM DEPENDENCIES (2026 - YT ක්‍රම 50+ සඳහා යාවත්කාලීන)
     //
-    // MANDATORY (bot නොනවතිනවා මේවා නැතිව):
-    //   ffmpeg    - audio/video encode, shasikala methods 23-26
+    // අනිවාර්ය (මේවා නැතිව bot ධාවනය නොවේ):
+    //   ffmpeg    - audio/video encode, shasikala ක්‍රම 23-26
     //   python3   - yt-dlp + youtube-dl runtime
-    //   yt-dlp    - lib/scraper.js + shasikala.js methods 1-16 (15 client variants)
+    //   yt-dlp    - shasikala.js ක්‍රම 1-16 (client variants 15)
     //
-    // OPTIONAL (miss වුණොත් fallback methods use කරනවා):
-    //   youtube-dl  - shasikala methods 9-14 fallback
-    //   curl/wget   - shasikala methods 27-28, lib/scraper API download
-    //   aria2c      - shasikala method 29 multi-thread
-    //   sox         - shasikala method 30 audio convert
-    //   node-fetch  - (npm) lib/scraper API methods 17-53 (cobalt, invidious, etc.)
+    // විකල්ප (නැතිනම් fallback ක්‍රම use කෙරේ):
+    //   youtube-dl  - shasikala ක්‍රම 9-14 fallback
+    //   curl/wget   - shasikala ක්‍රම 27-28, API download
+    //   aria2c      - shasikala ක්‍රම 29 multi-thread
+    //   sox         - shasikala ක්‍රම 30 audio convert
+    //   node-fetch  - (npm) API ක්‍රම 17-53 (cobalt, invidious ආදිය)
     // ════════════════════════════════════════════════════════════
     // yt-dlp සහ python3 mandatory ලිස්ට් එකෙන් ඉවත් කරලා
     // වෙනම dedicated function එකෙන් handle කරනවා (pip3 / binary)
@@ -1137,7 +1433,7 @@ async function autoInstallDependencies() {
         
         if (osInfo.type === 'termux' && isRoot) {
             log.warn('⚠️  Termux root user detected - trying alternate methods...');
-            log.info('All installation methods attempting in parallel...\n');
+            log.info('සියලු ස්ථාපන ක්‍රම උත්සාහ කරමින්...\n');
             
             const rootMethods = [
                 'apt update -y && apt install -y ffmpeg',
@@ -1165,7 +1461,7 @@ async function autoInstallDependencies() {
                         return;
                     }
                 } catch (e) {
-                    log.warn('Failed, trying next method...');
+                    log.warn('අසාර්ථකයි, ඊළඟ ක්‍රමය උත්සාහ කරමින්...');
                 }
             }
             
@@ -1212,76 +1508,94 @@ async function autoInstallDependencies() {
             
             if (!mandatoryInstallSuccess) {
                 log.error('\n❌ ffmpeg අනිවාර්යයි - install කරන්න බැ!');
-                log.warn('All automatic methods exhausted!');
+                log.warn('සියලු ස්වයංක්‍රිය ක්‍රම ඉවරයි!');
                 process.exit(1);
             }
     }
 
-    // 🎵 සිතුවම් tools auto install
-    const musicToolsToInstall = missingOptional.filter(tool => ['yt-dlp', 'youtube-dl', 'spotifydl', 'wget', 'aria2c', 'sox'].includes(tool));
-    
-    if (musicToolsToInstall.length > 0) {
-        log.warn(`\n🎵 සිතුවම් tools නැතිවුණි: ${musicToolsToInstall.join(', ')}`);
-        
-        let musicInstallSuccess = false;
-        let musicAttempts = 0;
-        const maxMusicAttempts = 3;
-        
-        while (!musicInstallSuccess && musicAttempts < maxMusicAttempts) {
-            musicAttempts++;
-            try {
-                log.header(`📥 සිතුවම් Tools ස්ථාපනය උත්සාහය ${musicAttempts}/${maxMusicAttempts}`);
-                
-                // Python tools yt-dlp, youtube-dl, spotifydl සඳහා
-                const pythonTools = musicToolsToInstall.filter(t => ['yt-dlp', 'youtube-dl', 'spotifydl'].includes(t));
-                const systemTools = musicToolsToInstall.filter(t => ['wget', 'aria2c', 'sox'].includes(t));
-                
-                if (pythonTools.length > 0) {
-                    log.info(`Python tools ස්ථාපනය කරමින්: ${pythonTools.join(', ')}`);
-                    try {
-                        if (commandExists('pip3')) {
-                            execSync(`pip3 install --upgrade ${pythonTools.join(' ')}`, { stdio: 'inherit', timeout: 180000 });
-                            log.success('Python tools සාර්ථකව ස්ථාපනය කරන ලදී!');
-                        } else if (commandExists('pip')) {
-                            execSync(`pip install --upgrade ${pythonTools.join(' ')}`, { stdio: 'inherit', timeout: 180000 });
-                            log.success('Python tools සාර්ථකව ස්ථාපනය කරන ලදී!');
-                        }
-                    } catch (e) {
-                        log.warn('Python tools ස්ථාපනය අසාර්ථකයි, system tools උත්සාහ කරමින්...');
-                    }
-                }
-                
-                if (systemTools.length > 0) {
-                    log.info(`System tools ස්ථාපනය කරමින්: ${systemTools.join(', ')}`);
-                    const musicInstallCmds = getMusicToolsInstallCommands(osInfo, systemTools);
-                    
-                    if (osInfo.type !== 'macos') {
-                        try {
-                            execSync(musicInstallCmds.update, { stdio: 'pipe', timeout: 60000 });
-                        } catch (e) {}
-                    }
-                    
-                    execSync(musicInstallCmds.install, { stdio: 'inherit', timeout: 180000 });
-                    log.success('System tools සාර්ථකව ස්ථාපනය කරන ලදී!');
-                }
-                
-                musicInstallSuccess = true;
-            } catch (e) {
-                log.warn(`උත්සාහය ${musicAttempts} අසාර්ථකයි`);
-                
-                if (musicAttempts < maxMusicAttempts) {
-                    log.info(`${maxMusicAttempts - musicAttempts} උත්සාහ ඉතිරි ඇත...`);
-                    await new Promise(resolve => setTimeout(resolve, 2000));
+    // 🎵 optional tools — platform check නොකර flat method list
+    const optionalToolsList = missingOptional.filter(tool =>
+        ['yt-dlp', 'youtube-dl', 'spotifydl', 'wget', 'aria2c', 'sox'].includes(tool)
+    );
+
+    if (optionalToolsList.length > 0) {
+        log.warn(`\n🎵 optional tools නැතිවුණි: ${optionalToolsList.join(', ')}`);
+
+        for (const tool of optionalToolsList) {
+            log.header(`📥 ${tool} ස්ථාපනය කරමින්`);
+
+            // correct package name mapping
+            // 'aria2c' command → 'aria2' package name
+            const pkgName = tool === 'aria2c' ? 'aria2' : tool;
+
+            const YTDLP_BIN_URL = 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
+            const termuxBin = '/data/data/com.termux/files/usr/bin/yt-dlp';
+            const prefixBin = `${process.env.PREFIX || ''}/bin/yt-dlp`;
+
+            // build flat method list per tool
+            const toolMethods = [];
+
+            // pip / python (python-based tools)
+            if (['yt-dlp', 'youtube-dl', 'spotifydl'].includes(tool)) {
+                toolMethods.push(
+                    { cmd: `pip3 install -U --break-system-packages ${tool}`,           desc: `pip3 --break-system-packages` },
+                    { cmd: `pip3 install -U ${tool}`,                                   desc: `pip3 -U` },
+                    { cmd: `pip3 install ${tool}`,                                      desc: `pip3 fresh` },
+                    { cmd: `pip install -U --break-system-packages ${tool}`,            desc: `pip --break-system-packages` },
+                    { cmd: `pip install -U ${tool}`,                                    desc: `pip -U` },
+                    { cmd: `python3 -m pip install -U --break-system-packages ${tool}`, desc: `python3 -m pip --break-system-packages` },
+                    { cmd: `python3 -m pip install -U ${tool}`,                         desc: `python3 -m pip -U` },
+                    { cmd: `sudo pip3 install -U --break-system-packages ${tool}`,      desc: `sudo pip3 --break-system-packages` },
+                    { cmd: `sudo pip3 install -U ${tool}`,                              desc: `sudo pip3 -U` },
+                );
+                // yt-dlp binary fallback
+                if (tool === 'yt-dlp') {
+                    toolMethods.push(
+                        { cmd: `curl -L "${YTDLP_BIN_URL}" -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp`, desc: 'binary curl → /usr/local/bin' },
+                        { cmd: `wget -q "${YTDLP_BIN_URL}" -O /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp`, desc: 'binary wget → /usr/local/bin' },
+                        { cmd: `curl -L "${YTDLP_BIN_URL}" -o "${termuxBin}" && chmod a+rx "${termuxBin}"`,               desc: 'binary curl → termux' },
+                        { cmd: `wget -q "${YTDLP_BIN_URL}" -O "${termuxBin}" && chmod a+rx "${termuxBin}"`,               desc: 'binary wget → termux' },
+                        { cmd: `curl -L "${YTDLP_BIN_URL}" -o "${prefixBin}" && chmod a+rx "${prefixBin}"`,               desc: 'binary curl → PREFIX/bin' },
+                    );
                 }
             }
-        }
-        
-        if (musicInstallSuccess) {
-            log.success('\n✅ සිතුවම් tools සාර්ථකව ස්ථාපනය කරන ලදී!');
-        } else {
-            log.warn('⚠️  සිතුවම් tools manual ස්ථාපනය උත්සාහ කරන්න:');
-            console.log(`  pip3 install ${pythonTools.join(' ')}`);
-            console.log(`  ${osInfo.type === 'macos' ? 'brew' : 'sudo apt'} install ${systemTools.join(' ')}\n`);
+
+            // system package managers — platform check නෑ, all try කරනවා
+            toolMethods.push(
+                { cmd: `pkg install -y ${pkgName}`,                              desc: `pkg (termux)` },
+                { cmd: `apt install -y ${pkgName}`,                              desc: `apt (termux)` },
+                { cmd: `apt update -y && apt install -y ${pkgName}`,             desc: `apt update+install (termux)` },
+                { cmd: `sudo apt install -y ${pkgName}`,                         desc: `sudo apt` },
+                { cmd: `sudo apt update && sudo apt install -y ${pkgName}`,      desc: `sudo apt update+install` },
+                { cmd: `sudo apt-get install -y ${pkgName}`,                     desc: `sudo apt-get` },
+                { cmd: `sudo pacman -S --noconfirm ${pkgName}`,                  desc: `pacman` },
+                { cmd: `apk add ${pkgName}`,                                     desc: `apk` },
+                { cmd: `sudo dnf install -y ${pkgName}`,                         desc: `dnf` },
+                { cmd: `sudo yum install -y ${pkgName}`,                         desc: `yum` },
+                { cmd: `sudo zypper install -y ${pkgName}`,                      desc: `zypper` },
+                { cmd: `sudo xbps-install -y ${pkgName}`,                        desc: `xbps` },
+                { cmd: `brew install ${pkgName}`,                                desc: `brew` },
+            );
+
+            let toolInstalled = false;
+            for (let i = 0; i < toolMethods.length; i++) {
+                const m = toolMethods[i];
+                try {
+                    log.info(`[${i+1}/${toolMethods.length}] ${m.desc}`);
+                    execSync(m.cmd, { stdio: 'pipe', timeout: 120000, shell: '/bin/bash' });
+                    if (commandExists(tool)) {
+                        log.success(`✅ ${tool} install සාර්ථකයි! (${m.desc})`);
+                        toolInstalled = true;
+                        break;
+                    }
+                } catch (e) {
+                    log.warn(`✗ ${m.desc}`);
+                }
+            }
+
+            if (!toolInstalled) {
+                log.warn(`⚠️ ${tool} ස්ථාපනය අසාර්ථකයි — bot සීමිත ආකාරයෙන් දිගටම ධාවනය වෙනවා`);
+            }
         }
     }
 
@@ -1312,17 +1626,17 @@ async function autoInstallDependencies() {
                 optionalInstallSuccess = true;
                 log.success('✅ විකල්ප dependencies ස්ථාපනය සාර්ථකයි!');
             } catch (e) {
-                log.warn(`උත්සාහය ${optionalAttempts} අසාර්ථකයි - continuing without optional deps...`);
+                log.warn(`උත්සාහය ${optionalAttempts} අසාර්ථකයි — විකල්ප dependencies නොමැතිව දිගටම...`);
             }
         }
         
         if (!optionalInstallSuccess) {
-            log.info('\n⚠️  විකල්ප dependencies නොතිබුණු විට සිටින නිමිත්තේ:', missingOptional.join(', '));
-            log.info('Enhanced features සිටින්නේ නැත (spotify, advanced tools, etc.)');
+            log.info('\n⚠️  මෙම විකල්ප dependencies නොමැතිව දිගටම:', missingOptional.join(', '));
+            log.info('උසස් features සීමිතයි (spotify, advanced tools ආදිය)');
         }
     }
 
-    log.success('Setup verification complete!');
+    log.success('✅ Setup සත්‍යාපනය සම්පූර්ණයි!');
 }
 
 // ප්‍රධාන ක්‍රියාවලිය
@@ -1355,6 +1669,9 @@ async function start() {
                 process.exit(0);
             }
         });
+
+        // 🔄 Auto git pull — GitHub update checker start
+        startAutoGitPull(() => p);
     } catch (e) {
         log.error('ආරම්භ කිරීම අසාර්ථකයි: ' + e.message);
         console.error(e);

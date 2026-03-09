@@ -140,6 +140,16 @@ function checkNpmInstalled() {
     }
 }
 
+// විධානය සිටින්නේ නම් පරීක්ෂා කරමින්
+function commandExists(cmd) {
+    try {
+        execSync(`which ${cmd}`, { stdio: 'pipe' });
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 // ═══════════════════════════════════════════════════════════
 // 🔧 NODEJS සහ PYTHON AUTO-INSTALL/UPGRADE
 // ═══════════════════════════════════════════════════════════

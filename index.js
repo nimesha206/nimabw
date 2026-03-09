@@ -1,18 +1,5 @@
 require('./settings');
 require('./protection');
-
-// Check if node_modules is installed
-try {
-	const pino = require('pino');
-} catch (err) {
-	const chalk = require('chalk');
-	console.error(chalk.red.bold('❌ දෝෂ: pino module සොයා ගත නොහැකි!'));
-	console.error(chalk.yellow.bold('📦 node_modules ස්ථාපිතයි කරන්න:'));
-	console.error(chalk.cyan('npm install --legacy-peer-deps'));
-	console.error(chalk.red.bold('\nකැඩි බඩිතුස්යතාවගේ පසුව නැවත උත්සාහ කරන්න!'));
-	process.exit(1);
-}
-
 const os = require('os');
 const pino = require('pino');
 const axios = require('axios');
@@ -102,7 +89,7 @@ print('Date & Time', new Date().toLocaleString('en-US', { timeZone: 'Asia/Colomb
 console.log(chalk.green.bold('╚' + ('═'.repeat(30))));
 
 server.listen(PORT, () => {
-	console.log('🌸 MISS SHASIKALA [BOT] ක්රියාකාරී වී ඇත!');
+	console.log('🌸 MISS SHASIKALA [BOT] ක්‍රියාකාරී වී ඇත!');
 });
 
 async function startnimaBot() {
@@ -367,7 +354,7 @@ async function startnimaBot() {
 		if (global.db?.set[botNumber]?.anticall) {
 			for (let id of call) {
 				if (id.status === 'offer') {
-					let msg = await nimaBot.sendMessage(id.from, { text: `ස්වයංක්රීය පණිවිඩයකි: දැනට අපට ${id.isVideo ? 'වීඩියෝ' : 'කටහඬ'} ඇමතුම් ලබා ගත නොහැක.\n@${id.from.split('@')[0]} ඔබට උදව් අවශ්ය නම්, කරුණාකර හිමිකරු (Owner) සම්බන්ධ කර ගන්න.`, mentions: [id.from]});
+					let msg = await nimaBot.sendMessage(id.from, { text: `ස්වයංක්‍රීය පණිවිඩයකි: දැනට අපට ${id.isVideo ? 'වීඩියෝ' : 'කටහඬ'} ඇමතුම් ලබා ගත නොහැක.\n@${id.from.split('@')[0]} ඔබට උදව් අවශ්‍ය නම්, කරුණාකර හිමිකරු (Owner) සම්බන්ධ කර ගන්න.`, mentions: [id.from]});
 					await nimaBot.sendContact(id.from, global.owner, msg);
 					await nimaBot.rejectCall(id.id, id.from)
 				}

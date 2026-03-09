@@ -114,7 +114,7 @@ function commandExists(cmd) {
 function getInstallCommands(osInfo, packages) {
     const cmds = {
         termux: {
-            update: 'pkg update',
+            update: 'pkg update -y',
             install: `pkg install -y ${packages.join(' ')}`
         },
         ubuntu: {
@@ -261,9 +261,9 @@ async function autoInstallDependencies() {
     
     const systemDeps = {
         'ffmpeg': 'media processing',
-        'python': 'python scripts',
         'python3': 'python3 scripts',
-        'curl': 'http requests'
+        'curl': 'http requests',
+        'git': 'version control'
     };
 
     let missingSystemDeps = [];
@@ -287,25 +287,43 @@ async function autoInstallDependencies() {
         console.log(`  ${chalk.yellow(installCmds.update)}`);
         console.log(`  ${chalk.yellow(installCmds.install)}\n`);
         
-        try {
-            // Try to update and install
-            if (osInfo.type !== 'macos') {
-                execSync(installCmds.update, { stdio: 'inherit' });
-            }
-            
-            execSync(installCmds.install, { stdio: 'inherit' });
-            
-            log.success('පද්ධති අවශ්‍යතා සාර්ථකව ස්ථාපනය කරන ලදී!');
-        } catch (e) {
-            log.warn('පද්ධති අවශ්‍යතා ස්ථාපනය අසාර්ථකයි!');
-            log.info('කරුණාකර මෙම විධාන manual ලෙස ධාවනය කරන්න:');
-            console.log(`  ${chalk.cyan(installCmds.update)}`);
-            console.log(`  ${chalk.cyan(installCmds.install)}`);
-            
-            if (osInfo.type === 'termux') {
-                log.info('Termux සඳහා විශේෂයි:');
-                console.log(`  ${chalk.cyan('pkg update')}`);
-                console.log(`  ${chalk.cyan(`pkg install ${missingSystemDeps.join(' ')}`)}`);
+        let systemInstallSuccess = false;
+        let sysAttempts = 0;
+        const maxSysAttempts = 2;
+        
+        while (!systemInstallSuccess && sysAttempts < maxSysAttempts) {
+            sysAttempts++;
+            try {
+                // Try to update and install
+                if (osInfo.type !== 'macos') {
+                    try {
+                        execSync(installCmds.update, { stdio: 'inherit' });
+                    } catch (e) {
+                        log.warn('පැකේජ සඳහා update අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
+                    }
+                }
+                
+                execSync(installCmds.install, { stdio: 'inherit' });
+                
+                systemInstallSuccess = true;
+                log.success('පද්ධති අවශ්‍යතා සාර්ථකව ස්ථාපනය කරන ලදී!');
+            } catch (e) {
+                if (sysAttempts < maxSysAttempts) {
+                    log.warn(`පද්ධති ස්ථාපනය උත්සාහය ${sysAttempts} අසාර්ථකයි, නැවත උත්සාහ කරමින්...`);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                } else {
+                    log.warn('⚠️  පද්ධති අවශ්‍යතා ස්ථාපනය අසාර්ථකයි!');
+                    log.info('කරුණාකර මෙම විධාන manual ලෙස ධාවනය කරන්න:');
+                    console.log(`  ${chalk.cyan(installCmds.update)}`);
+                    console.log(`  ${chalk.cyan(installCmds.install)}`);
+                    
+                    if (osInfo.type === 'termux') {
+                        log.info('\nTermux සඳහා විශේෂයි:');
+                        console.log(`  ${chalk.cyan('pkg update -y')}`);
+                        console.log(`  ${chalk.cyan(`pkg install -y ${missingSystemDeps.join(' ')}`)}`);
+                        log.warn('\nTermux sudo නැති බැවින් නිවැරදි command භාවිතා කරන්න!');
+                    }
+                }
             }
         }
     } else {

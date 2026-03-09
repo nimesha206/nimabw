@@ -537,11 +537,15 @@ async function autoInstallDependencies() {
     // පද්ධති බිමට අවශ්‍යතා පරීක්ෂා කරමින් සහ නැතිවූ විට ස්වයංක්‍රියව ස්ථාපනය
     log.header('🔧 system පරීක්ෂා කරමින්');
     
-    const mandatorySysDeps = ['ffmpeg']; // ffmpeg is mandatory
+    // nima.js සඳහා අනිවාර්ය: ffmpeg, yt-dlp, spotifydl
+    const mandatorySysDeps = ['ffmpeg', 'yt-dlp']; 
     const optionalSysDeps = {
         'python3': 'python3 scripts',
         'curl': 'http requests',
-        'git': 'version control'
+        'git': 'version control',
+        'spotifydl': 'spotify downloads',
+        'imagemagick': 'image conversions',
+        'ghostscript': 'PDF/document processing'
     };
 
     let missingMandatory = [];
@@ -668,11 +672,37 @@ async function autoInstallDependencies() {
     // Handle missing optional dependencies (non-blocking)
     if (missingOptional.length > 0) {
         log.warn(`\nවිකල්ප dependencies නැතිවුණි: ${missingOptional.join(', ')}`);
-        log.info('සම්පූර්ණ කිරීමට optional dependencies ස්ථාපනය කරන්න (අනිවාර්ය නොවේ).');
+        log.info('✅ ස්වයංක්‍රිය ස්ථාපනය උත්සාහ කරමින්...\n');
         
-        const optionalCmds = getInstallCommands(osInfo, missingOptional);
-        log.info('Optional install command:');
-        console.log(`  ${chalk.yellow(optionalCmds.install)}`);
+        // Optional dependencies බිමට ස්ථාපන උත්සාහ කරමින්
+        let optionalInstallSuccess = false;
+        let optionalAttempts = 0;
+        const maxOptionalAttempts = 3;
+        
+        while (!optionalInstallSuccess && optionalAttempts < maxOptionalAttempts) {
+            optionalAttempts++;
+            try {
+                const optionalCmds = getInstallCommands(osInfo, missingOptional);
+                log.info(`[උත්සාහය ${optionalAttempts}/${maxOptionalAttempts}] විකල්ප dependencies ස්ථාපනය කරමින்...`);
+                console.log(`  ${chalk.cyan(optionalCmds.install)}\n`);
+                
+                execSync(optionalCmds.install, { 
+                    stdio: 'inherit',
+                    timeout: 180000,
+                    shell: '/bin/bash'
+                });
+                
+                optionalInstallSuccess = true;
+                log.success('✅ විකල්ප dependencies ස්ථාපනය සාර්ථකයි!');
+            } catch (e) {
+                log.warn(`උත්සාහය ${optionalAttempts} අසාර්ථකයි - continuing without optional deps...`);
+            }
+        }
+        
+        if (!optionalInstallSuccess) {
+            log.info('\n⚠️  විකල්ප dependencies නොතිබුණු විට සිටින නිමිත්තේ:', missingOptional.join(', '));
+            log.info('ඉතුරු features සිටින්නේ නැත (spotfiy, advanced image tools, etc.)');
+        }
     }
 
     log.success('Setup verification complete!');

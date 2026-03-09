@@ -2916,6 +2916,95 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			break
 			
 			// Downloader Menu
+			
+			// 🎵 SONG DOWNLOAD - Search YouTube and download by song name
+			case 'song': {
+				if (!isLimit) return m.reply(mess.limit)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} "ගීතයේ නම්"`)
+				
+				try {
+					// 1️⃣ SEARCHING - සොයමින්
+					const searchMsg = `🔍 𝑺𝑬𝑨𝑹𝑪𝑯𝑰𝑵𝑮...
+━━━━━━━━━━━━━━━━━━━━━━
+🎵 *ගීතය:* ${text}
+⏳ *ඉතිරි:* සොයමින් පවතී...
+━━━━━━━━━━━━━━━━━━━━━━
+${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+
+					let statusMsg = await m.reply(searchMsg);
+
+					// YouTube සෙවීම
+					const searchQuery = `ytsearch:${text}`;
+
+					// 2️⃣ DOWNLOADING - බාගනිමින්
+					const downloadMsg = `⬇️ 𝑫𝑶𝑾𝑵𝑳𝑶𝑨𝑫𝑰𝑵𝑮...
+━━━━━━━━━━━━━━━━━━━━━━
+🎵 *ගීතය:* ${text}
+⏳ *ඉතිරි:* බාගනිමින් පවතී...
+━━━━━━━━━━━━━━━━━━━━━━
+${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+
+					await m.reply(downloadMsg);
+
+					m.reply(mess.wait)
+					try {
+						const hasil = await ytMp3(searchQuery);
+						const isBuffer = Buffer.isBuffer(hasil.result);
+						const audioPayload = isBuffer ? hasil.result : { url: hasil.result.url || hasil.result };
+						
+						if (isBuffer) {
+							const maxSize = 16 * 1024 * 1024;
+							if (hasil.result.length > maxSize) {
+								return m.reply(`❌ *File ලොකු වැඩියි!*\n\n📁 Size: ${hasil.size}\n⚠️ WhatsApp හි audio files සඳහා උපරිම limit එක *16MB* යි.`);
+							}
+						}
+
+						// 3️⃣ UPLOADING - ලබාදෙමින්
+						const uploadMsg = `⬆️ 𝑼𝑷𝑳𝑶𝑨𝑫𝑰𝑵𝑮...
+━━━━━━━━━━━━━━━━━━━━━━
+🎵 *ගීතය:* ${text}
+⏳ *ඉතිරි:* ලබාදෙමින් පවතී...
+━━━━━━━━━━━━━━━━━━━━━━
+${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+
+						await m.reply(uploadMsg);
+
+						await m.reply({
+							audio: audioPayload,
+							mimetype: 'audio/mpeg',
+							contextInfo: {
+								externalAdReply: {
+									title: hasil.title,
+									body: hasil.channel,
+									previewType: 'PHOTO',
+									thumbnailUrl: hasil.thumb,
+									mediaType: 1,
+									renderLargerThumbnail: true,
+									sourceUrl: searchQuery
+								}
+							}
+						})
+
+						// Success message
+						const successMsg = `✅ 𝑺𝑼𝑪𝑪𝑬𝑺𝑺
+━━━━━━━━━━━━━━━━━━━━━━
+🎵 *ගීතය:* ${hasil.title}
+⬇️ *ඉවරයි!*
+━━━━━━━━━━━━━━━━━━━━━━
+${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+
+						await m.reply(successMsg);
+						setLimit(m, db)
+					} catch (e) {
+						console.error('Song download error:', e);
+						m.reply('❌ ගීතය download කිරීමට අසාර්ථකයි: ' + e.message.substring(0, 100))
+					}
+				} catch (e) {
+					m.reply('❌ Error: ' + e.message)
+				}
+			}
+			break
+			
 			case 'ytmp3': case 'ytaudio': case 'ytplayaudio': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL`)
@@ -4123,6 +4212,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}urban (වචන අර්ථ සෙවීම්)
 ╰─┬────❍
 ╭─┴❍「 *⬇️ බාගත කිරීම් | DOWNLOAD ⬇️* 」❍
+│${setv} ${prefix}song (ගීතයේ නම සෙවීම)
 │${setv} ${prefix}ytmp3 (YouTube ගීත)
 │${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
 │${setv} ${prefix}instagram (ඉන්ස්ටග්‍රෑම් වීඩියෝ)
@@ -4410,6 +4500,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'downloadmenu': {
 				m.reply(`
 ╭──❍「 *බාගත කිරීම් (DOWNLOAD)* 」❍
+│${setv} ${prefix}song (ගීතයේ නම සෙවීම)
 │${setv} ${prefix}ytmp3 (YouTube ගීත)
 │${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
 │${setv} ${prefix}instagram (Instagram වීඩියෝ)

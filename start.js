@@ -6,7 +6,7 @@ const { execSync } = require('child_process');
 const os = require('os');
 
 // ═══════════════════════════════════════════════════════════
-// 🤖 සියලුම platform හරියනවා
+// 🎵 YouTube Complete Download Methods Auto Installer
 // Termux, Ubuntu, VPS, Windows(WSL), macOS
 // ═══════════════════════════════════════════════════════════
 
@@ -17,6 +17,47 @@ const log = {
     error: (msg) => console.log(`${chalk.red('✗')} ${msg}`),
     warn: (msg) => console.log(`${chalk.yellow('⚠')} ${msg}`),
     header: (msg) => console.log(`\n${chalk.bold.blue('═══════════════════════════════════')}\n${chalk.bold.cyan(msg)}\n${chalk.bold.blue('═══════════════════════════════════')}\n`)
+};
+
+// 🎵 YouTube Download Methods Package Matrix
+const YOUTUBE_METHODS = {
+    'yt-dlp': {
+        packages: ['yt-dlp', 'python3'],
+        methods: [
+            'Default (best)',
+            'Android Client',
+            'WEB Mobile (mweb)',
+            'WEB Creator',
+            'TV Embedded',
+            'iOS Client',
+            'VR Client',
+            'Studio Client'
+        ]
+    },
+    'youtube-dl': {
+        packages: ['youtube-dl', 'python3'],
+        methods: ['Python executable', 'Direct URL']
+    },
+    'ffmpeg': {
+        packages: ['ffmpeg'],
+        methods: ['Direct stream extraction']
+    },
+    'spotifydl': {
+        packages: ['spotifydl'],
+        methods: ['Spotify streaming']
+    },
+    'curl': {
+        packages: ['curl'],
+        methods: ['HTTP streaming']
+    },
+    'wget': {
+        packages: ['wget'],
+        methods: ['Direct download']
+    },
+    'aria2c': {
+        packages: ['aria2'],
+        methods: ['Multi-thread download']
+    }
 };
 
 // OS වර්ගය හඳුනාගනිමින්
@@ -31,7 +72,7 @@ function detectOS() {
         return {
             type: 'termux',
             display: 'Termux (Android)',
-            pm: 'pkg', // Updated to pkg
+            pm: 'pkg',
             pmAlternate: 'apt'
         };
     }
@@ -39,7 +80,6 @@ function detectOS() {
     // Ubuntu/Debian නම් පරීක්ෂා කරමින්
     if (platform === 'linux') {
         if (fs.existsSync('/etc/lsb-release') || fs.existsSync('/etc/debian_version')) {
-            // WSL එකෙ ධාවනය වෙනවා නම් පරීක්ෂා කරමින්
             const isWSL = release.toLowerCase().includes('microsoft') || fs.existsSync('/proc/version') && 
                          fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
             
@@ -110,26 +150,69 @@ function commandExists(cmd) {
     }
 }
 
+// 🎵 YouTube methods සඳහා install commands
+async function installYouTubePackages(osInfo) {
+    log.header('📥 YouTube Download Packages Installing');
+    
+    const allPackages = [];
+    Object.values(YOUTUBE_METHODS).forEach(method => {
+        allPackages.push(...method.packages);
+    });
+    
+    const uniquePackages = [...new Set(allPackages)];
+    log.info(`📦 සියලු YouTube packages: ${uniquePackages.join(', ')}\n`);
+    
+    const installCmds = getInstallCommands(osInfo, uniquePackages);
+    
+    let attempts = 0;
+    const maxAttempts = 3;
+    let installSuccess = false;
+    
+    while (!installSuccess && attempts < maxAttempts) {
+        attempts++;
+        try {
+            log.header(`📥 YouTube Packages Install උත්සාහය ${attempts}/${maxAttempts}`);
+            
+            if (osInfo.type !== 'macos') {
+                try {
+                    log.info('Repository update කරමින්...');
+                    execSync(installCmds.update, { stdio: 'inherit', timeout: 60000 });
+                } catch (e) {
+                    log.warn('Update අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
+                }
+            }
+            
+            log.info(`${uniquePackages.join(', ')} ස්ථාපනය කරමින්...\n`);
+            execSync(installCmds.install, { stdio: 'inherit', timeout: 180000 });
+            
+            installSuccess = true;
+            log.success('✅ YouTube Packages සාර්ථකව ස්ථාපනය කරන ලදි!');
+        } catch (e) {
+            log.warn(`උත්සාහය ${attempts} අසාර්ථකයි`);
+            
+            if (attempts < maxAttempts) {
+                log.info(`${maxAttempts - attempts} උත්සාහ ඉතිරි ඇත... නැවත උත්සාහ කරමින්...`);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+    }
+    
+    if (!installSuccess) {
+        log.warn('YouTube packages manual install කිරීමට උත්සාහ කරන්න:');
+        console.log(`  ${chalk.yellow(installCmds.install)}\n`);
+    }
+    
+    return installSuccess;
+}
+
 // ffmpeg බහු ක්‍රම ස්ථාපනයට උත්සාහ කරමින්
-// ffmpeg ශක්තිමත් ස්ථාපනය - සාර්ථකයි විය යුතුයි
 async function installFFmpeg(osInfo) {
     log.header(`📥 ffmpeg අනිවාර්ය - සියල්ලම platform උත්සාහ කරමින්`);
-
-    // Root සඳහා ස්ථාපිතයි නම් පරීක්ෂා කරමින්
-    const escalateToRoot = async () => {
-        try {
-            execSync('sudo -n true 2>/dev/null || echo "need_password"', { stdio: 'pipe' });
-            return true;
-        } catch (e) {
-            return false;
-        }
-    };
 
     const hasRoot = process.getuid ? process.getuid() === 0 : true;
     if (!hasRoot) {
         log.info('🔐 Root access attempting...');
         try {
-            // Sudo ප්‍රවේශ මුරපදයින් තොරව ලබා ගැනීමට උත්සාහ කරමින්
             execSync('sudo -v -p "" 2>/dev/null || true', { stdio: 'pipe', timeout: 5000 });
         } catch (e) {}
     }
@@ -168,7 +251,6 @@ async function installFFmpeg(osInfo) {
         ]
     };
 
-    // දැනට platform සඳහා repository ස්ථාපනය ධාවනය කරමින්
     const repoFixes = repoFixCommands[osInfo.type] || [];
     log.info('\n🔧 Repo fixes applying...');
     for (const cmd of repoFixes) {
@@ -201,7 +283,6 @@ async function installFFmpeg(osInfo) {
             try {
                 log.info(`[${totalAttempts}] ${chalk.yellow(method.desc.substring(0, 50))}`);
                 
-                // Sudo ඔස්සේ ස්වයංක්‍රියව උසස් අධිකාරය
                 let cmd = method.cmd;
                 if (!hasRoot && !cmd.includes('sudo') && !cmd.includes('brew') && osInfo.type !== 'termux') {
                     cmd = `sudo -E bash -c "${cmd.replace(/"/g, '\\"')}"`;
@@ -228,68 +309,13 @@ async function installFFmpeg(osInfo) {
         }
     }
 
-    log.header(`🔥 සියල්ලම platform fallbacks + repo fixes`);
-    
-    const aggressiveFallbacks = [
-        // Termux with repo fix
-        'sed -i "s/^deb http/deb [trusted=yes] http/" /etc/apt/sources.list 2>/dev/null; apt update -y && apt install -y ffmpeg 2>&1 || true',
-        'pkg update -y && pkg install -y ffmpeg 2>&1 || true',
-        'apt update -y && apt install -y ffmpeg 2>&1 || true',
-        
-        // Ubuntu with repo fix
-        'sudo -E bash -c "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2>/dev/null; apt update -y && apt install -y ffmpeg" 2>&1 || true',
-        'sudo -E bash -c "sed -i \\"s/^deb http/deb [trusted=yes] http/\\" /etc/apt/sources.list; apt update && apt install -y ffmpeg" 2>&1 || true',
-        'sudo -E apt update -y && sudo -E apt install -y ffmpeg 2>&1 || true',
-        'sudo -E bash -c "dpkg --configure -a && apt install -y ffmpeg" 2>&1 || true',
-        'sudo -E bash -c "apt clean && apt autoclean && apt update && apt install -y ffmpeg" 2>&1 || true',
-        
-        // CentOS/RHEL repository ස්ථාපනය සමඟ
-        'sudo -E bash -c "yum clean all && yum update -y && yum install -y ffmpeg" 2>&1 || true',
-        'sudo -E bash -c "dnf clean all && dnf update -y && dnf install -y ffmpeg" 2>&1 || true',
-        
-        // Arch repository ස්ථාපනය සමඟ
-        'sudo -E bash -c "pacman -Sc --noconfirm && pacman -Sy --noconfirm && pacman -S --noconfirm ffmpeg" 2>&1 || true',
-        
-        // macOS
-        'sudo -E bash -c "chown -R $(whoami) /usr/local/bin; brew update && brew install ffmpeg" 2>&1 || true',
-        'brew update && brew install ffmpeg 2>&1 || true',
-        'sudo port install ffmpeg 2>&1 || true',
-        
-        // Alpine Linux
-        'sudo -E bash -c "zypper refresh && zypper install -y ffmpeg" 2>&1 || true',
-        
-        // WSL Windows (PowerShell)
-        'powershell -Command "winget install FFmpeg -h --accept-source-agreements" 2>&1 || true',
-        
-        // සිදු හැකි සියල්ලම sudo උසස්කරණය සමඟ
-        'sudo -E bash -c "apt update && apt install -y ffmpeg" 2>&1 || apt update && apt install -y ffmpeg 2>&1 || true',
-        'sudo -E bash -c "yum update -y && yum install -y ffmpeg" 2>&1 || yum update -y && yum install -y ffmpeg 2>&1 || true',
-        'sudo -E bash -c "pacman -Sy --noconfirm && pacman -S --noconfirm ffmpeg" 2>&1 || true'
-    ];
-
-    for (let i = 0; i < aggressiveFallbacks.length; i++) {
-        totalAttempts++;
-        try {
-            log.info(`[${totalAttempts}] ${chalk.cyan(aggressiveFallbacks[i].substring(0, 80))}`);
-            execSync(aggressiveFallbacks[i], { stdio: 'inherit', timeout: 90000, shell: '/bin/bash' });
-            await new Promise(r => setTimeout(r, 500));
-            
-            if (commandExists('ffmpeg')) {
-                log.success(`\n✅ ffmpeg ස්ථාපිතයි!\n`);
-                return true;
-            }
-        } catch (e) {
-            log.warn(`✗`);
-        }
-    }
-
-    log.error(`\n❌ ffmpeg install failed! (උත්සාහ: ${totalAttempts})`);
-    process.exit(1);
+    log.error(`\n❌ ffmpeg install failed!`);
+    return false;
 }
 
 // සියල්ලම platform සඳහා සම්පූර්ණ ස්වයංක්‍රිය ධාවනය ක්‍රම
 function getInstallCommands(osInfo, packages) {
-    const pkg = packages[0]; // For ffmpeg specific handling
+    const pkg = packages[0];
     
     const cmds = {
         termux: {
@@ -300,7 +326,9 @@ function getInstallCommands(osInfo, packages) {
                 { cmd: `apt upgrade -y && apt install -y ${packages.join(' ')}`, desc: 'apt upgrade + install' },
                 { cmd: `apt-get update -y && apt-get install -y ${packages.join(' ')}`, desc: 'apt-get update + install' },
                 { cmd: `apt-get upgrade -y && apt-get install -y ${packages.join(' ')}`, desc: 'apt-get upgrade + install' }
-            ]
+            ],
+            update: `pkg update -y`,
+            install: `pkg install -y ${packages.join(' ')}`
         },
         ubuntu: {
             methods: [
@@ -311,7 +339,9 @@ function getInstallCommands(osInfo, packages) {
                 { cmd: `sudo DEBIAN_FRONTEND=noninteractive apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt with DEBIAN_FRONTEND' },
                 { cmd: `sudo snap install ${pkg}`, desc: 'snap install' },
                 { cmd: `sudo apt autoremove -y && sudo apt clean -y && sudo apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt clean + update + install' }
-            ]
+            ],
+            update: `sudo apt update -y`,
+            install: `sudo apt install -y ${packages.join(' ')}`
         },
         wsl: {
             methods: [
@@ -323,7 +353,9 @@ function getInstallCommands(osInfo, packages) {
                 { cmd: `sudo apt autoremove -y && sudo apt clean -y && sudo apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt clean + install' },
                 { cmd: `winget install -e --id Gyan.FFmpeg -h --accept-source-agreements`, desc: 'winget install' },
                 { cmd: `choco install ffmpeg -y`, desc: 'chocolatey install' }
-            ]
+            ],
+            update: `sudo apt update -y`,
+            install: `sudo apt install -y ${packages.join(' ')}`
         },
         macos: {
             methods: [
@@ -334,34 +366,32 @@ function getInstallCommands(osInfo, packages) {
                 { cmd: `sudo port upgrade outdated && sudo port install ${pkg}`, desc: 'macports upgrade outdated + install' },
                 { cmd: `brew tap homebrew-ffmpeg/ffmpeg && brew install --with-options-here homebrew-ffmpeg/ffmpeg/ffmpeg --HEAD 2>/dev/null || brew install ffmpeg`, desc: 'brew tap + install' },
                 { cmd: `curl -L https://evermeet.cx/ffmpeg/getrelease/zip -o /tmp/ffmpeg.zip && unzip -o /tmp/ffmpeg.zip -d /usr/local/bin/ && chmod +x /usr/local/bin/ffmpeg`, desc: 'official evermeet build' }
-            ]
+            ],
+            update: `brew update`,
+            install: `brew install ${packages.join(' ')}`
         },
         linux: {
             methods: [
-                // Debian/Ubuntu based
                 { cmd: `sudo apt update -y && sudo apt install -y ${packages.join(' ')}`, desc: 'apt update + install' },
                 { cmd: `sudo apt upgrade -y && sudo apt install -y ${packages.join(' ')}`, desc: 'apt upgrade + install' },
                 { cmd: `sudo apt-get update -y && sudo apt-get install -y ${packages.join(' ')}`, desc: 'apt-get update + install' },
                 { cmd: `sudo apt-get upgrade -y && sudo apt-get install -y ${packages.join(' ')}`, desc: 'apt-get upgrade + install' },
                 { cmd: `sudo DEBIAN_FRONTEND=noninteractive apt update && sudo apt install -y ${packages.join(' ')}`, desc: 'apt with DEBIAN_FRONTEND' },
-                // RedHat/CentOS/Fedora පාදක
                 { cmd: `sudo yum update -y && sudo yum install -y ${packages.join(' ')}`, desc: 'yum update + install' },
                 { cmd: `sudo yum upgrade -y && sudo yum install -y ${packages.join(' ')}`, desc: 'yum upgrade + install' },
                 { cmd: `sudo dnf update -y && sudo dnf install -y ${packages.join(' ')}`, desc: 'dnf update + install' },
                 { cmd: `sudo dnf upgrade -y && sudo dnf install -y ${packages.join(' ')}`, desc: 'dnf upgrade + install' },
-                // Arch පාදක
                 { cmd: `sudo pacman -Sy --noconfirm && sudo pacman -S --noconfirm ${packages.join(' ')}`, desc: 'pacman sync + install' },
                 { cmd: `sudo pacman -Syu --noconfirm && sudo pacman -S --noconfirm ${packages.join(' ')}`, desc: 'pacman upgrade + install' },
-                // openSUSE Linux
                 { cmd: `sudo zypper refresh && sudo zypper install -y ${packages.join(' ')}`, desc: 'zypper refresh + install' },
                 { cmd: `sudo zypper update -y && sudo zypper install -y ${packages.join(' ')}`, desc: 'zypper update + install' },
-                // Void Linux විතරක්
                 { cmd: `sudo xbps-install -Sy && sudo xbps-install -y ${packages.join(' ')}`, desc: 'xbps sync + install' },
                 { cmd: `sudo xbps-install -Syu && sudo xbps-install -y ${packages.join(' ')}`, desc: 'xbps upgrade + install' },
-                // Alpine
                 { cmd: `apk update && apk add ${packages.join(' ')}`, desc: 'apk update + install' },
                 { cmd: `apk upgrade && apk add ${packages.join(' ')}`, desc: 'apk upgrade + install' }
-            ]
+            ],
+            update: `sudo apt update -y`,
+            install: `sudo apt install -y ${packages.join(' ')}`
         }
     };
     
@@ -379,10 +409,6 @@ async function autoInstallDependencies() {
         log.error('npm හමු නොවුණි!');
         log.info(`Node.js ස්ථාපනය කරමින්...\n`);
         
-        const osInfo = detectOS();
-        let npmInstalled = false;
-        
-        // බහු ක්‍රම සමඟ Node.js ස්ථාපනය උත්සාහ කරමින්
         const nodeMethods = {
             termux: [
                 'pkg update -y && pkg install -y nodejs',
@@ -399,34 +425,36 @@ async function autoInstallDependencies() {
             ],
             macos: [
                 'brew update && brew install node',
-                'sudo port install nodejs20'
+                'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash'
             ],
             linux: [
                 'sudo apt update && sudo apt install -y nodejs npm',
                 'sudo yum install -y nodejs npm',
-                'sudo pacman -Sy nodejs npm',
-                'sudo dnf install -y nodejs npm'
+                'sudo dnf install -y nodejs npm',
+                'sudo pacman -S --noconfirm nodejs npm'
             ]
         };
-        
+
         const methods = nodeMethods[osInfo.type] || nodeMethods.linux;
         
-        for (const cmd of methods) {
+        let npmInstalled = false;
+        for (const method of methods) {
             try {
-                log.info(`උත්සාහ කරමින්: ${chalk.cyan(cmd)}`);
-                execSync(cmd, { stdio: 'inherit' });
+                log.info(`Node.js ස්ථාපනය උත්සාහ කරමින்...`);
+                execSync(method, { stdio: 'inherit', timeout: 180000 });
+                
                 if (checkNpmInstalled()) {
                     log.success('Node.js සාර්ථකව ස්ථාපනය කරන ලදී!');
                     npmInstalled = true;
                     break;
                 }
             } catch (e) {
-                log.warn('මෙම ක්‍රම අසාර්ථකයි, ඉන්දැයි නැවත උත්සාහ කරමින්...');
+                log.warn('උත්සාහය අසාර්ථකයි');
             }
         }
-        
+
         if (!npmInstalled) {
-            log.error('Node.js ස්ථාපනය කිරීමට අසාර්ථකයි!');
+            log.error('npm install කිරීමට අසාර්ථකයි!');
             process.exit(1);
         }
     }
@@ -445,7 +473,7 @@ async function autoInstallDependencies() {
     try {
         packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     } catch (e) {
-        log.error('package.json ලබාගැනීම කිරීමට අසාර්ථකයි: ' + e.message);
+        log.error('package.json ලබාගැනීම කිරීමට අසාර්ථයි: ' + e.message);
         process.exit(1);
     }
 
@@ -496,7 +524,6 @@ async function autoInstallDependencies() {
             try {
                 log.header(`📥 npm install උත්සාහය ${attempts}/${maxAttempts}`);
                 
-                // එක එක උත්සාහයට පෙර පිරිසිදු කරමින්
                 if (attempts > 1) {
                     try {
                         execSync('npm cache clean --force', {
@@ -537,15 +564,20 @@ async function autoInstallDependencies() {
     // පද්ධති බිමට අවශ්‍යතා පරීක්ෂා කරමින් සහ නැතිවූ විට ස්වයංක්‍රියව ස්ථාපනය
     log.header('🔧 system පරීක්ෂා කරමින්');
     
-    // nima.js සඳහා අනිවාර්ය: ffmpeg, yt-dlp, spotifydl
+    // 🎵 YouTube සඳහා අනිවාර්ය: ffmpeg, yt-dlp
+    // 🎵 shasikala.js song feature සඳහා: {prefix}song "song name"
     const mandatorySysDeps = ['ffmpeg', 'yt-dlp']; 
     const optionalSysDeps = {
-        'python3': 'python3 scripts',
-        'curl': 'http requests',
+        'python3': 'python3 scripts / yt-dlp enhanced',
+        'curl': 'http requests / streaming',
         'git': 'version control',
-        'spotifydl': 'spotify downloads',
+        'spotifydl': 'spotify/song downloads (shasikala)',
         'imagemagick': 'image conversions',
-        'ghostscript': 'PDF/document processing'
+        'ghostscript': 'PDF/document processing',
+        'youtube-dl': 'alternative YouTube download',
+        'wget': 'direct file download',
+        'aria2c': 'multi-thread download',
+        'ffprobe': 'media information'
     };
 
     let missingMandatory = [];
@@ -577,14 +609,12 @@ async function autoInstallDependencies() {
         
         const installCmds = getInstallCommands(osInfo, missingMandatory);
         
-        // Check if running as root in Termux
         const isRoot = process.getuid && process.getuid() === 0;
         
         if (osInfo.type === 'termux' && isRoot) {
             log.warn('⚠️  Termux root user detected - trying alternate methods...');
             log.info('All installation methods attempting in parallel...\n');
             
-            // Aggressive root user methods for Termux
             const rootMethods = [
                 'apt update -y && apt install -y ffmpeg',
                 'apt-get update -y && apt-get install -y ffmpeg',
@@ -615,7 +645,6 @@ async function autoInstallDependencies() {
                 }
             }
             
-            // සියල්ලම root ක්‍රම අසාර්ථකයි නම්, installFFmpeg උත්සාහ කරමින්
             log.info('\nTrying standard ffmpeg installation function...\n');
         }
             console.log(`\n${chalk.cyan(`${osInfo.display} - අනිවාර්ය dependencies ස්ථාපනය කරමින්:`)}`);
@@ -624,12 +653,10 @@ async function autoInstallDependencies() {
             
             let mandatoryInstallSuccess = false;
             
-            // Try with ffmpeg specific installation function
             if (missingMandatory.includes('ffmpeg')) {
                 log.header('📥 ffmpeg ස්ථාපනය - සියලුම ක්‍රම උත්සාහ කරමින්');
                 mandatoryInstallSuccess = await installFFmpeg(osInfo);
             } else {
-                // අනෙකුත් අනිවාර්ය බිමට අවශ්‍යතා සඳහා
                 let mandAttempts = 0;
                 const maxMandAttempts = 3;
                 
@@ -659,22 +686,18 @@ async function autoInstallDependencies() {
                 }
             }
             
-            // ffmpeg installation MUST succeed
             if (!mandatoryInstallSuccess) {
                 log.error('\n❌ ffmpeg අනිවාර්යයි - install කරන්න බැ!');
                 log.warn('All automatic methods exhausted!');
-                
-                // නව ශක්තිමත් installFFmpeg ශ්‍රිතය සමඟ මෙය කිසිවිටෙක සිදුවිය යුතුවේ නැත
                 process.exit(1);
             }
     }
 
-    // Handle missing optional dependencies (non-blocking)
-    if (missingOptional.length > 0) {
+    // 🎵 YouTube packages auto install
+    if (missingOptional.includes('yt-dlp') || missingOptional.length > 0) {
         log.warn(`\nවිකල්ප dependencies නැතිවුණි: ${missingOptional.join(', ')}`);
         log.info('✅ ස්වයංක්‍රිය ස්ථාපනය උත්සාහ කරමින්...\n');
         
-        // Optional dependencies බිමට ස්ථාපන උත්සාහ කරමින්
         let optionalInstallSuccess = false;
         let optionalAttempts = 0;
         const maxOptionalAttempts = 3;
@@ -683,7 +706,7 @@ async function autoInstallDependencies() {
             optionalAttempts++;
             try {
                 const optionalCmds = getInstallCommands(osInfo, missingOptional);
-                log.info(`[උත්සාහය ${optionalAttempts}/${maxOptionalAttempts}] විකල්ප dependencies ස්ථාපනය කරමින்...`);
+                log.info(`[උත්සාහය ${optionalAttempts}/${maxOptionalAttempts}] විකල්ප dependencies ස්ථාපනය කරමින්...`);
                 console.log(`  ${chalk.cyan(optionalCmds.install)}\n`);
                 
                 execSync(optionalCmds.install, { 
@@ -701,7 +724,7 @@ async function autoInstallDependencies() {
         
         if (!optionalInstallSuccess) {
             log.info('\n⚠️  විකල්ප dependencies නොතිබුණු විට සිටින නිමිත්තේ:', missingOptional.join(', '));
-            log.info('ඉතුරු features සිටින්නේ නැත (spotfiy, advanced image tools, etc.)');
+            log.info('Enhanced features සිටින්නේ නැත (spotify, advanced tools, etc.)');
         }
     }
 

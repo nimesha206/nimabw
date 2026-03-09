@@ -2761,13 +2761,13 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					const videoUrl = `https://www.youtube.com/watch?v=${_vid}`
 					const videoTitle = video.title || text
 
-					await conn.sendMessage(m.chat, {
+					await nimesha.sendMessage(m.chat, {
 						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 
 					// progress callback — live update
 					const _sendProgress = async (txt) => {
-						try { await conn.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
+						try { await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
 					}
 
 					const hasil = await ytMp3(videoUrl, _sendProgress)
@@ -2794,7 +2794,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						}
 					})
 
-					await conn.sendMessage(m.chat, {
+					await nimesha.sendMessage(m.chat, {
 						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 
@@ -2983,20 +2983,20 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						if (!videoId) return m.reply('❌ YouTube video ID හමු නොවිණි!')
 						ytUrl = `https://www.youtube.com/watch?v=${videoId}`
 						ytTitle = video.title || text
-						await conn.sendMessage(m.chat, {
+						await nimesha.sendMessage(m.chat, {
 							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n🔗 ${ytUrl}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 						}, { quoted: m, edit: statusMsg.key })
 					} catch (se) {
 						return m.reply('❌ YouTube සෙවීම අසාර්ථකයි: ' + se.message.substring(0, 80))
 					}
 				} else {
-					await conn.sendMessage(m.chat, {
+					await nimesha.sendMessage(m.chat, {
 						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 				}
 
 				const _sendProgress = async (txt) => {
-					try { await conn.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
+					try { await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
 				}
 
 				try {
@@ -3005,7 +3005,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
 
 					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) {
-						return conn.sendMessage(m.chat, {
+						return nimesha.sendMessage(m.chat, {
 							text: `❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`
 						}, { quoted: m, edit: statusMsg.key })
 					}
@@ -3026,13 +3026,13 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						}
 					})
 
-					await conn.sendMessage(m.chat, {
+					await nimesha.sendMessage(m.chat, {
 						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 
 					setLimit(m, db)
 				} catch (e) {
-					conn.sendMessage(m.chat, {
+					nimesha.sendMessage(m.chat, {
 						text: '❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100)
 					}, { quoted: m, edit: statusMsg.key })
 				}
@@ -3062,20 +3062,20 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						if (!videoId) return m.reply('❌ YouTube video ID හමු නොවිණි!')
 						ytUrl = `https://www.youtube.com/watch?v=${videoId}`
 						ytTitle = video.title || text
-						await conn.sendMessage(m.chat, {
+						await nimesha.sendMessage(m.chat, {
 							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n🔗 ${ytUrl}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 						}, { quoted: m, edit: statusMsg.key })
 					} catch (se) {
 						return m.reply('❌ YouTube සෙවීම අසාර්ථකයි: ' + se.message.substring(0, 80))
 					}
 				} else {
-					await conn.sendMessage(m.chat, {
+					await nimesha.sendMessage(m.chat, {
 						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 				}
 
 				const _sendProgress = async (txt) => {
-					try { await conn.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
+					try { await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
 				}
 
 				try {
@@ -3084,7 +3084,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
 
 					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) {
-						return conn.sendMessage(m.chat, {
+						return nimesha.sendMessage(m.chat, {
 							text: `❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`
 						}, { quoted: m, edit: statusMsg.key })
 					}
@@ -3105,13 +3105,13 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						}
 					})
 
-					await conn.sendMessage(m.chat, {
+					await nimesha.sendMessage(m.chat, {
 						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 
 					setLimit(m, db)
 				} catch (e) {
-					conn.sendMessage(m.chat, {
+					nimesha.sendMessage(m.chat, {
 						text: '❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100)
 					}, { quoted: m, edit: statusMsg.key })
 				}
@@ -3124,7 +3124,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				let _progressMsgKey4 = null;
 				const _sendProgress4 = async (txt, prevKey) => {
 					try {
-						const sent = await conn.sendMessage(m.chat, { text: txt }, { quoted: m });
+						const sent = await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m });
 						return sent?.key || prevKey;
 					} catch { return prevKey; }
 				};

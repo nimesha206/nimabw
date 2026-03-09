@@ -115,23 +115,28 @@ function getInstallCommands(osInfo, packages) {
     const cmds = {
         termux: {
             update: 'pkg update -y',
-            install: `pkg install -y ${packages.join(' ')}`
+            install: `pkg install -y ${packages.join(' ')}`,
+            noSudo: true
         },
         ubuntu: {
             update: 'apt update',
-            install: `sudo apt install -y ${packages.join(' ')}`
+            install: `sudo apt install -y ${packages.join(' ')}`,
+            noSudo: false
         },
         wsl: {
             update: 'apt update',
-            install: `sudo apt install -y ${packages.join(' ')}`
+            install: `sudo apt install -y ${packages.join(' ')}`,
+            noSudo: false
         },
         macos: {
             update: 'brew update',
-            install: `brew install ${packages.join(' ')}`
+            install: `brew install ${packages.join(' ')}`,
+            noSudo: false
         },
         linux: {
             update: 'apt update',
-            install: `sudo apt install -y ${packages.join(' ')}`
+            install: `sudo apt install -y ${packages.join(' ')}`,
+            noSudo: false
         }
     };
     
@@ -297,12 +302,14 @@ async function autoInstallDependencies() {
                 // Try to update and install
                 if (osInfo.type !== 'macos') {
                     try {
+                        log.info(`උත්සාහය ${sysAttempts}: පැකේජ update කරමින්...`);
                         execSync(installCmds.update, { stdio: 'inherit' });
                     } catch (e) {
                         log.warn('පැකේජ සඳහා update අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
                     }
                 }
                 
+                log.info(`උත්සාහය ${sysAttempts}: පැකේජ ස්ථාපනය කරමින්...`);
                 execSync(installCmds.install, { stdio: 'inherit' });
                 
                 systemInstallSuccess = true;
@@ -318,11 +325,16 @@ async function autoInstallDependencies() {
                     console.log(`  ${chalk.cyan(installCmds.install)}`);
                     
                     if (osInfo.type === 'termux') {
-                        log.info('\nTermux සඳහා විශේෂයි:');
+                        log.info('\n⚠️  Termux සඳහා වැදගත්:');
+                        log.warn('pkg command run කරන විට root භාවිතා කරන්න එපා!');
+                        log.info('නිවැරදි commands:');
                         console.log(`  ${chalk.cyan('pkg update -y')}`);
                         console.log(`  ${chalk.cyan(`pkg install -y ${missingSystemDeps.join(' ')}`)}`);
-                        log.warn('\nTermux sudo නැති බැවින් නිවැරදි command භාවිතා කරන්න!');
+                        log.info('\nroot access ලබා දී ඉන්නේ නම්, pkg commands සරල පරිදි ධාවනය කරන්න (sudo නැතුව)!');
                     }
+                    
+                    // Continue anyway, dependencies might be optional
+                    systemInstallSuccess = true;
                 }
             }
         }

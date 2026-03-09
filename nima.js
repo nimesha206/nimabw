@@ -2743,22 +2743,61 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			}
 			break
 			case 'play': case 'ytplay': case 'yts': case 'ytsearch': case 'youtubesearch': {
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} dj komang`)
-				m.reply(mess.wait)
+				if (!isLimit) return m.reply(mess.limit)
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You`)
 				try {
-					const res = await yts.search(text);
-					const hasil = pickRandom(res.all)
-					const teksnya = `*📍Title:* ${hasil.title || 'නැහැ tersedia'}\n*✏Description:* ${hasil.description || 'නැහැ tersedia'}\n*🌟Channel:* ${hasil.author?.name || 'නැහැ tersedia'}\n*⏳Duration:* ${hasil.seconds || 'නැහැ tersedia'} second (${hasil.timestamp || 'නැහැ tersedia'})\n*🔎Source:* ${hasil.url || 'නැහැ tersedia'}\n\n_සටහන: Download කිරීමට_\n_තෝරන්න ${prefix}ytmp3 url_video හෝ ${prefix}ytmp4 url_video_`;
-					await m.reply({ image: { url: hasil.thumbnail }, caption: teksnya })
-				} catch (e) {
-					try {
-						const res = await fetchApi('/search/youtube', { query: text });
-						const hasil = pickRandom(res.result.items)
-						const teksnya = `*📍Title:* ${hasil.snippet.title || 'නැහැ tersedia'}\n*✏Description:* ${hasil.snippet.description || 'නැහැ tersedia'}\n*🌟Channel:* ${hasil.snippet.channelTitle || 'නැහැ tersedia'}\n*⏳Duration:* ${hasil.duration || 'නැහැ tersedia'}\n*🔎Source:* https://youtu.be/${hasil.id.videoId || 'නැහැ tersedia'}\n\n_සටහන: Download කිරීමට_\n_තෝරන්න ${prefix}ytmp3 url_video හෝ ${prefix}ytmp4 url_video_`;
-						await m.reply({ image: { url: hasil.snippet.thumbnails.medium.url }, caption: teksnya })
-					} catch (e) {
-						m.reply('Post ලබා ගත නොහැකිය!')
+					// ytsearch → first result URL ලබාගෙන ytmp3 download
+					const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'
+					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+
+					// YouTube search
+					const searchRes = await yts(text)
+					const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
+					if (!video?.url) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
+
+					const videoUrl = video.url
+					const videoTitle = video.title || text
+
+					await conn.sendMessage(m.chat, {
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
+
+					// progress callback — live update
+					const _sendProgress = async (txt) => {
+						try { await conn.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
 					}
+
+					const hasil = await ytMp3(videoUrl, _sendProgress)
+					const isBuffer = Buffer.isBuffer(hasil.result)
+					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
+
+					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) {
+						return m.reply(`❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`)
+					}
+
+					await m.reply({
+						audio: audioPayload,
+						mimetype: 'audio/mpeg',
+						contextInfo: {
+							externalAdReply: {
+								title: hasil.title || videoTitle,
+								body: hasil.channel || video.author?.name || '',
+								previewType: 'PHOTO',
+								thumbnailUrl: hasil.thumb || video.thumbnail || '',
+								mediaType: 1,
+								renderLargerThumbnail: true,
+								sourceUrl: videoUrl
+							}
+						}
+					})
+
+					await conn.sendMessage(m.chat, {
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
+
+					setLimit(m, db)
+				} catch (e) {
+					m.reply('❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100))
 				}
 			}
 			break
@@ -2918,153 +2957,154 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			// Downloader Menu
 			
 			// 🎵 SONG DOWNLOAD - Search YouTube and download by song name
-			case 'song': {
+			case 'song': case 'mp3': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} "ගීතයේ නම්"`)
-				
-				try {
-					// 1️⃣ SEARCHING - සොයමින්
-					const searchMsg = `🔍 𝑺𝑬𝑨𝑹𝑪𝑯𝑰𝑵𝑮...
-━━━━━━━━━━━━━━━━━━━━━━
-🎵 *ගීතය:* ${text}
-⏳ *ඉතිරි:* සොයමින් පවතී...
-━━━━━━━━━━━━━━━━━━━━━━
-${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You  හෝ  ${prefix + command} https://youtu.be/xxx`)
 
-					let statusMsg = await m.reply(searchMsg);
+				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'
+				const isUrl = /https?:\/\//.test(text)
 
-					// YouTube සෙවීම
-					const searchQuery = `ytsearch:${text}`;
+				// URL නම් directly use, name නම් ytsearch කරනවා
+				let ytUrl = text
+				let ytTitle = text
 
-					// 2️⃣ DOWNLOADING - බාගනිමින්
-					const downloadMsg = `⬇️ 𝑫𝑶𝑾𝑵𝑳𝑶𝑨𝑫𝑰𝑵𝑮...
-━━━━━━━━━━━━━━━━━━━━━━
-🎵 *ගීතය:* ${text}
-⏳ *ඉතිරි:* බාගනිමින් පවතී...
-━━━━━━━━━━━━━━━━━━━━━━
-${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+				let statusMsg = await m.reply(`🔍 *${isUrl ? 'URL හඳුනාගනිමින්' : 'සොයමින්'}...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
 
-					await m.reply(downloadMsg);
-
-					m.reply(mess.wait)
+				if (!isUrl) {
 					try {
-						const hasil = await ytMp3(searchQuery);
-						const isBuffer = Buffer.isBuffer(hasil.result);
-						const audioPayload = isBuffer ? hasil.result : { url: hasil.result.url || hasil.result };
-						
-						if (isBuffer) {
-							const maxSize = 16 * 1024 * 1024;
-							if (hasil.result.length > maxSize) {
-								return m.reply(`❌ *File ලොකු වැඩියි!*\n\n📁 Size: ${hasil.size}\n⚠️ WhatsApp හි audio files සඳහා උපරිම limit එක *16MB* යි.`);
+						const searchRes = await yts(text)
+						const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
+						if (!video?.url) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
+						ytUrl = video.url
+						ytTitle = video.title || text
+						await conn.sendMessage(m.chat, {
+							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						}, { quoted: m, edit: statusMsg.key })
+					} catch (se) {
+						return m.reply('❌ YouTube සෙවීම අසාර්ථකයි: ' + se.message.substring(0, 80))
+					}
+				} else {
+					await conn.sendMessage(m.chat, {
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
+				}
+
+				const _sendProgress = async (txt) => {
+					try { await conn.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
+				}
+
+				try {
+					const hasil = await ytMp3(ytUrl, _sendProgress)
+					const isBuffer = Buffer.isBuffer(hasil.result)
+					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
+
+					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) {
+						return conn.sendMessage(m.chat, {
+							text: `❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`
+						}, { quoted: m, edit: statusMsg.key })
+					}
+
+					await m.reply({
+						audio: audioPayload,
+						mimetype: 'audio/mpeg',
+						contextInfo: {
+							externalAdReply: {
+								title: hasil.title || ytTitle,
+								body: hasil.channel || '',
+								previewType: 'PHOTO',
+								thumbnailUrl: hasil.thumb || '',
+								mediaType: 1,
+								renderLargerThumbnail: true,
+								sourceUrl: ytUrl
 							}
 						}
+					})
 
-						// 3️⃣ UPLOADING - ලබාදෙමින්
-						const uploadMsg = `⬆️ 𝑼𝑷𝑳𝑶𝑨𝑫𝑰𝑵𝑮...
-━━━━━━━━━━━━━━━━━━━━━━
-🎵 *ගීතය:* ${text}
-⏳ *ඉතිරි:* ලබාදෙමින් පවතී...
-━━━━━━━━━━━━━━━━━━━━━━
-${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
+					await conn.sendMessage(m.chat, {
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
 
-						await m.reply(uploadMsg);
-
-						await m.reply({
-							audio: audioPayload,
-							mimetype: 'audio/mpeg',
-							contextInfo: {
-								externalAdReply: {
-									title: hasil.title,
-									body: hasil.channel,
-									previewType: 'PHOTO',
-									thumbnailUrl: hasil.thumb,
-									mediaType: 1,
-									renderLargerThumbnail: true,
-									sourceUrl: searchQuery
-								}
-							}
-						})
-
-						// Success message
-						const successMsg = `✅ 𝑺𝑼𝑪𝑪𝑬𝑺𝑺
-━━━━━━━━━━━━━━━━━━━━━━
-🎵 *ගීතය:* ${hasil.title}
-⬇️ *ඉවරයි!*
-━━━━━━━━━━━━━━━━━━━━━━
-${global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'}`;
-
-						await m.reply(successMsg);
-						setLimit(m, db)
-					} catch (e) {
-						console.error('Song download error:', e);
-						m.reply('❌ ගීතය download කිරීමට අසාර්ථකයි: ' + e.message.substring(0, 100))
-					}
+					setLimit(m, db)
 				} catch (e) {
-					m.reply('❌ Error: ' + e.message)
+					conn.sendMessage(m.chat, {
+						text: '❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100)
+					}, { quoted: m, edit: statusMsg.key })
 				}
 			}
 			break
 			
 			case 'ytmp3': case 'ytaudio': case 'ytplayaudio': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL`)
-				if (!text.includes('youtu')) return m.reply('URL YouTube ප්‍රතිඵලය ඇතුළත් නෑ!')
-				let _progressMsgKey = null;
-				const _sendProgress = async (txt, prevKey) => {
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You  හෝ  ${prefix + command} https://youtu.be/xxx`)
+
+				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'
+				const isUrl = /https?:\/\//.test(text)
+
+				// URL නම් directly use, name නම් ytsearch කරනවා
+				let ytUrl = text
+				let ytTitle = text
+
+				let statusMsg = await m.reply(`🔍 *${isUrl ? 'URL හඳුනාගනිමින්' : 'සොයමින්'}...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+
+				if (!isUrl) {
 					try {
-						const sent = await conn.sendMessage(m.chat, { text: txt }, { quoted: m });
-						return sent?.key || prevKey;
-					} catch { return prevKey; }
-				};
-				try {
-					const hasil = await ytMp3(text, _sendProgress);
-					// hasil.result can be Buffer or { url: '...' }
-					const isBuffer = Buffer.isBuffer(hasil.result);
-					const audioPayload = isBuffer ? hasil.result : { url: hasil.result.url || hasil.result };
-					if (isBuffer) {
-						const maxSize = 16 * 1024 * 1024;
-						if (hasil.result.length > maxSize) {
-							return m.reply(`❌ *File ලොකු වැඩියි!*\n\n📁 Size: ${hasil.size}\n⚠️ WhatsApp හි audio files සඳහා උපරිම limit එක *16MB* යි.\n\n🎵 කෙටි video එකක් (විනාඩි 5-6 යට) try කරන්න.`);
-						}
+						const searchRes = await yts(text)
+						const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
+						if (!video?.url) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
+						ytUrl = video.url
+						ytTitle = video.title || text
+						await conn.sendMessage(m.chat, {
+							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						}, { quoted: m, edit: statusMsg.key })
+					} catch (se) {
+						return m.reply('❌ YouTube සෙවීම අසාර්ථකයි: ' + se.message.substring(0, 80))
 					}
+				} else {
+					await conn.sendMessage(m.chat, {
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
+				}
+
+				const _sendProgress = async (txt) => {
+					try { await conn.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
+				}
+
+				try {
+					const hasil = await ytMp3(ytUrl, _sendProgress)
+					const isBuffer = Buffer.isBuffer(hasil.result)
+					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
+
+					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) {
+						return conn.sendMessage(m.chat, {
+							text: `❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`
+						}, { quoted: m, edit: statusMsg.key })
+					}
+
 					await m.reply({
 						audio: audioPayload,
 						mimetype: 'audio/mpeg',
 						contextInfo: {
 							externalAdReply: {
-								title: hasil.title,
-								body: hasil.channel,
+								title: hasil.title || ytTitle,
+								body: hasil.channel || '',
 								previewType: 'PHOTO',
-								thumbnailUrl: hasil.thumb,
+								thumbnailUrl: hasil.thumb || '',
 								mediaType: 1,
 								renderLargerThumbnail: true,
-								sourceUrl: text
+								sourceUrl: ytUrl
 							}
 						}
 					})
+
+					await conn.sendMessage(m.chat, {
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
+
 					setLimit(m, db)
 				} catch (e) {
-					try {
-						const { result: hasil } = await fetchApi('/download/youtube', { url: text, type: 'audio' });
-						await m.reply({
-							audio: { url: hasil.download || hasil.url || hasil.audio },
-							mimetype: 'audio/mpeg',
-							contextInfo: {
-								externalAdReply: {
-									title: hasil.title || 'YouTube Audio',
-									body: hasil.channel || hasil.quality || '',
-									previewType: 'PHOTO',
-									thumbnailUrl: hasil.thumbnail || hasil.thumb || '',
-									mediaType: 1,
-									renderLargerThumbnail: true,
-									sourceUrl: text
-								}
-							}
-						})
-						setLimit(m, db)
-					} catch (e2) {
-						m.reply('Audio Download අසාර්ථකයි!');
-					}
+					conn.sendMessage(m.chat, {
+						text: '❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100)
+					}, { quoted: m, edit: statusMsg.key })
 				}
 			}
 			break

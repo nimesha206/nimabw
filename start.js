@@ -100,7 +100,7 @@ function checkNpmInstalled() {
     }
 }
 
-// Check if system command exists
+// Check if command exists
 function commandExists(cmd) {
     try {
         execSync(`which ${cmd}`, { stdio: 'pipe' });
@@ -110,32 +110,90 @@ function commandExists(cmd) {
     }
 }
 
+// Try to install ffmpeg with multiple methods
+async function installFFmpeg(osInfo) {
+    const installCmds = getInstallCommands(osInfo, ['ffmpeg']);
+    const allMethods = [
+        {
+            name: 'Primary method',
+            cmd: installCmds.install
+        },
+        ...(installCmds.alternatives || []).map((cmd, idx) => ({
+            name: `Alternative ${idx + 1}`,
+            cmd: cmd
+        }))
+    ];
+
+    log.info(`\n${allMethods.length} ffmpeg ස්ථාපන ක්‍රම උත්සාහ කරමින්...\n`);
+
+    for (let i = 0; i < allMethods.length; i++) {
+        const method = allMethods[i];
+        try {
+            log.info(`[${i + 1}/${allMethods.length}] ${method.name}: ${method.cmd}`);
+            execSync(method.cmd, { stdio: 'inherit' });
+            log.success(`✓ ffmpeg ${method.name} මගින් සාර්ථකව ස්ථාපනය කරන ලදී!`);
+            return true;
+        } catch (e) {
+            log.warn(`✗ ${method.name} අසාර්ථකයි`);
+        }
+    }
+    
+    return false;
+}
+
 // Get installation commands for OS
 function getInstallCommands(osInfo, packages) {
     const cmds = {
         termux: {
             update: 'pkg update -y',
             install: `pkg install -y ${packages.join(' ')}`,
+            alternatives: [
+                'apt install -y ffmpeg',
+                'apt update && apt install -y ffmpeg'
+            ],
             noSudo: true
         },
         ubuntu: {
             update: 'apt update',
             install: `sudo apt install -y ${packages.join(' ')}`,
+            alternatives: [
+                'sudo apt-get install -y ffmpeg',
+                'sudo snap install ffmpeg',
+                'sudo apt install -y ffmpeg-full'
+            ],
             noSudo: false
         },
         wsl: {
             update: 'apt update',
             install: `sudo apt install -y ${packages.join(' ')}`,
+            alternatives: [
+                'sudo apt-get install -y ffmpeg',
+                'sudo snap install ffmpeg',
+                'winget install ffmpeg'
+            ],
             noSudo: false
         },
         macos: {
             update: 'brew update',
             install: `brew install ${packages.join(' ')}`,
+            alternatives: [
+                'port install ffmpeg',
+                'sudo port install ffmpeg',
+                'curl https://evermeet.cx/ffmpeg/getrelease/zip -o ffmpeg.zip && unzip ffmpeg.zip'
+            ],
             noSudo: false
         },
         linux: {
             update: 'apt update',
             install: `sudo apt install -y ${packages.join(' ')}`,
+            alternatives: [
+                'sudo yum install -y ffmpeg',
+                'sudo pacman -S ffmpeg',
+                'sudo dnf install -y ffmpeg',
+                'sudo zypper install ffmpeg',
+                'sudo xbps-install -S ffmpeg',
+                'sudo apt-get install -y ffmpeg'
+            ],
             noSudo: false
         }
     };
@@ -264,82 +322,130 @@ async function autoInstallDependencies() {
     // Check system dependencies and auto-install if missing
     log.header('🔧 system පරීක්ෂා කරමින්');
     
-    const systemDeps = {
-        'ffmpeg': 'media processing',
+    const mandatorySysDeps = ['ffmpeg']; // ffmpeg is mandatory
+    const optionalSysDeps = {
         'python3': 'python3 scripts',
         'curl': 'http requests',
         'git': 'version control'
     };
 
-    let missingSystemDeps = [];
+    let missingMandatory = [];
+    let missingOptional = [];
 
-    for (const [cmd, desc] of Object.entries(systemDeps)) {
+    // Check mandatory dependencies
+    for (const cmd of mandatorySysDeps) {
+        if (commandExists(cmd)) {
+            console.log(`  ${chalk.green('✓')} ${cmd.padEnd(12)} - අනිවාර්ය`);
+        } else {
+            console.log(`  ${chalk.red('✗')} ${cmd.padEnd(12)} - අනිවාර්ය`);
+            missingMandatory.push(cmd);
+        }
+    }
+
+    // Check optional dependencies
+    for (const [cmd, desc] of Object.entries(optionalSysDeps)) {
         if (commandExists(cmd)) {
             console.log(`  ${chalk.green('✓')} ${cmd.padEnd(12)} - ${desc}`);
         } else {
             console.log(`  ${chalk.red('✗')} ${cmd.padEnd(12)} - ${desc}`);
-            missingSystemDeps.push(cmd);
+            missingOptional.push(cmd);
         }
     }
 
-    // Auto-install missing system dependencies
-    if (missingSystemDeps.length > 0) {
-        log.warn(`Missing system dependencies: ${missingSystemDeps.join(', ')}`);
+    // Handle missing mandatory dependencies
+    if (missingMandatory.length > 0) {
+        log.error(`\n❌ අනිවාර්ය දෙයක් නැතිවුණි: ${missingMandatory.join(', ')}`);
         
-        const installCmds = getInstallCommands(osInfo, missingSystemDeps);
+        const installCmds = getInstallCommands(osInfo, missingMandatory);
         
-        console.log(`\n${chalk.cyan(`${osInfo.display} - ස්ථාපන උත්සාහ කරමින්:`)}`);
-        console.log(`  ${chalk.yellow(installCmds.update)}`);
-        console.log(`  ${chalk.yellow(installCmds.install)}\n`);
+        // Check if running as root in Termux
+        const isRoot = process.getuid && process.getuid() === 0;
         
-        let systemInstallSuccess = false;
-        let sysAttempts = 0;
-        const maxSysAttempts = 2;
-        
-        while (!systemInstallSuccess && sysAttempts < maxSysAttempts) {
-            sysAttempts++;
-            try {
-                // Try to update and install
-                if (osInfo.type !== 'macos') {
+        if (osInfo.type === 'termux' && isRoot) {
+            log.error('⚠️  Termux එකෙ root user එකින් pkg install කරන්න බැරි!');
+            log.info('කරුණාකර regular user එකින් ධාවනය කරන්න:');
+            console.log(`  ${chalk.cyan('pkg update -y && pkg install -y ' + missingMandatory.join(' '))}`);
+            process.exit(1);
+        } else {
+            console.log(`\n${chalk.cyan(`${osInfo.display} - අනිවාර්ය dependencies ස්ථාපනය කරමින්:`)}`);
+            console.log(`  ${chalk.yellow(installCmds.update)}`);
+            console.log(`  ${chalk.yellow(installCmds.install)}\n`);
+            
+            let mandatoryInstallSuccess = false;
+            
+            // Try with ffmpeg specific installation function
+            if (missingMandatory.includes('ffmpeg')) {
+                log.header('📥 ffmpeg ස්ථාපනය - සියලුම ක්‍රම උත්සාහ කරමින්');
+                mandatoryInstallSuccess = await installFFmpeg(osInfo);
+            } else {
+                // For other mandatory dependencies
+                let mandAttempts = 0;
+                const maxMandAttempts = 3;
+                
+                while (!mandatoryInstallSuccess && mandAttempts < maxMandAttempts) {
+                    mandAttempts++;
                     try {
-                        log.info(`උත්සාහය ${sysAttempts}: පැකේජ update කරමින්...`);
-                        execSync(installCmds.update, { stdio: 'inherit' });
+                        if (osInfo.type !== 'macos') {
+                            try {
+                                log.info(`උත්සාහය ${mandAttempts}: පැකේජ update කරමින්...`);
+                                execSync(installCmds.update, { stdio: 'inherit' });
+                            } catch (e) {
+                                log.warn('පැකේජ සඳහා update අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
+                            }
+                        }
+                        
+                        log.info(`උත්සාහය ${mandAttempts}: ${missingMandatory.join(', ')} ස්ථාපනය කරමින්...`);
+                        execSync(installCmds.install, { stdio: 'inherit' });
+                        
+                        mandatoryInstallSuccess = true;
+                        log.success('අනිවාර්ය dependencies සාර්ථකව ස්ථාපනය කරන ලදී!');
                     } catch (e) {
-                        log.warn('පැකේජ සඳහා update අසාර්ථකයි, ස්ථාපනය උත්සාහ කරමින්...');
+                        if (mandAttempts < maxMandAttempts) {
+                            log.warn(`උත්සාහය ${mandAttempts} අසාර්ථකයි, නැවත උත්සාහ කරමින්...`);
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                        }
                     }
-                }
-                
-                log.info(`උත්සාහය ${sysAttempts}: පැකේජ ස්ථාපනය කරමින්...`);
-                execSync(installCmds.install, { stdio: 'inherit' });
-                
-                systemInstallSuccess = true;
-                log.success('පද්ධති අවශ්‍යතා සාර්ථකව ස්ථාපනය කරන ලදී!');
-            } catch (e) {
-                if (sysAttempts < maxSysAttempts) {
-                    log.warn(`පද්ධති ස්ථාපනය උත්සාහය ${sysAttempts} අසාර්ථකයි, නැවත උත්සාහ කරමින්...`);
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                } else {
-                    log.warn('⚠️  පද්ධති අවශ්‍යතා ස්ථාපනය අසාර්ථකයි!');
-                    log.info('කරුණාකර මෙම විධාන manual ලෙස ධාවනය කරන්න:');
-                    console.log(`  ${chalk.cyan(installCmds.update)}`);
-                    console.log(`  ${chalk.cyan(installCmds.install)}`);
-                    
-                    if (osInfo.type === 'termux') {
-                        log.info('\n⚠️  Termux සඳහා වැදගත්:');
-                        log.warn('pkg command run කරන විට root භාවිතා කරන්න එපා!');
-                        log.info('නිවැරදි commands:');
-                        console.log(`  ${chalk.cyan('pkg update -y')}`);
-                        console.log(`  ${chalk.cyan(`pkg install -y ${missingSystemDeps.join(' ')}`)}`);
-                        log.info('\nroot access ලබා දී ඉන්නේ නම්, pkg commands සරල පරිදි ධාවනය කරන්න (sudo නැතුව)!');
-                    }
-                    
-                    // Continue anyway, dependencies might be optional
-                    systemInstallSuccess = true;
                 }
             }
+            
+            // If still failed, show all available methods
+            if (!mandatoryInstallSuccess) {
+                log.error('\n❌ ffmpeg ස්ථාපනය කිරීමට සම්පූර්ණ අසාර්ථකයි!');
+                log.error('බොට් ඉදිරිපත් කිරීමට ffmpeg අවශ්‍යය!');
+                
+                log.info('\n📋 උපලබ්ධ ස්ථාපන ක්‍රම:');
+                
+                const methods = getInstallCommands(osInfo, ['ffmpeg']);
+                console.log(`\n${chalk.yellow('Primary:')}`);
+                console.log(`  ${chalk.cyan(methods.install)}`);
+                
+                if (methods.alternatives && methods.alternatives.length > 0) {
+                    console.log(`\n${chalk.yellow('Alternatives:')}`);
+                    methods.alternatives.forEach((cmd, idx) => {
+                        console.log(`  ${idx + 1}. ${chalk.cyan(cmd)}`);
+                    });
+                }
+                
+                if (osInfo.type === 'termux') {
+                    console.log(`\n${chalk.yellow('Termux specific:')}`);
+                    console.log(`  ${chalk.cyan('pkg update -y && pkg install -y ffmpeg')}`);
+                    console.log(`  ${chalk.cyan('apt update && apt install -y ffmpeg')}`);
+                }
+                
+                log.error('\nකරුණාකර ඉහත කරන්සතින් එකක් manual ලෙස ධාවනය කරන්න!');
+                process.exit(1);
+            }
         }
-    } else {
-        log.success('සියලුම පද්ධති අවශ්‍යතා හමු විය!');
+    }
+
+    // Handle missing optional dependencies (non-blocking)
+    if (missingOptional.length > 0) {
+        log.warn(`\nවිකල්ප dependencies නැතිවුණි: ${missingOptional.join(', ')}`);
+        log.info('සම්පූර්ණ කිරීමට optional dependencies ස්ථාපනය කරන්න (අනිවාර්ය නොවේ).');
+        
+        const optionalCmds = getInstallCommands(osInfo, missingOptional);
+        log.info('Optional install command:');
+        console.log(`  ${chalk.yellow(optionalCmds.install)}`);
     }
 
     log.success('Setup verification complete!');

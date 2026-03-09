@@ -663,7 +663,6 @@ async function autoInstallDependencies() {
                 // නව ශක්තිමත් installFFmpeg ශ්‍රිතය සමඟ මෙය කිසිවිටෙක සිදුවිය යුතුවේ නැත
                 process.exit(1);
             }
-        }
     }
 
     // Handle missing optional dependencies (non-blocking)

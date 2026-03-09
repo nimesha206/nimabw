@@ -14,12 +14,16 @@ function start() {
 		} else if (data === 'uptime') {
 			p.send(process.uptime())
 		}
+	}).on('error', (err) => {
+		console.error(chalk.red.bold('[BOT] බොට් :'), err.message)
+		console.error(chalk.red.bold('[BOT] node_modules ස්ථාපිතයි නොවිණුවිට, නයාකරණ අවශ්යයි:'))
+		console.error(chalk.cyan('npm install --legacy-peer-deps'))
 	}).on('exit', code => {
 		if (code !== 0) {
-			console.error(chalk.red.bold(`[BOT] දෝෂ කේතය ${code} සමඟ ක්‍රියාවලිය නැවතුණි. නැවත ආරම්භ කරමින්...`))
+			console.error(chalk.red.bold(`[BOT] දෝෂ කේතය ${code} සමඟ ක්රියාවලිය නැවතුණි. නැවත ආරම්භ කරමින්...`))
 			start()
 		} else {
-			console.log(chalk.green.bold('[BOT] ක්‍රියාවලිය සාර්ථකව අවසන් විය. සමුගනිමු!'))
+			console.log(chalk.green.bold('[BOT] ක්රියාවලිය සාර්ථකව අවසන් විය. සමුගනිමු!'))
 			process.exit(0)
 		}
 	})

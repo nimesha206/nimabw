@@ -3103,7 +3103,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': case 'video': case 'mp4': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL හෝ Video නම`)
-				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY_ *NIMESHA MADHUSHAN* '
+				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN*_ '
 				const _sendProgress4 = async (txt, prevKey) => {
 					try {
 						const sent = await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m });

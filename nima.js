@@ -2747,7 +2747,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You`)
 				try {
 					// ytsearch → first result URL ලබාගෙන ytmp3 download
-					const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN*_'
+					
 					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
 
 					// YouTube search
@@ -2962,50 +2962,38 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			// 🎵 SONG DOWNLOAD - Search YouTube and download by song name
 			case 'song': case 'mp3': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You  හෝ  ${prefix + command} https://youtu.be/xxx`)
-
-
-				// URL නම් directly use, name නම් ytsearch කරනවා
-				let ytUrl = text
-				let ytTitle = text
-
-				let statusMsg = await m.reply(`🔍 *${isUrl ? 'URL හඳුනාගනිමින්' : 'සොයමින්'}...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
-
-				if (!isUrl) {
-					try {
-						const searchRes = await yts(text)
-						const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
-						if (!video) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
-						// always use watch?v= format so scraper.js getVideoId() works
-						const videoId = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1]
-						if (!videoId) return m.reply('❌ YouTube video ID හමු නොවිණි!')
-						ytUrl = `https://www.youtube.com/watch?v=${videoId}`
-						ytTitle = video.title || text
-						await nimesha.sendMessage(m.chat, {
-							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n🔗 ${ytUrl}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
-						}, { quoted: m, edit: statusMsg.key })
-					} catch (se) {
-						return m.reply('❌ YouTube සෙවීම අසාර්ථකයි: ' + se.message.substring(0, 80))
-					}
-				} else {
-					await nimesha.sendMessage(m.chat, {
-						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
-					}, { quoted: m, edit: statusMsg.key })
-				}
-
-				const _sendProgress = async (txt) => {
-					try { await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
-				}
-
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You`)
 				try {
-					const hasil = await ytMp3(ytUrl, _sendProgress)
+					// ytsearch → first result URL ලබාගෙන ytmp3 download
+					
+					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+
+					// YouTube search
+					const searchRes = await yts(text)
+					const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
+					if (!video) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
+
+					// watch?v= format ensure — scraper.js getVideoId() works
+					const _vid = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1]
+					if (!_vid) return m.reply('❌ YouTube video ID හමු නොවිණි!')
+					const videoUrl = `https://www.youtube.com/watch?v=${_vid}`
+					const videoTitle = video.title || text
+
+					await nimesha.sendMessage(m.chat, {
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+					}, { quoted: m, edit: statusMsg.key })
+
+					// progress callback — live update
+					const _sendProgress = async (txt) => {
+						try { await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m, edit: statusMsg.key }) } catch {}
+					}
+
+					const hasil = await ytMp3(videoUrl, _sendProgress)
 					const isBuffer = Buffer.isBuffer(hasil.result)
 					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
 
 					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) {
-						return nimesha.sendMessage(m.chat, {
-							text: `❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`
-						}, { quoted: m, edit: statusMsg.key })
+						return m.reply(`❌ *File ලොකු වැඩියි!*\n📁 Size: ${hasil.size}\n⚠️ WhatsApp limit: 16MB`)
 					}
 
 					await m.reply({
@@ -3013,26 +3001,24 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						mimetype: 'audio/mpeg',
 						contextInfo: {
 							externalAdReply: {
-								title: hasil.title || ytTitle,
-								body: hasil.channel || '',
+								title: hasil.title || videoTitle,
+								body: hasil.channel || video.author?.name || '',
 								previewType: 'PHOTO',
-								thumbnailUrl: hasil.thumb || '',
+								thumbnailUrl: hasil.thumb || video.thumbnail || '',
 								mediaType: 1,
 								renderLargerThumbnail: true,
-								sourceUrl: ytUrl
+								sourceUrl: videoUrl
 							}
 						}
 					})
 
 					await nimesha.sendMessage(m.chat, {
-						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
 					}, { quoted: m, edit: statusMsg.key })
 
 					setLimit(m, db)
 				} catch (e) {
-					nimesha.sendMessage(m.chat, {
-						text: '❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100)
-					}, { quoted: m, edit: statusMsg.key })
+					m.reply('❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100))
 				}
 			}
 			break
@@ -3117,7 +3103,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': case 'video': case 'mp4': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL හෝ Video නම`)
-				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN*_ '
+				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY_ *NIMESHA MADHUSHAN* '
 				const _sendProgress4 = async (txt, prevKey) => {
 					try {
 						const sent = await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m });

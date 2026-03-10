@@ -3115,11 +3115,10 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				}
 			}
 			break
-			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': {
+			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': case 'video': case 'mp4': {
 				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL`)
-				if (!text.includes('youtu')) return m.reply('URL YouTube ප්‍රතිඵලය ඇතුළත් නෑ!')
-				let _progressMsgKey4 = null;
+				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL හෝ Video නම`)
+				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY_ *NIMESHA MADHUSHAN*'
 				const _sendProgress4 = async (txt, prevKey) => {
 					try {
 						const sent = await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m });
@@ -3127,15 +3126,43 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					} catch { return prevKey; }
 				};
 				try {
-					const hasil = await ytMp4(text, _sendProgress4);
+					let videoUrl = text
+					let videoTitle = text
+
+					// URL නොමැති නම් → YouTube search කරන්න
+					if (!text.includes('youtu')) {
+						let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+						const searchRes = await yts(text)
+						const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
+						if (!video) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
+						const _vid = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1]
+						if (!_vid) return m.reply('❌ YouTube video ID හමු නොවිණි!')
+						videoUrl = `https://www.youtube.com/watch?v=${_vid}`
+						videoTitle = video.title || text
+						await nimesha.sendMessage(m.chat, {
+							text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						}, { quoted: m, edit: statusMsg.key })
+					}
+
+					const hasil = await ytMp4(videoUrl, _sendProgress4);
 					// hasil.result can be Buffer or { url: '...' }
 					const isBuffer = Buffer.isBuffer(hasil.result);
 					const videoPayload = isBuffer ? hasil.result : { url: hasil.result.url || hasil.result };
-					await m.reply({ video: videoPayload, caption: `*📍Title:* ${hasil.title}\n*🚀Channel:* ${hasil.channel}\n*🗓Upload at:* ${hasil.uploadDate}` })
+					await m.reply({ video: videoPayload, caption: `*📍Title:* ${hasil.title || videoTitle}\n*🚀Channel:* ${hasil.channel || ''}\n*🗓Upload at:* ${hasil.uploadDate || ''}` })
 					setLimit(m, db)
 				} catch (e) {
 					try {
-						const { result: hasil } = await fetchApi('/download/youtube', { url: text, type: 'video', format: '360' });
+						// Fallback: URL නොමැති නම් search කරලා fallback API ද use කරන්න
+						let dlUrl = text
+						if (!text.includes('youtu')) {
+							const searchRes = await yts(text)
+							const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
+							if (video) {
+								const _vid = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1]
+								if (_vid) dlUrl = `https://www.youtube.com/watch?v=${_vid}`
+							}
+						}
+						const { result: hasil } = await fetchApi('/download/youtube', { url: dlUrl, type: 'video', format: '360' });
 						await m.reply({ video: { url: hasil.download || hasil.url || hasil.video }, caption: `*📍Title:* ${hasil.title || ''}\n*✏Quality:* ${hasil.quality || '360p'}\n*⏳Duration:* ${hasil.duration || ''}` })
 						setLimit(m, db)
 					} catch (e2) {
@@ -4274,8 +4301,10 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}mp3 (ගීතයේ නම / YouTube URL)
 │${setv} ${prefix}song (ගීතයේ නම / YouTube URL)
 │${setv} ${prefix}play (ගීතයේ නම / YouTube URL)
-│${setv} ${prefix}ytmp3 (YouTube ගීත)
-│${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
+│${setv} ${prefix}ytmp3 (ගීතයේ නම / YouTube URL)
+│${setv} ${prefix}ytmp4 (වීඩියෝ නම / YouTube URL)
+│${setv} ${prefix}video (වීඩියෝ නම / YouTube URL)
+│${setv} ${prefix}mp4 (වීඩියෝ නම / YouTube URL)
 │${setv} ${prefix}instagram (ඉන්ස්ටග්‍රෑම් වීඩියෝ)
 │${setv} ${prefix}tiktok (ටික්ටොක් වීඩියෝ)
 │${setv} ${prefix}tiktokmp3 (ටික්ටොක් ශබ්ද)
@@ -4564,8 +4593,10 @@ _ස්තූතියි!_ 🌸`).then(() => {
 │${setv} ${prefix}mp3 (ගීතයේ නම / YouTube URL)
 │${setv} ${prefix}song (ගීතයේ නම / YouTube URL)
 │${setv} ${prefix}play (ගීතයේ නම / YouTube URL)
-│${setv} ${prefix}ytmp3 (YouTube ගීත)
-│${setv} ${prefix}ytmp4 (YouTube වීඩියෝ)
+│${setv} ${prefix}ytmp3 (ගීතයේ නම / YouTube URL)
+│${setv} ${prefix}ytmp4 (වීඩියෝ නම / YouTube URL)
+│${setv} ${prefix}video (වීඩියෝ නම / YouTube URL)
+│${setv} ${prefix}mp4 (වීඩියෝ නම / YouTube URL)
 │${setv} ${prefix}instagram (Instagram වීඩියෝ)
 │${setv} ${prefix}tiktok (TikTok වීඩියෝ)
 │${setv} ${prefix}tiktokmp3 (TikTok ශබ්ද)

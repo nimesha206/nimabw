@@ -2747,8 +2747,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You`)
 				try {
 					// ytsearch → first result URL ලබාගෙන ytmp3 download
-					
-					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━`)
 
 					// YouTube search
 					const searchRes = await yts(text)
@@ -2762,7 +2761,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					const videoTitle = video.title || text
 
 					await nimesha.sendMessage(m.chat, {
-						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━`
 					}, { quoted: m, edit: statusMsg.key })
 
 					// progress callback — live update
@@ -2795,7 +2794,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					})
 
 					await nimesha.sendMessage(m.chat, {
-						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━`
 					}, { quoted: m, edit: statusMsg.key })
 
 					setLimit(m, db)
@@ -2965,8 +2964,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You`)
 				try {
 					// ytsearch → first result URL ලබාගෙන ytmp3 download
-					
-					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━`)
 
 					// YouTube search
 					const searchRes = await yts(text)
@@ -2980,7 +2978,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					const videoTitle = video.title || text
 
 					await nimesha.sendMessage(m.chat, {
-						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━`
 					}, { quoted: m, edit: statusMsg.key })
 
 					// progress callback — live update
@@ -3013,7 +3011,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					})
 
 					await nimesha.sendMessage(m.chat, {
-						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || videoTitle}\n━━━━━━━━━━━━━━━━━━━━━━`
 					}, { quoted: m, edit: statusMsg.key })
 
 					setLimit(m, db)
@@ -3033,7 +3031,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				let ytUrl = text
 				let ytTitle = text
 
-				let statusMsg = await m.reply(`🔍 *${isUrl ? 'URL හඳුනාගනිමින්' : 'සොයමින්'}...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
+				let statusMsg = await m.reply(`🔍 *${isUrl ? 'URL හඳුනාගනිමින්' : 'සොයමින්'}...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n━━━━━━━━━━━━━━━━━━━━━━`)
 
 				if (!isUrl) {
 					try {
@@ -3046,14 +3044,14 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						ytUrl = `https://www.youtube.com/watch?v=${videoId}`
 						ytTitle = video.title || text
 						await nimesha.sendMessage(m.chat, {
-							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n🔗 ${ytUrl}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+							text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${ytTitle}\n🔗 ${ytUrl}\n⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━`
 						}, { quoted: m, edit: statusMsg.key })
 					} catch (se) {
 						return m.reply('❌ YouTube සෙවීම අසාර්ථකයි: ' + se.message.substring(0, 80))
 					}
 				} else {
 					await nimesha.sendMessage(m.chat, {
-						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🔗 *URL:* ${ytUrl}\n━━━━━━━━━━━━━━━━━━━━━━`
 					}, { quoted: m, edit: statusMsg.key })
 				}
 
@@ -3089,7 +3087,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 					})
 
 					await nimesha.sendMessage(m.chat, {
-						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+						text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${hasil.title || ytTitle}\n━━━━━━━━━━━━━━━━━━━━━━`
 					}, { quoted: m, edit: statusMsg.key })
 
 					setLimit(m, db)
@@ -3103,7 +3101,6 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': case 'video': case 'mp4': {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL හෝ Video නම`)
-				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN*_ '
 				const _sendProgress4 = async (txt, prevKey) => {
 					try {
 						const sent = await nimesha.sendMessage(m.chat, { text: txt }, { quoted: m });
@@ -3125,7 +3122,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 						videoUrl = `https://www.youtube.com/watch?v=${_vid}`
 						videoTitle = video.title || text
 						await nimesha.sendMessage(m.chat, {
-							text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
+							text: `⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${videoTitle}\n⏳ *URL:* ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━`
 						}, { quoted: m, edit: statusMsg.key })
 					}
 

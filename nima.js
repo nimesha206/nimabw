@@ -2747,7 +2747,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You`)
 				try {
 					// ytsearch → first result URL ලබාගෙන ytmp3 download
-					const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'
+					const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY_ *NIMESHA MADHUSHAN*'
 					let statusMsg = await m.reply(`🔍 *සොයමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
 
 					// YouTube search
@@ -2964,8 +2964,6 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You  හෝ  ${prefix + command} https://youtu.be/xxx`)
 
-				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'
-				const isUrl = /https?:\/\//.test(text)
 
 				// URL නම් directly use, name නම් ytsearch කරනවා
 				let ytUrl = text
@@ -3043,7 +3041,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 				if (!isLimit) return m.reply(mess.limit)
 				if (!text) return m.reply(`උදාහරණ: ${prefix + command} Shape of You  හෝ  ${prefix + command} https://youtu.be/xxx`)
 
-				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨'
+				const footer = global.mess?.footer || '> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY_ *NIMESHA MADHUSHAN*'
 				const isUrl = /https?:\/\//.test(text)
 
 				// URL නම් directly use, name නම් ytsearch කරනවා

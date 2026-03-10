@@ -106,13 +106,33 @@ function detectOS() {
             }
         } catch {}
 
-        // ── Cloud / Docker / Railway / Render (cloud platforms) ─────────────────
+        // ── Cloud / Docker / Railway / Render / JustRunMy.App ───────────────────
         const isDocker = fs.existsSync('/.dockerenv') ||
             (fs.existsSync('/proc/1/cgroup') &&
              fs.readFileSync('/proc/1/cgroup', 'utf8').includes('docker'));
         const isCloud  = process.env.RAILWAY_ENVIRONMENT || process.env.RENDER ||
                          process.env.HEROKU_APP_NAME || process.env.FLY_APP_NAME ||
-                         process.env.REPL_ID;
+                         process.env.REPL_ID || process.env.JUSTRUNMY_APP ||
+                         process.env.PANEL_URL || isDocker;
+
+        // ── JustRunMy.App / managed panel detection ────────────────────────────
+        // මෙවැනි platforms root access ඇති Debian/Ubuntu container
+        // sudo නෑ, DEBIAN_FRONTEND set කරන්න ඕනෙ
+        const isJustRunMy = (() => {
+            try {
+                const hostname = require('os').hostname();
+                const cgroup = fs.existsSync('/proc/1/cgroup')
+                    ? fs.readFileSync('/proc/1/cgroup', 'utf8') : '';
+                return (
+                    process.env.JUSTRUNMY_APP ||
+                    hostname.includes('panel') ||
+                    hostname.includes('justrun') ||
+                    cgroup.includes('lxc') ||
+                    cgroup.includes('containerd') ||
+                    (isDocker && !process.env.RAILWAY_ENVIRONMENT && !process.env.RENDER)
+                );
+            } catch { return false; }
+        })();
 
         // ── /etc/os-release හරහා Linux distro හඳුනාගැනීම ──────────────
         let distroId = '';
@@ -163,8 +183,10 @@ function detectOS() {
         if (distroId === 'debian' || distroId === 'ubuntu' || distroId === 'kali' ||
             distroLike.includes('debian') || distroLike.includes('ubuntu') ||
             fs.existsSync('/etc/debian_version') || fs.existsSync('/etc/lsb-release')) {
-            const label = isDocker ? 'Docker (Debian/Ubuntu)' : isCloud ? 'Cloud VPS (Debian/Ubuntu)' : 'Ubuntu/Debian/VPS';
-            return { type: 'ubuntu', display: label, pm: 'apt', pmAlternate: 'apt-get' };
+            const label = isJustRunMy ? 'JustRunMy.App/Panel (Debian/Ubuntu)' :
+                          isDocker ? 'Docker (Debian/Ubuntu)' :
+                          isCloud ? 'Cloud VPS (Debian/Ubuntu)' : 'Ubuntu/Debian/VPS';
+            return { type: isJustRunMy ? 'justrunmy' : 'ubuntu', display: label, pm: 'apt', pmAlternate: 'apt-get' };
         }
 
         // Generic Linux fallback (සාමාන්‍ය Linux)
@@ -215,6 +237,12 @@ function commandExists(cmd) {
 
 async function autoInstallNodeJS(osInfo) {
     const methods = {
+        justrunmy: [
+            'DEBIAN_FRONTEND=noninteractive apt-get update -y && apt-get install -y nodejs npm',
+            'apt-get update -y && apt-get install -y nodejs npm',
+            'apt update -y && apt install -y nodejs npm',
+            'curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs',
+        ],
         termux: [
             'pkg update -y && pkg install -y nodejs',
             'apt update -y && apt install -y nodejs',
@@ -265,9 +293,13 @@ async function autoInstallNodeJS(osInfo) {
 
 async function autoInstallPython(osInfo) {
     const methods = {
+        justrunmy: [
+            'DEBIAN_FRONTEND=noninteractive apt-get update -y && apt-get install -y python3 python3-pip',
+            'apt-get update -y && apt-get install -y python3 python3-pip',
+            'apt update -y && apt install -y python3 python3-pip',
+            'apt-get install -y python3',
+        ],
         termux: [
-            'pkg update -y && pkg install -y python',
-            'pkg install -y python3',
             'apt update -y && apt install -y python3',
             'apt install -y python3-pip',
         ],
@@ -315,6 +347,11 @@ async function autoUpgradeSystemPackages(osInfo) {
     log.header('📦 System පැකේජ upgrade කරමින්');
     
     const upgradeMethods = {
+        justrunmy: [
+            'DEBIAN_FRONTEND=noninteractive apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y',
+            'apt-get update -y && apt-get upgrade -y',
+            'apt update -y && apt upgrade -y',
+        ],
         termux: [
             'pkg update -y && pkg upgrade -y',
             'apt update -y && apt upgrade -y',
@@ -362,6 +399,19 @@ async function autoUpgradeSystemPackages(osInfo) {
 
 async function installPackageWithFallback(osInfo, packageName, maxAttempts = 10) {
     const installMethods = {
+        // JustRunMy.App / Panel / LXC — root, no sudo, pip --break-system-packages
+        justrunmy: [
+            () => `DEBIAN_FRONTEND=noninteractive apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ${packageName}`,
+            () => `apt-get update -y && apt-get install -y ${packageName}`,
+            () => `apt update -y && apt install -y ${packageName}`,
+            () => `DEBIAN_FRONTEND=noninteractive apt-get install -y ${packageName}`,
+            () => `pip3 install --break-system-packages ${packageName}`,
+            () => `pip3 install ${packageName}`,
+            () => `python3 -m pip install --break-system-packages ${packageName}`,
+            () => `python3 -m pip install ${packageName}`,
+            () => `apt-get install -y --fix-broken && apt-get install -y ${packageName}`,
+            () => `apt-get upgrade -y && apt-get install -y ${packageName}`,
+        ],
         termux: [
             () => `pkg update -y && pkg install -y ${packageName}`,
             () => `apt update -y && apt install -y ${packageName}`,
@@ -685,6 +735,22 @@ function getInstallCommands(osInfo, packages) {
     const pkg = packages[0];
     
     const cmds = {
+        // ── JustRunMy.App / Panel / LXC / managed container ──────────────────
+        justrunmy: {
+            methods: [
+                { cmd: `DEBIAN_FRONTEND=noninteractive apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ${packages.join(' ')}`, desc: 'apt-get DEBIAN_FRONTEND (no sudo)' },
+                { cmd: `apt-get update -y && apt-get install -y ${packages.join(' ')}`, desc: 'apt-get (no sudo)' },
+                { cmd: `apt update -y && apt install -y --no-install-recommends ${packages.join(' ')}`, desc: 'apt --no-install-recommends' },
+                { cmd: `apt update -y && apt install -y ${packages.join(' ')}`, desc: 'apt (no sudo)' },
+                { cmd: `DEBIAN_FRONTEND=noninteractive apt-get install -y ${packages.join(' ')}`, desc: 'apt-get direct' },
+                { cmd: `apt-get install -y --fix-broken && apt-get install -y ${packages.join(' ')}`, desc: 'apt-get fix-broken + install' },
+                { cmd: `pip3 install --break-system-packages ${pkg}`, desc: 'pip3 --break-system-packages' },
+                { cmd: `pip3 install ${pkg}`, desc: 'pip3' },
+                { cmd: `python3 -m pip install --break-system-packages ${pkg}`, desc: 'python3 -m pip --break-system-packages' },
+            ],
+            update: `DEBIAN_FRONTEND=noninteractive apt-get update -y`,
+            install: `DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ${packages.join(' ')}`
+        },
         termux: {
             methods: [
                 { cmd: `pkg update -y && pkg install -y ${packages.join(' ')}`, desc: 'pkg update + install' },
@@ -908,7 +974,7 @@ async function autoSetupPermissions(osInfo) {
     log.info(`පරිශීලකය: ${currentUser} | Root: ${isRoot} | Platform: ${osInfo.display}`);
 
     // ── 1. sudo NOPASSWD සැකසීම (root නොවන පරිශීලකයන් සඳහා) ───────
-    if (!isRoot && !isTermux) {
+    if (!isRoot && !isTermux && osInfo.type !== 'justrunmy') {
         log.info('sudo NOPASSWD සකස් කරමින්...');
         const sudoersMethods = [
             // /etc/sudoers.d/ drop-in (safest)
@@ -1013,6 +1079,9 @@ async function autoSetupPermissions(osInfo) {
     // ── 5. pip / python අවසර නිවැරදි කිරීම ───────────────────────
     log.info('pip අවසර නිවැරදි කරමින්...');
     const pipPermCmds = [
+        // JustRunMy.App / panel / root container — no sudo needed
+        'rm -f /usr/lib/python3*/EXTERNALLY-MANAGED 2>/dev/null || true',
+        'find /usr/lib/python3* -name EXTERNALLY-MANAGED -delete 2>/dev/null || true',
         // modern distros: allow pip system-wide
         'sudo rm -f /usr/lib/python3*/EXTERNALLY-MANAGED 2>/dev/null || true',
         'rm -f /usr/lib/python3*/EXTERNALLY-MANAGED 2>/dev/null || true',
@@ -1639,95 +1708,9 @@ async function autoInstallDependencies() {
     log.success('✅ Setup සත්‍යාපනය සම්පූර්ණයි!');
 }
 
-// ═══════════════════════════════════════════════════════════
-// 🔄 Startup Git Pull — Bot ආරම්භයේදී update check
-// ═══════════════════════════════════════════════════════════
-
-async function startupGitPullCheck() {
-    log.header('🔄 Startup Git Pull Check');
-    try {
-        ensureGitSetup();
-    } catch { /* skip */ }
-
-    // git config
-    try {
-        execSync('git config pull.rebase false', { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
-        execSync('git config credential.helper store', { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
-        execSync(`git remote set-url origin ${REPO_URL}`, { stdio: 'pipe', cwd: __dirname, timeout: 5000 });
-    } catch { /* skip */ }
-
-    const local  = getCurrentCommit();
-    const remote = getRemoteCommit();
-
-    if (!local || !remote) {
-        log.warn('⚠️ Git commit check අසාර්ථකයි — bot දිගටම ආරම්භ කරමින්...');
-        return false; // already up-to-date ලෙස සලකා bot start
-    }
-
-    if (local === remote) {
-        log.success(`✅ දැනටමත් යාවත්කාලීනයි (${local.slice(0,7)}) — bot ආරම්භ කරමින්...`);
-        return false; // pull නෑ, bot start
-    }
-
-    log.warn(`🔄 නව update හමු වුණා! local=${local.slice(0,7)} → remote=${remote.slice(0,7)}`);
-    log.info('🔄 Git pull කරමින්...');
-
-    const pullMethods = [
-        'git pull origin main --rebase',
-        'git pull origin main',
-        'git pull --force origin main',
-        'git fetch origin main && git reset --hard origin/main',
-        'git fetch --all && git reset --hard origin/main',
-    ];
-
-    let pulled = false;
-    for (const cmd of pullMethods) {
-        try {
-            log.info(`උත්සාහ: ${cmd}`);
-            execSync(cmd, { stdio: 'inherit', cwd: __dirname, timeout: 60000, shell: '/bin/bash' });
-            pulled = true;
-            log.success('✅ Git pull සාර්ථකයි!');
-            break;
-        } catch (e) {
-            log.warn(`✗ ${cmd}`);
-        }
-    }
-
-    if (!pulled) {
-        log.warn('⚠️ Git pull ක්‍රම සියල්ල අසාර්ථකයි — bot දිගටම ආරම්භ කරමින්...');
-        return false;
-    }
-
-    // npm install
-    try {
-        log.info('📦 npm install කරමින්...');
-        execSync('npm install --prefer-offline --no-audit --legacy-peer-deps', {
-            stdio: 'inherit', cwd: __dirname, timeout: 120000
-        });
-        log.success('✅ npm install සාර්ථකයි!');
-    } catch (e) {
-        log.warn('npm install අවවාදය: ' + e.message);
-    }
-
-    return true; // pull වුණා, restart කළ යුතු
-}
-
 // ප්‍රධාන ක්‍රියාවලිය
 async function start() {
     try {
-        // ══ Startup Git Pull Check ══
-        const didPull = await startupGitPullCheck();
-        if (didPull) {
-            log.success('🔄 Update ලැබුණා! Bot auto-restart කරමින්...');
-            const { spawn: _spawn } = require('child_process');
-            const child = _spawn(process.argv[0], process.argv.slice(1), {
-                stdio: 'inherit',
-                detached: false,
-            });
-            child.on('exit', (code) => process.exit(code ?? 0));
-            return;
-        }
-
         // බිමට අවශ්‍යතා පරීක්ෂා කරමින් සහ ස්ථාපනය කරමින්
         await autoInstallDependencies();
 
@@ -1737,8 +1720,7 @@ async function start() {
         // ප්‍රධාන යෙදුම ආරම්භ කරමින්
         let args = [path.join(__dirname, 'index.js'), ...process.argv.slice(2)];
         let p = spawn(process.argv[0], args, {
-            stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
-            env: { ...process.env, _GIT_PULL_DONE: '1' }
+            stdio: ['inherit', 'inherit', 'inherit', 'ipc']
         }).on('message', data => {
             if (data === 'reset') {
                 console.log(chalk.yellow.bold('[BOT] නැවත පණ ගන්වමින් පවතී...'));

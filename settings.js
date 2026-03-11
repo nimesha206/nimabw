@@ -68,6 +68,7 @@ global.badWords = ['dongo']
 global.chatLength = 500
 global.geminiMemorySize = 50
 global.geminiApiKey = SecureConfig.geminiApiKey;
+global.footer = SecureConfig.footer;
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {

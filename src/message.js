@@ -929,7 +929,7 @@ async function Serialize(nimesha, msg, store) {
 		m.isBot = ['HSK', 'BAE', 'B1E', '3EB0', 'B24E', 'WA'].some(a => m.id.startsWith(a) && [12, 16, 20, 22, 40].includes(m.id.length)) || /(.)\1{5,}|[^a-zA-Z0-9]|[^0-9A-F]/.test(m.id) || false
 		m.isGroup = m.chat.endsWith('@g.us')
 		if (!m.isGroup && m.chat.endsWith('@lid')) m.chat = nimesha.findJidByLid(m.chat, store) || m.chat;
-		m.sender = nimesha.decodeJid(m.fromMe && nimesha.user.id || m.key.participant || m.chat || '')
+		m.sender = nimesha.decodeJid(m.fromMe && (global.owner?.[0] ? global.owner[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net' : nimesha.user.id) || m.key.participant || m.chat || '')
 		if (m.isGroup) {
 			if (!store.groupMetadata) store.groupMetadata = await nimesha.groupFetchAllParticipating().catch(e => ({}));
 			let metadata = store.groupMetadata[m.chat] ? store.groupMetadata[m.chat] : (store.groupMetadata[m.chat] = await nimesha.groupMetadata(m.chat).catch(e => ({ ...store.groupMetadata[m.chat] })));

@@ -828,18 +828,23 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                 }, { quoted: m });
 
                 try {
-                    // Download ක්‍රම progress tracking
-                    let progressLines = [];
+                    // Download ක්‍රම progress — fail නම් edit, success නම් final line set කිරීම
+                    let successLine = '';
                     const progressCallback = async (num, methodName, success, total) => {
                         try {
-                            const icon = success ? '✅' : '❌';
-                            const status = success ? 'සාර්ථකයි' : 'අසාර්ථකයි';
-                            progressLines.push(`${icon} *${num}/${total}* — \`${methodName}\` → ${status}`);
-                            const nextLine = (!success && num < total) ? '\n\n⏳ _ඊළඟ ක්‍රමය උත්සාහ කරමින්..._' : '';
-                            // Downloading message edit
-                            await nimesha.sendMessage(m.chat, {
-                                text: '⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + progressLines.join('\n') + nextLine + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
-                            }, { edit: statusMsg.key });
+                            if (success) {
+                                // හරිගිය line save කිරීම — uploading message හි use කිරීමට
+                                successLine = '✅ *' + num + '/' + total + '* — `' + methodName + '` → සාර්ථකයි';
+                                // downloading message හි success line edit
+                                await nimesha.sendMessage(m.chat, {
+                                    text: '⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + successLine + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
+                                }, { quoted: m, edit: statusMsg.key });
+                            } else {
+                                // අසාර්ථක නම් — edit කරමින් ඊළඟ try පෙන්වීම
+                                await nimesha.sendMessage(m.chat, {
+                                    text: '⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n🔄 *' + num + '/' + total + '* — `' + methodName + '` → අසාර්ථකයි, ඊළඟ උත්සාහය...\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
+                                }, { quoted: m, edit: statusMsg.key });
+                            }
                         } catch (e) {}
                     };
 
@@ -855,18 +860,18 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                     if (!downloadResult || !downloadResult.success) {
                         await nimesha.sendMessage(m.chat, {
                             text: `❌ *බාගැනීම අසාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${pending.displayTitle}\n⚠️ *දෝෂය:* ${downloadResult?.error || 'නොදන්නා දෝෂයකි'}\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                        }, { edit: statusMsg.key });
+                        }, { quoted: m, edit: statusMsg.key });
                         return;
                     }
 
                     const audioBuffer = fs.readFileSync(downloadResult.filePath);
 
-                    // Uploading message edit
+                    // uploading + done — media යැවීමට කලින් status msg edit
                     await nimesha.sendMessage(m.chat, {
-                        text: `📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${pending.displayTitle}\n🎶 *ආකෘතිය:* ${formatNames[choice]}\n⏳ Upload කරමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
+                        text: '📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + successLine + '\n━━━━━━━━━━━━━━━━━━━━━━\n✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
+                    }, { quoted: m, edit: statusMsg.key });
 
-                    // Media send — user reply ට quoted
+                    // Media send — new message ලෙස
                     if (choice === '1') {
                         await nimesha.sendMessage(m.chat, {
                             audio: audioBuffer, mimetype: 'audio/mpeg', ptt: false,
@@ -883,18 +888,13 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                         }, { quoted: m });
                     }
 
-                    // Done message edit
-                    await nimesha.sendMessage(m.chat, {
-                        text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${pending.displayTitle}\n🎶 *ආකෘතිය:* ${formatNames[choice]}\n🔧 *ක්‍රමය:* ${downloadResult.method}\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
-
                     // තාවකාලික ගොනුව මකාදැමීම
                     try { fs.unlinkSync(downloadResult.filePath); } catch (e) {}
 
                 } catch (err) {
                     await nimesha.sendMessage(m.chat, {
                         text: `❌ *දෝෂයකි!*\n━━━━━━━━━━━━━━━━━━━━━━\n⚠️ ${err.message.substring(0, 150)}\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
+                    }, { quoted: m, edit: statusMsg.key });
                 }
             }
 
@@ -905,9 +905,9 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                 const qualityMap = { '1': '144', '2': '360', '3': '720' };
                 const quality = qualityMap[choice];
 
-                // Downloading message — user reply ට quoted
+                // පියවර 1: Downloading message — user reply ට quoted
                 let statusMsg = await nimesha.sendMessage(m.chat, {
-                    text: `⬇️ *වීඩියෝ බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n⏳ yt-dlp ආරම්භ කරමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
+                    text: `⬇️ *වීඩියෝ බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n⏳ ගොනුව ලබාගනිමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
                 }, { quoted: m });
 
                 try {
@@ -921,11 +921,6 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                         ? 'bestvideo[height<=360]+bestaudio/best[height<=360]'
                         : 'bestvideo[height<=720]+bestaudio/best[height<=720]';
 
-                    // Downloading edit
-                    await nimesha.sendMessage(m.chat, {
-                        text: `⬇️ *වීඩියෝ බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n⏳ ගොනුව ලබාගනිමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
-
                     await new Promise((res, rej) => {
                         exec(`yt-dlp -f "${qualityFilter}" --merge-output-format mp4 --no-playlist -o "${outputPath}" "${pending.url}"`,
                             (err, stdout, stderr) => {
@@ -937,26 +932,21 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                     const videoBuffer = fs.readFileSync(outputPath);
                     try { fs.unlinkSync(outputPath); } catch (e) {}
 
-                    // Uploading edit
+                    // uploading + done — media යැවීමට කලින් status msg edit
                     await nimesha.sendMessage(m.chat, {
-                        text: `📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n⏳ Upload කරමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
+                        text: `📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n━━━━━━━━━━━━━━━━━━━━━━\n✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
+                    }, { quoted: m, edit: statusMsg.key });
 
-                    // Video send
+                    // Video send — new message ලෙස
                     await nimesha.sendMessage(m.chat, {
                         video: videoBuffer,
                         caption: `🎬 *${pending.displayTitle}*\n📺 *තත්ත්වය:* ${quality}p\n${botFooter}`
                     }, { quoted: m });
 
-                    // Done edit
-                    await nimesha.sendMessage(m.chat, {
-                        text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
-
                 } catch (err) {
                     await nimesha.sendMessage(m.chat, {
                         text: `❌ *වීඩියෝ දෝෂයකි!*\n━━━━━━━━━━━━━━━━━━━━━━\n⚠️ ${err.message.substring(0, 150)}\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
+                    }, { quoted: m, edit: statusMsg.key });
                 }
             }
             return;
@@ -1007,7 +997,7 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                     // පියවර 2: Choice message — searching message edit
                     await nimesha.sendMessage(m.chat, {
                         text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${displayTitle}\n🔗 ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n\n🎶 *Download ආකෘතිය තෝරන්න:*\n\n1️⃣ Audio (🎵 mp3)\n2️⃣ හඬ සටහන (🎤 voice note)\n3️⃣ ලිපිගොනු (📄 document)\n\n📩 *අංකයක් reply කරන්න (1/2/3)*\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
+                    }, { quoted: m, edit: statusMsg.key });
 
                 } catch (err) {
                     console.error('ගීත සෙවීමේ දෝෂය:', err);
@@ -1051,7 +1041,7 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                         if (!video) {
                             await nimesha.sendMessage(m.chat, {
                                 text: `❌ *YouTube හි හමු නොවිණි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *ඉල්ලුම:* ${input}\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                            }, { edit: statusMsg.key });
+                            }, { quoted: m, edit: statusMsg.key });
                             break;
                         }
                         const _vid = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1];
@@ -1065,7 +1055,7 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                     // පියවර 2: Choice message — searching message edit
                     await nimesha.sendMessage(m.chat, {
                         text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${displayTitle}\n🔗 ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n\n📺 *Video තත්ත්වය තෝරන්න:*\n\n1️⃣ 144p (අඩු ගුණත්වය)\n2️⃣ 360p (මධ්‍යම ගුණත්වය)\n3️⃣ 720p (ඉහළ ගුණත්වය)\n\n📩 *අංකයක් reply කරන්න (1/2/3)*\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
-                    }, { edit: statusMsg.key });
+                    }, { quoted: m, edit: statusMsg.key });
 
                 } catch (err) {
                     await nimesha.sendMessage(m.chat, {

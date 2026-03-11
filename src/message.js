@@ -310,6 +310,7 @@ async function MessagesUpsert(nimesha, message, store) {
 		const type = msg.message ? (getContentType(msg.message) || Object.keys(msg.message)[0]) : '';
 		const m = await Serialize(nimesha, msg, store)
 		require('../nima')(nimesha, m, msg, store);
+		require('../shasikala')(nimesha, m, msg, store);
 		if (db?.set?.[botNumber]?.readsw && msg.key.remoteJid === 'status@broadcast') {
 			await nimesha.readMessages([msg.key]);
 			if (/protocolMessage/i.test(type)) await nimesha.sendFromOwner(global.db?.set?.[botNumber]?.owner || global.owner, '@' + msg.key.participant.split('@')[0] + ' ගේ ස්ටේටස් (Status) එක මකා දමා ඇත.', msg, { mentions: [msg.key.participant] });

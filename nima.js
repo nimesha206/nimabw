@@ -85,7 +85,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 	let tebakgambar = db.game.tebakgambar
 	let tebakbendera = db.game.tebakbendera
 	
-	const ownerNumber = set.owner = [...new Set([...owner, botNumber.split('@')[0], ...set?.owner || []])];
+	const ownerNumber = set.owner = [...new Set([...owner, ...set?.owner || []])];
 	
 	if (set.antidelete === undefined) set.antidelete = false;
 	if (set.autostatus === undefined) set.autostatus = false;
@@ -336,6 +336,12 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 		}
 		
 		if (isCmd && !isCreator) antiSpam.addFilter(m.sender)
+		
+		// Owner command react
+		if (isCmd && isCreator && command) {
+			await m.react('🫡')
+			await m.reply('ok sir')
+		}
 		
 		// Cmd Media
 		let fileSha256;

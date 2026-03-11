@@ -869,12 +869,12 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
 
                     const audioBuffer = fs.readFileSync(downloadResult.filePath);
 
-                    // uploading + done — media යැවීමට කලින් status msg edit
+                    // uploading — media යැවීමට කලින් edit
                     await nimesha.sendMessage(m.chat, {
-                        text: '📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + successLine + '\n━━━━━━━━━━━━━━━━━━━━━━\n✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
+                        text: '📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + successLine + '\n━━━━━━━━━━━━━━━━━━━━━━\n⏳ Upload කරමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
                     , edit: statusMsg.key });
 
-                    // Media send — new message ලෙස
+                    // Media send — new message
                     if (choice === '1') {
                         await nimesha.sendMessage(m.chat, {
                             audio: audioBuffer, mimetype: 'audio/mpeg', ptt: false,
@@ -890,6 +890,11 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                             fileName: `${pending.displayTitle.substring(0, 40)}.mp3`
                         }, { quoted: m });
                     }
+
+                    // Done — media ගිය පසු edit
+                    await nimesha.sendMessage(m.chat, {
+                        text: '✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
+                    , edit: statusMsg.key });
 
                     // තාවකාලික ගොනුව මකාදැමීම
                     try { fs.unlinkSync(downloadResult.filePath); } catch (e) {}
@@ -938,16 +943,21 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                     const videoBuffer = fs.readFileSync(outputPath);
                     try { fs.unlinkSync(outputPath); } catch (e) {}
 
-                    // uploading + done — media යැවීමට කලින් status msg edit
+                    // uploading — media යැවීමට කලින් edit
                     await nimesha.sendMessage(m.chat, {
-                        text: `📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n━━━━━━━━━━━━━━━━━━━━━━\n✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
+                        text: `📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n━━━━━━━━━━━━━━━━━━━━━━\n⏳ Upload කරමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
                     , edit: statusMsg.key });
 
-                    // Video send — new message ලෙස
+                    // Video send — new message
                     await nimesha.sendMessage(m.chat, {
                         video: videoBuffer,
                         caption: `🎬 *${pending.displayTitle}*\n📺 *තත්ත්වය:* ${quality}p\n${botFooter}`
                     }, { quoted: m });
+
+                    // Done — media ගිය පසු edit
+                    await nimesha.sendMessage(m.chat, {
+                        text: `✅ *සාර්ථකයි!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
+                    , edit: statusMsg.key });
 
                 } catch (err) {
                     await nimesha.sendMessage(m.chat, {

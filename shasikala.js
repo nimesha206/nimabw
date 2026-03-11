@@ -839,9 +839,9 @@ ${botFooter}`
                     const progressCallback = async (num, methodName, success, total) => {
                         try {
                             const icon = success ? '✅' : '❌';
-                            const තත්වය = success ? 'සාර්ථකයි' : 'අසාර්ථකයි';
-                            progressLines.push(`${icon} *${num}/${total}* — \`${methodName}\` → ${තත්වය}`);
-                            const ඊළඟ = (!success && num < total) ? '
+                            const status = success ? 'සාර්ථකයි' : 'අසාර්ථකයි';
+                            progressLines.push(`${icon} *${num}/${total}* — \`${methodName}\` → ${status}`);
+                            const nextLine = (!success && num < total) ? '
 
 ⏳ _ඊළඟ ක්‍රමය උත්සාහ කරමින්..._' : '';
                             // පියවර 2: Progress edit (reply message edit)
@@ -852,7 +852,7 @@ ${botFooter}`
 🎶 *ආකෘතිය:* ${formatNames[choice]}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${progressLines.join('
-')}${ඊළඟ}
+')}${nextLine}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
                             }, { quoted: m, edit: statusMsg.key });

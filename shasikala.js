@@ -845,7 +845,7 @@ ${botFooter}`
                             // පියවර 2: Progress edit (reply message edit)
                             await nimesha.sendMessage(m.chat, {
                                 text: '⬇️ *බාගනිමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ' + pending.displayTitle + '\n🎶 *ආකෘතිය:* ' + formatNames[choice] + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + progressLines.join('\n') + nextLine + '\n━━━━━━━━━━━━━━━━━━━━━━\n' + botFooter
-                            }, { quoted: m, edit: statusMsg.key });
+                            }, { edit: statusMsg.key });
                         } catch (e) {}
                     };
 
@@ -866,7 +866,7 @@ ${botFooter}`
 ⚠️ *දෝෂය:* ${downloadResult.error || 'නොදන්නා දෝෂයකි'}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                        }, { quoted: m, edit: statusMsg.key });
+                        }, { edit: statusMsg.key });
                         return;
                     }
 
@@ -881,7 +881,7 @@ ${botFooter}`
 ⏳ Upload කරමින්...
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
 
                     // Media යැවීම (reply message ලෙස)
                     if (choice === '1') {
@@ -917,7 +917,7 @@ ${botFooter}`
 🔧 *ක්‍රමය:* ${downloadResult.method}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
 
                     // තාවකාලික ගොනුව මකාදැමීම
                     try { fs.unlinkSync(downloadResult.filePath); } catch (e) {}
@@ -930,7 +930,7 @@ ${botFooter}`
 ⚠️ ${err.message.substring(0,150)}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
                 }
             }
 
@@ -972,7 +972,7 @@ ${botFooter}`
 ⏳ ගොනුව ලබාගනිමින්...
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
 
                     await new Promise((res, rej) => {
                         exec(`yt-dlp -f "${qualityFilter}" --merge-output-format mp4 --no-playlist -o "${outputPath}" "${pending.url}"`, (err, stdout, stderr) => {
@@ -993,7 +993,7 @@ ${botFooter}`
 ⏳ Upload කරමින්...
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
 
                     // Media යැවීම (reply message ලෙස)
                     await nimesha.sendMessage(m.chat, {
@@ -1011,7 +1011,7 @@ ${botFooter}`
 📺 *තත්ත්වය:* ${quality}p
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
 
                 } catch (err) {
                     // දෝෂය edit කරමින් පෙන්වීම
@@ -1021,7 +1021,7 @@ ${botFooter}`
 ⚠️ ${err.message.substring(0,150)}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                    }, { quoted: m, edit: statusMsg.key });
+                    }, { edit: statusMsg.key });
                 }
             }
             return;
@@ -1034,7 +1034,9 @@ ${botFooter}`
         for (const cmd of commands) {
             if (m.command === cmd && m.text) {
                 try {
-                    const input = m.text.trim();
+                    // prefix සහ command ඉවත් කර ගීත නාමය ලබාගැනීම
+                    const input = (m.args && m.args.length > 0) ? m.args.join(' ').trim() : m.text.replace(m.prefix + cmd, '').trim();
+                    if (!input) { await nimesha.sendMessage(m.chat, { text: `⚠️ ගීත නාමය ඇතුළත් කරන්න!\nඋදාහරණ: ${m.prefix}${cmd} Shape of You\n${botFooter}` }, { quoted: m }); break; }
 
                     // පියවර 1: Searching message (reply message ලෙස)
                     let statusMsg = await nimesha.sendMessage(m.chat, {
@@ -1083,9 +1085,8 @@ ${botFooter}`
 
 📩 *අංකයක් reply කරන්න (1/2/3)*
 ━━━━━━━━━━━━━━━━━━━━━━
-${botFooter}`,
-                        edit: statusMsg.key
-                    });
+${botFooter}`
+                    }, { edit: statusMsg.key });
 
                 } catch (err) {
                     console.error('ගීත සෙවීමේ දෝෂය:', err);
@@ -1103,7 +1104,9 @@ ${botFooter}`
         // ══════════════════════════════════════
         if ((m.command === 'video' || m.command === 'mp4' || m.command === 'ytmp4') && m.text) {
             try {
-                const input = m.text.trim();
+                // prefix සහ command ඉවත් කර වීඩියෝ නාමය/URL ලබාගැනීම
+                const input = (m.args && m.args.length > 0) ? m.args.join(' ').trim() : m.text.replace(m.prefix + m.command, '').trim();
+                if (!input) { await nimesha.sendMessage(m.chat, { text: `⚠️ වීඩියෝ නාමය ඇතුළත් කරන්න!\nඋදාහරණ: ${m.prefix}${m.command} Avengers\n${botFooter}` }, { quoted: m }); return; }
                 let videoUrl = input;
                 let displayTitle = input;
 
@@ -1129,7 +1132,7 @@ ${botFooter}`
 🎬 *ඉල්ලුම:* ${input}
 ━━━━━━━━━━━━━━━━━━━━━━
 ${botFooter}`
-                        }, { quoted: m, edit: statusMsg.key });
+                        }, { edit: statusMsg.key });
                         return;
                     }
                     const _vid = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1];
@@ -1156,9 +1159,8 @@ ${botFooter}`
 
 📩 *අංකයක් reply කරන්න (1/2/3)*
 ━━━━━━━━━━━━━━━━━━━━━━
-${botFooter}`,
-                    edit: statusMsg.key
-                });
+${botFooter}`
+                }, { edit: statusMsg.key });
 
             } catch (err) {
                 await nimesha.sendMessage(m.chat, {

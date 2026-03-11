@@ -526,7 +526,6 @@ async function startnimaBot() {
 	});
 	
 	nimaBot.ev.on('messages.upsert', async (message) => {
-		await shasikala(nimaBot, message, null, global.store);
 		await MessagesUpsert(nimaBot, message, global.store);
 	});
 	

@@ -343,84 +343,7 @@ module.exports = nimesha = async (nimesha, m, msg, store) => {
 			await m.reply('ok sir')
 		}
 
-		// Pending download choice handler (song/video)
-		if (!isCmd && pending_download[m.sender] && /^[123]$/.test(body.trim())) {
-			const choice = body.trim()
-			const pending = pending_download[m.sender]
-			delete pending_download[m.sender]
-
-			if (pending.type === 'song') {
-				const formatNames = { '1': 'Audio 🎵', '2': 'Voice 🎤', '3': 'Document 📄' }
-				let statusMsg = await m.reply(`⬇️ *${formatNames[choice]} format download කරමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎵 *ගීතය:* ${pending.title}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
-				try {
-					const hasil = await ytMp3(pending.url)
-					const isBuffer = Buffer.isBuffer(hasil.result)
-					const audioPayload = isBuffer ? hasil.result : { url: hasil.result?.url || hasil.result }
-					if (isBuffer && hasil.result.length > 16 * 1024 * 1024) return m.reply('❌ File ලොකු වැඩියි! (16MB+)')
-
-					if (choice === '1') {
-						await nimesha.sendMessage(m.chat, {
-							audio: audioPayload,
-							mimetype: 'audio/mpeg',
-							contextInfo: { externalAdReply: { title: hasil.title || pending.title, previewType: 'PHOTO', thumbnailUrl: pending.thumb, mediaType: 1, renderLargerThumbnail: true, sourceUrl: pending.url } }
-						}, { quoted: m })
-					} else if (choice === '2') {
-						await nimesha.sendMessage(m.chat, {
-							audio: audioPayload,
-							mimetype: 'audio/ogg; codecs=opus',
-							ptt: true
-						}, { quoted: m })
-					} else if (choice === '3') {
-						await nimesha.sendMessage(m.chat, {
-							document: audioPayload,
-							mimetype: 'audio/mpeg',
-							fileName: `${(hasil.title || pending.title).replace(/[^a-zA-Z0-9 ]/g, '')}.mp3`
-						}, { quoted: m })
-					}
-					await nimesha.sendMessage(m.chat, { text: `✅ *සාර්ථකයි!*\n🎵 ${hasil.title || pending.title}\n${footer}`, edit: statusMsg.key })
-					setLimit(m, db)
-				} catch (e) {
-					m.reply('❌ Download අසාර්ථකයි: ' + e.message.substring(0, 100))
-				}
-				return
-
-			} else if (pending.type === 'video') {
-				const qualityMap = { '1': '144', '2': '360', '3': '720' }
-				const quality = qualityMap[choice]
-				let statusMsg = await m.reply(`⬇️ *${quality}p video download කරමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.title}\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`)
-				try {
-					const { exec } = require('child_process')
-					const path = require('path')
-					const fs = require('fs')
-					const outputPath = path.join('./database/temp', `video_${Date.now()}.mp4`)
-					
-					const qualityFilter = quality === '144' ? 'bestvideo[height<=144]+bestaudio/best[height<=144]/worst' :
-						quality === '360' ? 'bestvideo[height<=360]+bestaudio/best[height<=360]/best[height<=480]' :
-						'bestvideo[height<=720]+bestaudio/best[height<=720]/best[height<=1080]'
-
-					await new Promise((res, rej) => {
-						exec(`yt-dlp -f "${qualityFilter}" --merge-output-format mp4 --no-playlist -o "${outputPath}" "${pending.url}"`, (err, stdout, stderr) => {
-							if (err) return rej(new Error(stderr || err.message))
-							res()
-						})
-					})
-
-					const videoBuffer = fs.readFileSync(outputPath)
-					await fs.promises.unlink(outputPath).catch(() => {})
-
-					await nimesha.sendMessage(m.chat, {
-						video: videoBuffer,
-						caption: `🎬 *${pending.title}*\n📺 Quality: ${quality}p`
-					}, { quoted: m })
-
-					await nimesha.sendMessage(m.chat, { text: `✅ *සාර්ථකයි!* ${quality}p\n🎬 ${pending.title}\n${footer}`, edit: statusMsg.key })
-					setLimit(m, db)
-				} catch (e) {
-					m.reply('❌ Video Download අසාර්ථකයි: ' + e.message.substring(0, 100))
-				}
-				return
-			}
-		}
+		// ගීත/වීඩියෝ download - shasikala.js හි සම්පූර්ණයෙන් handle වෙනවා
 		
 		// Cmd Media
 		let fileSha256;
@@ -3129,38 +3052,7 @@ _ස්තූතියි!_ 🌸`).then(() => {
 			}
 			break
 			case 'ytmp4': case 'ytvideo': case 'ytplayvideo': case 'video': case 'mp4': {
-				if (!isLimit) return m.reply(mess.limit)
-				if (!text) return m.reply(`උදාහරණ: ${prefix + command} YouTube URL හෝ Video නම`)
-				try {
-					let videoUrl = text
-					let videoTitle = text
-					let videoThumb = ''
-
-					let statusMsg = await nimesha.sendMessage(m.chat, {
-						text: `🔍 *${text.includes('youtu') ? 'URL හඳුනාගනිමින්' : 'සොයමින්'}...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *ඉල්ලුම:* ${text}\n⏳ YouTube හි සොයමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`
-					}, { quoted: m })
-
-					if (!text.includes('youtu')) {
-						const searchRes = await yts(text)
-						const video = searchRes?.videos?.[0] || searchRes?.all?.[0]
-						if (!video) return m.reply('❌ YouTube ප්‍රතිඵල හමු නොවිණි!')
-						const _vid = video.videoId || video.url?.match(/(?:v=|youtu\.be\/)([^&?#]+)/)?.[1]
-						if (!_vid) return m.reply('❌ YouTube video ID හමු නොවිණි!')
-						videoUrl = `https://www.youtube.com/watch?v=${_vid}`
-						videoTitle = video.title || text
-						videoThumb = video.thumbnail || ''
-					}
-
-					// Save pending and ask quality choice
-					pending_download[m.sender] = { type: 'video', url: videoUrl, title: videoTitle, thumb: videoThumb }
-
-					await nimesha.sendMessage(m.chat, {
-						text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${videoTitle}\n🔗 ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n\n📺 *Video quality තෝරන්න:*\n\n1️⃣ 144p\n2️⃣ 360p\n3️⃣ 720p\n\n📩 *Reply number එකක් දෙන්න (1/2/3)*\n━━━━━━━━━━━━━━━━━━━━━━\n${footer}`,
-						edit: statusMsg.key
-					})
-				} catch (e) {
-					m.reply('❌ Video සොයාගත නොහැකිය: ' + e.message.substring(0, 100))
-				}
+				// shasikala.js හි handle වෙනවා
 			}
 			break
 			case 'ig': case 'instagram': case 'instadl': case 'igdown': case 'igdl': {

@@ -811,7 +811,7 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
         // pendingDownload map check — prefix නෑ, body = "1"/"2"/"3"
         // ══════════════════════════════════════════════════
         const rawBody = (m.body || m.text || '').trim();
-        if (/^[123]$/.test(rawBody) && pendingDownload.has(m.sender)) {
+        if (/^[123456]$/.test(rawBody) && pendingDownload.has(m.sender)) {
             const choice = rawBody;
             const pending = pendingDownload.get(m.sender);
             pendingDownload.delete(m.sender);
@@ -878,16 +878,19 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                     if (choice === '1') {
                         await nimesha.sendMessage(m.chat, {
                             audio: audioBuffer, mimetype: 'audio/mpeg', ptt: false,
-                            fileName: `${pending.displayTitle.substring(0, 40)}.mp3`
+                            fileName: `${pending.displayTitle.substring(0, 40)}.mp3`,
+                            caption: `> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN* _`
                         }, { quoted: m });
                     } else if (choice === '2') {
                         await nimesha.sendMessage(m.chat, {
-                            audio: audioBuffer, mimetype: 'audio/ogg; codecs=opus', ptt: true
+                            audio: audioBuffer, mimetype: 'audio/ogg; codecs=opus', ptt: true,
+                            caption: `> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN* _`
                         }, { quoted: m });
                     } else if (choice === '3') {
                         await nimesha.sendMessage(m.chat, {
                             document: audioBuffer, mimetype: 'audio/mpeg',
-                            fileName: `${pending.displayTitle.substring(0, 40)}.mp3`
+                            fileName: `${pending.displayTitle.substring(0, 40)}.mp3`,
+                            caption: `> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN* _`
                         }, { quoted: m });
                     }
 
@@ -910,7 +913,8 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
             // වීඩියෝ download කිරීම
             // ══════════════════════
             if (pending.type === 'video') {
-                const qualityMap = { '1': '144', '2': '360', '3': '720' };
+                const qualityMap = { '1': '144', '2': '360', '3': '720', '4': '144', '5': '360', '6': '720' };
+                const isDoc = ['4','5','6'].includes(choice);
                 const quality = qualityMap[choice];
 
                 // MSG 1 continue — same message edit (searching/select message key)
@@ -948,11 +952,20 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
                         text: `📤 *WhatsApp වෙත යවමින්...*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${pending.displayTitle}\n📺 *තත්ත්වය:* ${quality}p\n━━━━━━━━━━━━━━━━━━━━━━\n⏳ Upload කරමින්...\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
                     , edit: statusMsg.key });
 
-                    // Video send — new message
-                    await nimesha.sendMessage(m.chat, {
-                        video: videoBuffer,
-                        caption: `🎬 *${pending.displayTitle}*\n📺 *තත්ත්වය:* ${quality}p\n${botFooter}`
-                    }, { quoted: m });
+                    // Video send — new message (video or document)
+                    if (isDoc) {
+                        await nimesha.sendMessage(m.chat, {
+                            document: videoBuffer,
+                            mimetype: 'video/mp4',
+                            fileName: `${pending.displayTitle.substring(0, 40)}.mp4`,
+                            caption: `🎬 *${pending.displayTitle}*\n📺 *තත්ත්වය:* ${quality}p (📄 document)\n> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN* _`
+                        }, { quoted: m });
+                    } else {
+                        await nimesha.sendMessage(m.chat, {
+                            video: videoBuffer,
+                            caption: `🎬 *${pending.displayTitle}*\n📺 *තත්ත්වය:* ${quality}p\n> 🌸 *MISS SHASIKALA* [BOT]✨ | 👑 _CREATED BY *NIMESHA MADHUSHAN* _`
+                        }, { quoted: m });
+                    }
 
                     // Done — media ගිය පසු edit
                     await nimesha.sendMessage(m.chat, {
@@ -1070,7 +1083,7 @@ module.exports = shasikala = async (nimesha, m, msg, store) => {
 
                     // පියවර 2: Choice message — searching message edit
                     await nimesha.sendMessage(m.chat, {
-                        text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${displayTitle}\n🔗 ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n\n📺 *Video තත්ත්වය තෝරන්න:*\n\n1️⃣ 144p (අඩු ගුණත්වය)\n2️⃣ 360p (මධ්‍යම ගුණත්වය)\n3️⃣ 720p (ඉහළ ගුණත්වය)\n\n📩 *අංකයක් reply කරන්න (1/2/3)*\n━━━━━━━━━━━━━━━━━━━━━━\n${botFooter}`
+                        text: `🎯 *හමු වුණා!*\n━━━━━━━━━━━━━━━━━━━━━━\n🎬 *වීඩියෝ:* ${displayTitle}\n🔗 ${videoUrl}\n━━━━━━━━━━━━━━━━━━━━━━\n\n📺 *Video ආකෘතිය තෝරන්න:*\\n\\n1️⃣ 144p\\n2️⃣ 360p\\n3️⃣ 720p\\n4️⃣ 144p (📄 document)\\n5️⃣ 360p (📄 document)\\n6️⃣ 720p (📄 document)\\n\\n📩 *අංකයක් reply කරන්න (1-6)*\\n━━━━━━━━━━━━━━━━━━━━━━\\n${botFooter}`
                     , edit: statusMsg.key });
 
                 } catch (err) {

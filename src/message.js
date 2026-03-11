@@ -930,6 +930,11 @@ async function Serialize(nimesha, msg, store) {
 		m.isGroup = m.chat.endsWith('@g.us')
 		if (!m.isGroup && m.chat.endsWith('@lid')) m.chat = nimesha.findJidByLid(m.chat, store) || m.chat;
 		m.sender = nimesha.decodeJid(m.fromMe && (global.owner?.[0] ? global.owner[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net' : nimesha.user.id) || m.key.participant || m.chat || '')
+		// lid format නම් real jid එකට convert කරන්න
+		if (m.sender && m.sender.endsWith('@lid')) {
+			const realJid = nimesha.findJidByLid(m.sender, store)
+			if (realJid && !realJid.endsWith('@lid')) m.sender = realJid
+		}
 		if (m.isGroup) {
 			if (!store.groupMetadata) store.groupMetadata = await nimesha.groupFetchAllParticipating().catch(e => ({}));
 			let metadata = store.groupMetadata[m.chat] ? store.groupMetadata[m.chat] : (store.groupMetadata[m.chat] = await nimesha.groupMetadata(m.chat).catch(e => ({ ...store.groupMetadata[m.chat] })));
